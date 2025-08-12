@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Installments • Editor / Client (v7.3)</title>
+  <title>Installments • Editor / Client (v7.4)</title>
   <style>
     *{box-sizing:border-box}
     :root{--bg:#0b0d12;--card:#0f1420;--line:#1c2233;--muted:#9fb0d0;--ink:#e7ebf3;--warn:#ffb3b3}
@@ -48,7 +48,7 @@
 </head>
 <body>
   <div class="wrap">
-    <h1 id="app-title">Калькулятор рассрочки • Editor / Client (v7.3)</h1>
+    <h1 id="app-title">Калькулятор рассрочки • Editor / Client (v7.4)</h1>
     <div id="root"></div>
   </div>
 
@@ -58,14 +58,32 @@
   <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script crossorigin src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script crossorigin src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 
   <script type="text/babel">
     const {useEffect,useMemo,useRef,useState} = React;
 
-    // i18n
+    // ---------- PIN / security ----------
+    const PIN_SALT = 'enso-v7.4-salt-1';
+    // sha256('334346|enso-v7.4-salt-1') precomputed:
+    const PIN_HASH_HEX = 'c0b37fd5b1ebc835af06c260b9ceb435285f79ecffd7f0a68be695db347d2aa6';
+
+    async function sha256Hex(str){
+      const buf = new TextEncoder().encode(str);
+      const digest = await crypto.subtle.digest('SHA-256', buf);
+      return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    async function verifyPinFlow(){
+      const pin = prompt('Enter PIN');
+      if(pin==null) return false;
+      const hex = await sha256Hex(`${pin}|${PIN_SALT}`);
+      return hex === PIN_HASH_HEX;
+    }
+
+    // ---------- i18n ----------
     const T = {
       ru: {
-        title: 'Калькулятор рассрочки • Editor / Client (v7.3)',
+        title: 'Калькулятор рассрочки • Editor / Client (v7.4)',
         editor: 'Редактор',
         client: 'Клиент',
         lang: 'Язык интерфейса',
@@ -119,7 +137,7 @@
         exportPDF: 'Сохранить в PDF'
       },
       en: {
-        title: 'Installments Calculator • Editor / Client (v7.3)',
+        title: 'Installments Calculator • Editor / Client (v7.4)',
         editor: 'Editor',
         client: 'Client',
         lang: 'Language',
@@ -177,7 +195,8 @@
     const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
     const fmtMoney = (n, currency='USD') => new Intl.NumberFormat('en-US',{style:'currency',currency,maximumFractionDigits:2}).format(n ?? 0);
 
-    // URL hash helpers
+    // ---------- URL state (compressed) ----------
+    // We store state in hash param `s` using LZString.compressToEncodedURIComponent / decompress…
     const readHashParams = () => {
       const h = location.hash.startsWith('#') ? location.hash.slice(1) : location.hash;
       const sp = new URLSearchParams(h);
@@ -185,7 +204,8 @@
     };
     const encodeStateToUrl = (state, {view}={}) => {
       try{
-        const s = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+        const payload = JSON.stringify(state);
+        const s = LZString.compressToEncodedURIComponent(payload);
         const url = new URL(location.href);
         const sp = new URLSearchParams();
         sp.set('s', s);
@@ -198,7 +218,8 @@
       try{
         const {s, view} = readHashParams();
         if(!s) return null;
-        const obj = JSON.parse(decodeURIComponent(escape(atob(s))));
+        const json = LZString.decompressFromEncodedURIComponent(s);
+        const obj = JSON.parse(json);
         return { state: obj, view };
       }catch{ return null; }
     };
@@ -208,8 +229,8 @@
       const [lang,setLang] = useState('ru');
       const t = T[lang];
 
-      // client/editor
-      const [isClient,setIsClient] = useState(false);
+      // client/editor (default: CLIENT!)
+      const [isClient,setIsClient] = useState(true);
 
       // currency
       const [currency,setCurrency] = useState('USD');
@@ -237,28 +258,45 @@
          ownTerms:false, months:null, monthlyRatePct:null, firstPostUSD:0},
       ]);
 
-      // restore / persist
+      // restore / persist (shorter localStorage key)
       useEffect(()=>{
-        const fromUrl = decodeStateFromUrl();
-        const saved = fromUrl?.state || JSON.parse(localStorage.getItem('installments_v73')||'null');
-        if(saved){
-          try{
-            if(saved.lang) setLang(saved.lang);
-            if(saved.currency) setCurrency(saved.currency);
-            if(typeof saved.idrPerUsd==='number') setIdrPerUsd(saved.idrPerUsd);
-            if(typeof saved.eurPerUsd==='number') setEurPerUsd(saved.eurPerUsd);
-            if(typeof saved.handoverMonth==='number') setHandoverMonth(saved.handoverMonth);
-            if(typeof saved.months==='number') setMonths(saved.months);
-            if(typeof saved.monthlyRatePct==='number') setMonthlyRatePct(saved.monthlyRatePct);
-            if(Array.isArray(saved.stages)) setStages(saved.stages);
-            if(Array.isArray(saved.villas)) setVillas(saved.villas.map(v=>({firstPostUSD:0, ...v})));
-          }catch{}
-        }
-        if(fromUrl?.view === 'client') setIsClient(true);
+        (async ()=>{
+          const fromUrl = decodeStateFromUrl();
+          const saved = fromUrl?.state || JSON.parse(localStorage.getItem('installments_v74')||'null');
+          if(saved){
+            try{
+              if(saved.lang) setLang(saved.lang);
+              if(saved.currency) setCurrency(saved.currency);
+              if(typeof saved.idrPerUsd==='number') setIdrPerUsd(saved.idrPerUsd);
+              if(typeof saved.eurPerUsd==='number') setEurPerUsd(saved.eurPerUsd);
+              if(typeof saved.handoverMonth==='number') setHandoverMonth(saved.handoverMonth);
+              if(typeof saved.months==='number') setMonths(saved.months);
+              if(typeof saved.monthlyRatePct==='number') setMonthlyRatePct(saved.monthlyRatePct);
+              if(Array.isArray(saved.stages)) setStages(saved.stages);
+              if(Array.isArray(saved.villas)) setVillas(saved.villas.map(v=>({firstPostUSD:0, ...v})));
+            }catch{}
+          }
+          // route guard: default client; editor demands PIN
+          const view = (fromUrl?.view) || (new URLSearchParams(location.hash.slice(1)).get('view'));
+          if(view === 'editor'){
+            const ok = await verifyPinFlow();
+            setIsClient(!ok);
+            if(!ok){
+              // stay in client, and normalize hash to client (remove view=editor)
+              const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
+              const url = encodeStateToUrl(state, {view:'client'});
+              if(url) history.replaceState(null,'',url);
+              alert(lang==='ru'?'Неверный PIN — открыт клиентский режим':'Wrong PIN — opened client view');
+            }
+          } else {
+            setIsClient(true);
+          }
+        })();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       },[]);
       useEffect(()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
-        localStorage.setItem('installments_v73', JSON.stringify(state));
+        localStorage.setItem('installments_v74', JSON.stringify(state));
         document.getElementById('app-title').textContent = t.title;
         document.title = t.title;
       },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas]);
@@ -318,7 +356,6 @@
         };
         totals.afterUSD = totals.finalUSD - totals.preUSD;
 
-        // consolidated cashflow (USD)
         const m = new Map();
         const push = (month, amt, desc) => {
           if(amt<=0) return;
@@ -334,7 +371,6 @@
         });
         const raw = Array.from(m.values()).sort((a,b)=>a.month-b.month);
 
-        // add running balance (USD)
         let cumulative=0;
         const cashflow = raw.map(row=>{
           cumulative += row.amountUSD;
@@ -365,13 +401,12 @@
         });
       },[project.cashflow, currency, idrPerUsd, eurPerUsd, lang]);
 
-      // Stage sum check helpers
+      // Stage hint
       const prePctValues = villas.map(v=> v.prePct ?? 0);
       const minPre = Math.min(...prePctValues);
       const maxPre = Math.max(...prePctValues);
       const allSame = prePctValues.every(p=> p === prePctValues[0]);
       const targetText = allSame ? `${prePctValues[0]}%` : `${minPre}%–${maxPre}%`;
-      const mismatch = allSame ? (Math.round(stagesSumPct*100)/100 !== prePctValues[0]) : true;
 
       // exports
       const exportCSV = ()=>{
@@ -419,7 +454,7 @@
 
       const exportPDF = ()=> window.print();
 
-      // helpers UI
+      // helpers
       const updateVilla = (id, patch)=> setVillas(prev=> prev.map(v=> v.id===id? {...v, ...patch}: v));
       const addVilla = ()=> setVillas(prev=>{
         const last = prev[prev.length-1]; const id=(last?.id||0)+1;
@@ -429,14 +464,18 @@
 
       const shareEditor = async ()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
-        const url = encodeStateToUrl(state, {view:null});
+        const url = encodeStateToUrl(state, {view:'editor'});
         if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
       };
       const shareClient = async ()=>{
+        // client link uses same state (ставка скрыта в UI, но присутствует в расчёте)
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
         const url = encodeStateToUrl(state, {view:'client'});
         if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
       };
+
+      // hint mismatch
+      const mismatch = allSame ? (Math.round(stagesSumPct*100)/100 !== prePctValues[0]) : true;
 
       // UI
       return (
@@ -491,7 +530,7 @@
                 </>
               ) : (
                 <>
-                  {/* в клиентском режиме — без ставки вообще */}
+                  {/* client: no rate at all */}
                   <div className="field" style={{flex:1}}>
                     <label>{t.clientTerm}</label>
                     <input type="number" min="6" step="1" value={months} onChange={e=>setMonths(clamp(parseInt(e.target.value||0,10),6,120))}/>
@@ -529,18 +568,14 @@
                 })
               }}>{t.addStage}</button>
 
-              <StageHint
-                stagesSumPct={stagesSumPct}
-                prePctValues={prePctValues}
-                allSame={allSame}
-                targetText={targetText}
-                t={t}
-              />
+              <div className={`hint ${mismatch ? 'warn' : ''}`}>
+                {t.sumStages}: {Math.round(stagesSumPct*100)/100}% · {t.targetPrepay}: {targetText} {mismatch ? (allSame ? ` ${t.mismatch}` : ` (${t.mixedTargets})`) : ''}
+              </div>
             </div>
 
             <div className="hr"></div>
 
-            {/* Share — editor only */}
+            {/* Share — editor only (client can't получить ссылку на редактор) */}
             {!isClient && (
               <div className="row">
                 <button className="btn" onClick={shareEditor}>{t.shareEditor}</button>
@@ -602,15 +637,6 @@
             <h3 style={{margin:'6px 0'}}>{t.totals}</h3>
             <KPIBlock isClient={isClient} t={t} totals={project.totals} currency={currency} toCurrency={toCurrency}/>
           </div>
-        </div>
-      );
-    }
-
-    function StageHint({stagesSumPct, prePctValues, allSame, targetText, t}){
-      const mismatch = allSame ? (Math.round(stagesSumPct*100)/100 !== prePctValues[0]) : true;
-      return (
-        <div className={`hint ${mismatch ? 'warn' : ''}`}>
-          {t.sumStages}: {Math.round(stagesSumPct*100)/100}% · {t.targetPrepay}: {targetText} {mismatch ? (allSame ? ` ${t.mismatch}` : ` (${t.mixedTargets})`) : ''}
         </div>
       );
     }
