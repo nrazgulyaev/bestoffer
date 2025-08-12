@@ -35,6 +35,12 @@
       --radius: 12px;
       --radius-lg: 16px;
       --radius-xl: 24px;
+      
+      /* Брейкпоинты */
+      --mobile: 480px;
+      --tablet: 768px;
+      --laptop: 1024px;
+      --desktop: 1200px;
     }
     
     body{
@@ -48,13 +54,20 @@
     
     .wrap{
       max-width:1400px;
-      margin:32px auto;
-      padding:0 24px;
+      margin:16px auto;
+      padding:0 16px;
+    }
+    
+    @media (min-width: 768px) {
+      .wrap {
+        margin: 32px auto;
+        padding: 0 24px;
+      }
     }
     
     h1{
-      margin:0 0 24px;
-      font-size:28px;
+      margin:0 0 20px;
+      font-size:20px;
       font-weight:700;
       background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       -webkit-background-clip:text;
@@ -63,10 +76,24 @@
       text-align:center;
     }
     
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 28px;
+        margin-bottom: 24px;
+      }
+    }
+    
     .grid{
       display:grid;
-      grid-template-columns:450px 1fr;
-      gap:24px;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+    
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: 450px 1fr;
+        gap: 24px;
+      }
     }
     
     .card{
@@ -74,9 +101,15 @@
       backdrop-filter:blur(20px);
       border:1px solid var(--line);
       border-radius:var(--radius-lg);
-      padding:24px;
+      padding:16px;
       transition:all 0.3s ease;
       box-shadow:var(--shadow-lg);
+    }
+    
+    @media (min-width: 768px) {
+      .card {
+        padding: 24px;
+      }
     }
     
     .card:hover{
@@ -87,28 +120,47 @@
     
     .row{
       display:flex;
-      gap:16px;
+      gap:12px;
       align-items:center;
       flex-wrap:wrap;
+    }
+    
+    @media (min-width: 768px) {
+      .row {
+        gap: 16px;
+      }
     }
     
     .field{
       display:grid;
       gap:8px;
-      margin-bottom:20px;
+      margin-bottom:16px;
+      width:100%;
+    }
+    
+    @media (min-width: 768px) {
+      .field {
+        margin-bottom: 20px;
+      }
     }
     
     label{
       color:var(--muted);
-      font-size:14px;
+      font-size:13px;
       font-weight:500;
       text-transform:uppercase;
       letter-spacing:0.5px;
     }
     
+    @media (min-width: 768px) {
+      label {
+        font-size: 14px;
+      }
+    }
+    
     input[type="text"],input[type="number"],input[type="range"],select,textarea{
       width:100%;
-      padding:14px 16px;
+      padding:12px 14px;
       border-radius:var(--radius);
       border:2px solid transparent;
       background:rgba(255,255,255,0.05);
@@ -116,6 +168,12 @@
       font-size:14px;
       transition:all 0.3s ease;
       backdrop-filter:blur(10px);
+    }
+    
+    @media (min-width: 768px) {
+      input[type="text"],input[type="number"],input[type="range"],select,textarea {
+        padding: 14px 16px;
+      }
     }
     
     input[type="text"]:focus,input[type="number"]:focus,select:focus,textarea:focus{
@@ -150,24 +208,38 @@
     }
     
     .pill{
-      padding:8px 16px;
+      padding:6px 12px;
       border-radius:999px;
       background:rgba(139,92,246,0.1);
       border:1px solid rgba(139,92,246,0.2);
-      font-size:12px;
+      font-size:11px;
       font-weight:600;
       color:var(--accent-light);
       text-align:center;
     }
     
+    @media (min-width: 768px) {
+      .pill {
+        padding: 8px 16px;
+        font-size: 12px;
+      }
+    }
+    
     .badge{
       background:rgba(59,130,246,0.1);
       border:1px solid rgba(59,130,246,0.2);
-      padding:6px 12px;
+      padding:4px 8px;
       border-radius:999px;
-      font-size:12px;
+      font-size:11px;
       font-weight:600;
       color:var(--strong);
+    }
+    
+    @media (min-width: 768px) {
+      .badge {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
     }
     
     .muted{color:var(--muted)}
@@ -176,7 +248,13 @@
       height:1px;
       background:linear-gradient(90deg, transparent, var(--line), transparent);
       border:0;
-      margin:24px 0;
+      margin:16px 0;
+    }
+    
+    @media (min-width: 768px) {
+      .hr {
+        margin: 24px 0;
+      }
     }
     
     .btn{
@@ -184,15 +262,23 @@
       border:none;
       background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color:white;
-      padding:12px 24px;
+      padding:10px 18px;
       border-radius:var(--radius);
       cursor:pointer;
       font-weight:600;
-      font-size:14px;
+      font-size:13px;
       transition:all 0.3s ease;
       box-shadow:var(--shadow);
       position:relative;
       overflow:hidden;
+      white-space:nowrap;
+    }
+    
+    @media (min-width: 768px) {
+      .btn {
+        padding: 12px 24px;
+        font-size: 14px;
+      }
     }
     
     .btn::before{
@@ -224,9 +310,16 @@
     }
     
     .btn.icon{
-      padding:10px;
+      padding:8px;
       border-radius:var(--radius-sm);
-      min-width:40px;
+      min-width:36px;
+    }
+    
+    @media (min-width: 768px) {
+      .btn.icon {
+        padding: 10px;
+        min-width: 40px;
+      }
     }
     
     table{
@@ -235,14 +328,27 @@
       background:rgba(255,255,255,0.02);
       border-radius:var(--radius);
       overflow:hidden;
+      font-size:13px;
+    }
+    
+    @media (min-width: 768px) {
+      table {
+        font-size: 14px;
+      }
     }
     
     th,td{
-      padding:16px 12px;
+      padding:10px 8px;
       border-bottom:1px solid rgba(255,255,255,0.05);
       text-align:right;
       font-variant-numeric:tabular-nums;
       vertical-align:middle;
+    }
+    
+    @media (min-width: 768px) {
+      th,td {
+        padding: 16px 12px;
+      }
     }
     
     th:first-child,td:first-child{text-align:left}
@@ -250,32 +356,64 @@
     th{
       background:rgba(255,255,255,0.05);
       font-weight:600;
-      font-size:13px;
+      font-size:12px;
       text-transform:uppercase;
       letter-spacing:0.5px;
       color:var(--muted);
     }
     
+    @media (min-width: 768px) {
+      th {
+        font-size: 13px;
+      }
+    }
+    
     .scroll{
       overflow:auto;
-      max-height:50vh;
+      max-height:40vh;
       border-radius:var(--radius);
+    }
+    
+    @media (min-width: 768px) {
+      .scroll {
+        max-height: 50vh;
+      }
     }
     
     .kpis{
       display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:16px;
-      margin:20px 0;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin:16px 0;
+    }
+    
+    @media (min-width: 768px) {
+      .kpis {
+        grid-template-columns: repeat(5,1fr);
+        gap: 16px;
+        margin: 20px 0;
+      }
+    }
+    
+    @media (min-width: 480px) and (max-width: 767px) {
+      .kpis {
+        grid-template-columns: repeat(3,1fr);
+      }
     }
     
     .kpi{
       background:rgba(255,255,255,0.03);
       border:1px solid rgba(255,255,255,0.05);
       border-radius:var(--radius);
-      padding:20px;
+      padding:16px;
       text-align:center;
       transition:all 0.3s ease;
+    }
+    
+    @media (min-width: 768px) {
+      .kpi {
+        padding: 20px;
+      }
     }
     
     .kpi:hover{
@@ -284,19 +422,34 @@
     }
     
     .kpi .v{
-      font-size:24px;
+      font-size:18px;
       font-weight:700;
       color:var(--accent-light);
-      margin-top:8px;
+      margin-top:6px;
+    }
+    
+    @media (min-width: 768px) {
+      .kpi .v {
+        font-size: 24px;
+        margin-top: 8px;
+      }
     }
     
     .hint{
-      font-size:13px;
+      font-size:12px;
       color:var(--muted);
-      margin-left:12px;
-      padding:4px 8px;
+      margin-left:8px;
+      padding:3px 6px;
       border-radius:var(--radius-sm);
       background:rgba(255,255,255,0.05);
+    }
+    
+    @media (min-width: 768px) {
+      .hint {
+        font-size: 13px;
+        margin-left: 12px;
+        padding: 4px 8px;
+      }
     }
     
     .hint.warn{
@@ -306,15 +459,24 @@
     
     .tabs{
       display:flex;
-      gap:8px;
-      margin-bottom:20px;
+      gap:6px;
+      margin-bottom:16px;
       background:rgba(255,255,255,0.03);
-      padding:4px;
+      padding:3px;
       border-radius:var(--radius);
+      overflow-x:auto;
+    }
+    
+    @media (min-width: 768px) {
+      .tabs {
+        gap: 8px;
+        margin-bottom: 20px;
+        padding: 4px;
+      }
     }
     
     .tab{
-      padding:12px 20px;
+      padding:10px 16px;
       border-radius:var(--radius);
       border:none;
       background:transparent;
@@ -324,6 +486,15 @@
       transition:all 0.3s ease;
       flex:1;
       text-align:center;
+      white-space:nowrap;
+      min-width:80px;
+    }
+    
+    @media (min-width: 768px) {
+      .tab {
+        padding: 12px 20px;
+        min-width: 100px;
+      }
     }
     
     .tab.active{
@@ -336,17 +507,31 @@
       background:rgba(255,255,255,0.05);
       color:var(--ink);
     }
-    
-    /* calc table */
+
+        /* calc table */
     .calc-scroll{
       overflow:auto;
-      max-height:45vh;
+      max-height:35vh;
       border:1px solid rgba(255,255,255,0.1);
       border-radius:var(--radius);
       background:rgba(255,255,255,0.02);
     }
     
-    .calc-table{min-width:1200px}
+    @media (min-width: 768px) {
+      .calc-scroll {
+        max-height: 45vh;
+      }
+    }
+    
+    .calc-table{
+      min-width:800px;
+    }
+    
+    @media (min-width: 1024px) {
+      .calc-table {
+        min-width: 1200px;
+      }
+    }
     
     .calc-table th{
       position:sticky;
@@ -356,20 +541,38 @@
       backdrop-filter:blur(10px);
     }
     
-    .col-project{min-width:200px}.col-villa{min-width:260px}.col-qty{min-width:80px}.col-area{min-width:90px}.col-ppsm{min-width:110px}
-    .col-base{min-width:190px}.col-disc{min-width:130px}.col-pre{min-width:120px}.col-months{min-width:110px}.col-rate{min-width:120px}
-    .col-first{min-width:140px}.col-lineTotal{min-width:190px}.col-actions{min-width:110px}
+    .col-project{min-width:120px}.col-villa{min-width:150px}.col-qty{min-width:60px}.col-area{min-width:70px}.col-ppsm{min-width:80px}
+    .col-base{min-width:120px}.col-disc{min-width:80px}.col-pre{min-width:90px}.col-months{min-width:80px}.col-rate{min-width:90px}
+    .col-first{min-width:100px}.col-lineTotal{min-width:120px}.col-actions{min-width:80px}
+    
+    @media (min-width: 1024px) {
+      .col-project{min-width:200px}.col-villa{min-width:260px}.col-qty{min-width:80px}.col-area{min-width:90px}.col-ppsm{min-width:110px}
+      .col-base{min-width:190px}.col-disc{min-width:130px}.col-pre{min-width:120px}.col-months{min-width:110px}.col-rate{min-width:120px}
+      .col-first{min-width:140px}.col-lineTotal{min-width:190px}.col-actions{min-width:110px}
+    }
     
     .base-strong{
       font-weight:700;
-      font-size:16px;
+      font-size:14px;
       color:var(--strong);
+    }
+    
+    @media (min-width: 768px) {
+      .base-strong {
+        font-size: 16px;
+      }
     }
     
     .line-strong{
       font-weight:700;
-      font-size:16px;
+      font-size:14px;
       color:var(--good);
+    }
+    
+    @media (min-width: 768px) {
+      .line-strong {
+        font-size: 16px;
+      }
     }
     
     /* modal */
@@ -383,6 +586,13 @@
       justify-content:center;
       z-index:50;
       animation:fadeIn 0.3s ease;
+      padding:16px;
+    }
+    
+    @media (min-width: 768px) {
+      .modal {
+        padding: 24px;
+      }
     }
     
     @keyframes fadeIn{
@@ -394,12 +604,19 @@
       backdrop-filter:blur(20px);
       border:1px solid var(--line);
       border-radius:var(--radius-xl);
-      width:min(1100px,96vw);
-      max-height:86vh;
+      width:100%;
+      max-width:1100px;
+      max-height:90vh;
       display:flex;
       flex-direction:column;
       box-shadow:var(--shadow-xl);
       animation:slideUp 0.3s ease;
+    }
+    
+    @media (min-width: 768px) {
+      .modal .panel {
+        max-height: 86vh;
+      }
     }
     
     @keyframes slideUp{
@@ -407,33 +624,69 @@
     }
     
     .modal .head{
-      padding:20px 24px;
+      padding:16px 20px;
       border-bottom:1px solid var(--line);
       display:flex;
-      gap:16px;
+      gap:12px;
       align-items:center;
       justify-content:space-between;
     }
     
+    @media (min-width: 768px) {
+      .modal .head {
+        padding: 20px 24px;
+        gap: 16px;
+      }
+    }
+    
     .modal .body{
       display:grid;
-      grid-template-columns:280px 1fr;
-      min-height:60vh;
+      grid-template-columns:1fr;
+      min-height:50vh;
+    }
+    
+    @media (min-width: 768px) {
+      .modal .body {
+        grid-template-columns: 280px 1fr;
+        min-height: 60vh;
+      }
     }
     
     .modal .side{
-      border-right:1px solid var(--line);
+      border-right:none;
+      border-bottom:1px solid var(--line);
       overflow:auto;
       background:rgba(255,255,255,0.02);
+      max-height:200px;
     }
     
-    .modal .content{overflow:auto;padding:20px}
+    @media (min-width: 768px) {
+      .modal .side {
+        border-right: 1px solid var(--line);
+        border-bottom: none;
+        max-height: none;
+      }
+    }
+    
+    .modal .content{overflow:auto;padding:16px}
+    
+    @media (min-width: 768px) {
+      .modal .content {
+        padding: 20px;
+      }
+    }
     
     .side .proj{
-      padding:16px 20px;
+      padding:12px 16px;
       border-bottom:1px solid rgba(255,255,255,0.05);
       cursor:pointer;
       transition:all 0.3s ease;
+    }
+    
+    @media (min-width: 768px) {
+      .side .proj {
+        padding: 16px 20px;
+      }
     }
     
     .side .proj:hover{
@@ -446,20 +699,154 @@
     }
     
     .filters{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:20px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:8px;
+      margin-bottom:16px;
     }
     
-    .modal table{min-width:800px}
+    @media (min-width: 480px) {
+      .filters {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .filters {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+    }
+    
+    .modal table{
+      min-width:600px;
+      font-size:12px;
+    }
+    
+    @media (min-width: 768px) {
+      .modal table {
+        min-width: 800px;
+        font-size: 14px;
+      }
+    }
     
     .modal .foot{
-      padding:20px 24px;
+      padding:16px 20px;
       border-top:1px solid var(--line);
       display:flex;
-      gap:16px;
+      gap:12px;
       justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+    
+    @media (min-width: 768px) {
+      .modal .foot {
+        padding: 20px 24px;
+        gap: 16px;
+      }
+    }
+    
+    /* Адаптивные стили для мобильных устройств */
+    @media (max-width: 767px) {
+      .row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .field {
+        margin-bottom: 12px;
+      }
+      
+      .btn {
+        width: 100%;
+        margin-bottom: 8px;
+      }
+      
+      .btn.icon {
+        width: auto;
+        margin-bottom: 0;
+      }
+      
+      .tabs {
+        flex-direction: column;
+      }
+      
+      .tab {
+        min-width: auto;
+      }
+      
+      .kpis {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .calc-scroll {
+        max-height: 30vh;
+      }
+      
+      .scroll {
+        max-height: 30vh;
+      }
+      
+      .modal .panel {
+        margin: 16px;
+        max-height: calc(100vh - 32px);
+      }
+      
+      .modal .body {
+        min-height: 40vh;
+      }
+      
+      .modal .side {
+        max-height: 150px;
+      }
+    }
+    
+    /* Стили для планшетов */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .card {
+        padding: 20px;
+      }
+      
+      .calc-scroll {
+        max-height: 40vh;
+      }
+      
+      .kpis {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    /* Стили для ноутбуков */
+    @media (min-width: 1024px) and (max-width: 1199px) {
+      .grid {
+        grid-template-columns: 400px 1fr;
+        gap: 20px;
+      }
+      
+      .wrap {
+        max-width: 1200px;
+      }
+    }
+    
+    /* Стили для больших экранов */
+    @media (min-width: 1200px) {
+      .wrap {
+        max-width: 1400px;
+      }
+      
+      .grid {
+        grid-template-columns: 450px 1fr;
+        gap: 24px;
+      }
     }
     
     @media print{
@@ -494,6 +881,62 @@
     .kpi:nth-child(3) { animation-delay: 0.5s; }
     .kpi:nth-child(4) { animation-delay: 0.6s; }
     .kpi:nth-child(5) { animation-delay: 0.7s; }
+    
+    /* Улучшенные стили для форм */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    @media (min-width: 480px) {
+      .form-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid transparent;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.05);
+      color: var(--ink);
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.1);
+    }
+    
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
+    .form-select {
+      cursor: pointer;
+    }
+    
+    .form-select option {
+      background: var(--card);
+      color: var(--ink);
+    }
   </style>
 </head>
 <body>
@@ -502,7 +945,8 @@
     <div id="boot-diagnostics" style="position:fixed;left:10px;top:10px;z-index:99999;background:#1b2336;color:#fff;border:1px solid #334;padding:8px 10px;border-radius:8px;font:12px/1.4 system-ui;max-width:80vw;display:none"></div>
     <div id="root"></div>
   </div>
-  <!-- libs -->
+
+    <!-- libs -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -610,7 +1054,13 @@
         priceFrom:'Цена от', priceTo:'Цена до',
         sort:'Сортировать', byPrice:'по цене', byArea:'по площади', byName:'по названию',
         addSelected:'Добавить выбранные', cancel:'Отмена',
-        qtyShort:'Кол-во', baseUSD:'База (USD)'
+        qtyShort:'Кол-во', baseUSD:'База (USD)',
+        // Новые поля для улучшенного каталога
+        projectId:'ID проекта', projectName:'Название проекта',
+        villaId:'ID виллы', villaName:'Название виллы',
+        villaArea:'Площадь (м²)', villaPpsm:'Цена за м² ($)',
+        villaBasePrice:'Базовая цена ($)', save:'Сохранить',
+        edit:'Редактировать', remove:'Удалить'
       },
       en: {
         title:'Arconique / Installments Calculator — v7.6',
@@ -652,7 +1102,13 @@
         priceFrom:'Price from', priceTo:'Price to',
         sort:'Sort', byPrice:'by price', byArea:'by area', byName:'by name',
         addSelected:'Add selected', cancel:'Cancel',
-        qtyShort:'Qty', baseUSD:'Base (USD)'
+        qtyShort:'Qty', baseUSD:'Base (USD)',
+        // Новые поля для улучшенного каталога
+        projectId:'Project ID', projectName:'Project Name',
+        villaId:'Villa ID', villaName:'Villa Name',
+        villaArea:'Area (sqm)', villaPpsm:'Price per sqm ($)',
+        villaBasePrice:'Base Price ($)', save:'Save',
+        edit:'Edit', remove:'Remove'
       }
     };
 
@@ -712,6 +1168,7 @@
       ]);
 
       const [modalOpen,setModalOpen]=useState(false);
+      const [catalogModalOpen,setCatalogModalOpen]=useState(false);
 
       useEffect(()=>{(async()=>{
         try{
@@ -955,11 +1412,7 @@
                 <>
                   <h3 style={{margin:'6px 0'}}>{t.catalogTitle}</h3>
                   <div className="row">
-                    <button className="btn ok" onClick={()=>{
-                      const projectId=prompt('projectId:','newproj'); if(!projectId) return;
-                      const projectName=prompt('Project name:','New Project')||'New Project';
-                      setCatalog(prev=>[...prev,{projectId,projectName,villas:[]}]);
-                    }}>{t.addProject}</button>
+                    <button className="btn ok" onClick={()=>setCatalogModalOpen(true)}>{t.addProject}</button>
                     <button className="btn" onClick={()=>{
                       const json=prompt('Paste catalog JSON:', JSON.stringify(catalog,null,2));
                       if(!json) return;
@@ -979,14 +1432,7 @@
                             <input type="text" value={p.projectName} onChange={e=>setCatalog(prev=>prev.map(x=>x.projectId===p.projectId?{...x,projectName:e.target.value}:x))}/>
                             <span className="pill">{p.projectId}</span>
                           </div>
-                          <button className="btn" onClick={()=>{
-                            const villaId=prompt('villaId:','newvilla'); if(!villaId) return;
-                            const name=prompt('Name:','New Villa')||'New Villa';
-                            const area=parseFloat(prompt('Area (sqm):','100')||'100');
-                            const ppsm=parseFloat(prompt('$ per sqm:','2500')||'2500');
-                            const baseUSD=parseFloat(prompt('Base USD (blank=auto)','')|| (area*ppsm));
-                            setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:[...pr.villas,{villaId,name,area,ppsm,baseUSD}]}:pr));
-                          }}>{t.addVilla}</button>
+                          <button className="btn" onClick={()=>setCatalogModalOpen(true)}>{t.addVilla}</button>
                         </div>
                         <table style={{marginTop:8}}>
                           <thead><tr><th>{t.villa}</th><th>{t.area}</th><th>{t.ppsm}</th><th>{t.price}</th></tr></thead>
@@ -1086,11 +1532,9 @@
                 <h3 style={{margin:'6px 0'}}>{t.cashflowTitle}</h3>
                 <div className="row" style={{gap:8}}>
                   <button className="btn" onClick={exportCSV}>{t.exportCSV}</button>
-            
+                  <button className="btn" onClick={exportXLSX}>{t.exportXLSX}</button>
 
-
-<button className="btn" onClick={exportXLSX}>{t.exportXLSX}</button>
-                  <button className="btn" onClick={exportPDF}>{t.exportPDF}</button>
+                                    <button className="btn" onClick={exportPDF}>{t.exportPDF}</button>
                 </div>
               </div>
 
@@ -1137,6 +1581,18 @@
                   return [...prev,...appended];
                 });
                 setModalOpen(false);
+              }}
+            />
+          )}
+
+          {catalogModalOpen && (
+            <CatalogEditorModal
+              t={t}
+              catalog={catalog}
+              onClose={()=>setCatalogModalOpen(false)}
+              onSave={(newCatalog)=>{
+                setCatalog(newCatalog);
+                setCatalogModalOpen(false);
               }}
             />
           )}
@@ -1247,6 +1703,270 @@
             <div className="foot">
               <button className="btn" onClick={onClose}>{t.cancel}</button>
               <button className="btn ok" onClick={add}>{t.addSelected}</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Новый компонент для редактирования каталога
+    function CatalogEditorModal({t,catalog,onClose,onSave}){
+      const [editingProject,setEditingProject]=useState(null);
+      const [editingVilla,setEditingVilla]=useState(null);
+      const [newProject,setNewProject]=useState({projectId:'',projectName:'',villas:[]});
+      const [newVilla,setNewVilla]=useState({villaId:'',name:'',area:100,ppsm:2500,baseUSD:250000});
+
+      const addProject=()=>{
+        if(!newProject.projectId || !newProject.projectName) return;
+        const updatedCatalog=[...catalog,{...newProject}];
+        onSave(updatedCatalog);
+        setNewProject({projectId:'',projectName:'',villas:[]});
+      };
+
+      const addVilla=(projectId)=>{
+        if(!newVilla.villaId || !newVilla.name) return;
+        const updatedCatalog=catalog.map(p=>
+          p.projectId===projectId 
+            ? {...p,villas:[...p.villas,{...newVilla}]}
+            : p
+        );
+        onSave(updatedCatalog);
+        setNewVilla({villaId:'',name:'',area:100,ppsm:2500,baseUSD:250000});
+      };
+
+      const updateProject=(projectId,field,value)=>{
+        const updatedCatalog=catalog.map(p=>
+          p.projectId===projectId ? {...p,[field]:value} : p
+        );
+        onSave(updatedCatalog);
+      };
+
+      const updateVilla=(projectId,villaId,field,value)=>{
+        const updatedCatalog=catalog.map(p=>
+          p.projectId===projectId 
+            ? {...p,villas:p.villas.map(v=>v.villaId===villaId ? {...v,[field]:value} : v)}
+            : p
+        );
+        onSave(updatedCatalog);
+      };
+
+      const removeProject=(projectId)=>{
+        const updatedCatalog=catalog.filter(p=>p.projectId!==projectId);
+        onSave(updatedCatalog);
+      };
+
+      const removeVilla=(projectId,villaId)=>{
+        const updatedCatalog=catalog.map(p=>
+          p.projectId===projectId 
+            ? {...p,villas:p.villas.filter(v=>v.villaId!==villaId)}
+            : p
+        );
+        onSave(updatedCatalog);
+      };
+
+      return (
+        <div className="modal" onClick={onClose}>
+          <div className="panel" onClick={e=>e.stopPropagation()}>
+            <div className="head">
+              <strong>{t.catalogTitle}</strong>
+              <button className="btn" onClick={onClose}>✕</button>
+            </div>
+            <div className="body">
+              <div className="content">
+                {/* Добавление нового проекта */}
+                <div className="card" style={{marginBottom:20}}>
+                  <h4 style={{margin:'0 0 16px'}}>{t.addProject}</h4>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label className="form-label">{t.projectId}</label>
+                      <input 
+                        className="form-input" 
+                        type="text" 
+                        value={newProject.projectId} 
+                        onChange={e=>setNewProject(prev=>({...prev,projectId:e.target.value}))}
+                        placeholder="project-id"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">{t.projectName}</label>
+                      <input 
+                        className="form-input" 
+                        type="text" 
+                        value={newProject.projectName} 
+                        onChange={e=>setNewProject(prev=>({...prev,projectName:e.target.value}))}
+                        placeholder="Project Name"
+                      />
+                    </div>
+                  </div>
+                  <button className="btn ok" onClick={addProject} style={{width:'100%'}}>{t.addProject}</button>
+                </div>
+
+                {/* Добавление новой виллы */}
+                <div className="card" style={{marginBottom:20}}>
+                  <h4 style={{margin:'0 0 16px'}}>{t.addVilla}</h4>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label className="form-label">{t.project}</label>
+                      <select 
+                        className="form-input form-select" 
+                        onChange={e=>setNewVilla(prev=>({...prev,projectId:e.target.value}))}
+                      >
+                        <option value="">{t.selectFromCatalog}</option>
+                        {catalog.map(p=>(<option key={p.projectId} value={p.projectId}>{p.projectName}</option>))}
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">{t.villaId}</label>
+                      <input 
+                        className="form-input" 
+                        type="text" 
+                        value={newVilla.villaId} 
+                        onChange={e=>setNewVilla(prev=>({...prev,villaId:e.target.value}))}
+                        placeholder="villa-id"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label className="form-label">{t.villaName}</label>
+                      <input 
+                        className="form-input" 
+                        type="text" 
+                        value={newVilla.name} 
+                        onChange={e=>setNewVilla(prev=>({...prev,name:e.target.value}))}
+                        placeholder="Villa Name"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">{t.villaArea}</label>
+                      <input 
+                        className="form-input" 
+                        type="number" 
+                        min="1" 
+                        step="0.1"
+                        value={newVilla.area} 
+                        onChange={e=>setNewVilla(prev=>({...prev,area:parseFloat(e.target.value)||0}))}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label className="form-label">{t.villaPpsm}</label>
+                      <input 
+                        className="form-input" 
+                        type="number" 
+                        min="0" 
+                        step="1"
+                        value={newVilla.ppsm} 
+                        onChange={e=>setNewVilla(prev=>({...prev,ppsm:parseFloat(e.target.value)||0}))}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">{t.villaBasePrice}</label>
+                      <input 
+                        className="form-input" 
+                        type="number" 
+                        min="0" 
+                        step="1"
+                        value={newVilla.baseUSD} 
+                        onChange={e=>setNewVilla(prev=>({...prev,baseUSD:parseFloat(e.target.value)||0}))}
+                      />
+                    </div>
+                  </div>
+                  <button 
+                    className="btn ok" 
+                    onClick={()=>addVilla(newVilla.projectId)} 
+                    style={{width:'100%'}}
+                    disabled={!newVilla.projectId || !newVilla.villaId || !newVilla.name}
+                  >
+                    {t.addVilla}
+                  </button>
+                </div>
+
+                {/* Редактирование существующего каталога */}
+                <div className="scroll" style={{maxHeight:'40vh'}}>
+                  {catalog.map(p=>(
+                    <div key={p.projectId} className="card" style={{marginBottom:16}}>
+                      <div className="row" style={{justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
+                        <div className="row" style={{flex:1}}>
+                          <span className="badge">{t.project}:</span>
+                          <input 
+                            type="text" 
+                            value={p.projectName} 
+                            onChange={e=>updateProject(p.projectId,'projectName',e.target.value)}
+                            style={{flex:1,marginRight:8}}
+                          />
+                          <span className="pill">{p.projectId}</span>
+                        </div>
+                        <button className="btn warn" onClick={()=>removeProject(p.projectId)}>{t.remove}</button>
+                      </div>
+                      
+                      <table>
+                        <thead>
+                          <tr>
+                            <th style={{textAlign:'left'}}>{t.villa}</th>
+                            <th>{t.area}</th>
+                            <th>{t.ppsm}</th>
+                            <th>{t.price}</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {p.villas.map(v=>(
+                            <tr key={v.villaId}>
+                              <td style={{textAlign:'left'}}>
+                                <input 
+                                  value={v.name} 
+                                  onChange={e=>updateVilla(p.projectId,v.villaId,'name',e.target.value)}
+                                  style={{width:'100%'}}
+                                />
+                                <div className="muted" style={{fontSize:11}}>{v.villaId}</div>
+                              </td>
+                              <td>
+                                <input 
+                                  type="number" 
+                                  min="1" 
+                                  step="0.1" 
+                                  value={v.area} 
+                                  onChange={e=>updateVilla(p.projectId,v.villaId,'area',parseFloat(e.target.value)||0)}
+                                  style={{width:80}}
+                                />
+                              </td>
+                              <td>
+                                <input 
+                                  type="number" 
+                                  min="0" 
+                                  step="1" 
+                                  value={v.ppsm} 
+                                  onChange={e=>updateVilla(p.projectId,v.villaId,'ppsm',parseFloat(e.target.value)||0)}
+                                  style={{width:80}}
+                                />
+                              </td>
+                              <td>
+                                <input 
+                                  type="number" 
+                                  min="0" 
+                                  step="1" 
+                                  value={v.baseUSD} 
+                                  onChange={e=>updateVilla(p.projectId,v.villaId,'baseUSD',parseFloat(e.target.value)||0)}
+                                  style={{width:100}}
+                                />
+                              </td>
+                              <td>
+                                <button className="btn warn icon" onClick={()=>removeVilla(p.projectId,v.villaId)}>✕</button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="foot">
+              <button className="btn" onClick={onClose}>{t.cancel}</button>
+              <button className="btn ok" onClick={()=>onSave(catalog)}>{t.save}</button>
             </div>
           </div>
         </div>
