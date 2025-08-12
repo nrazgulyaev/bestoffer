@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0b0d12" />
+<meta name="color-scheme" content="dark light" />
+<meta name="description" content="Installments calculator for villas — Arconique." />
 <title>A32rconique / Калькулятор рассрочки для любимых клиентов</title>
 <style>
   *{box-sizing:border-box} :root{--bg:#0b0d12;--card:#0f1420;--line:#1c2233;--muted:#9fb0d0;--ink:#e7ebf3;--ok:#b9ffcc;--warn:#ffb8c1}
@@ -58,12 +61,12 @@
   </div>
 
   <!-- libs -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script crossorigin src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script crossorigin src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script crossorigin src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+  <script defer crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script defer crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script defer crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script defer crossorigin src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script defer crossorigin src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script defer crossorigin src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 
   <script type="text/babel">
     const {useEffect,useMemo,useRef,useState} = React;
@@ -133,7 +136,7 @@
     function App(){
       // lang & ui
       const [lang,setLang]=useState('ru'); const t=T[lang];
-      useEffect(()=>{document.getElementById('title').textContent=t.title;document.title=t.title},[lang]);
+      useEffect(()=>{document.getElementById('title').textContent=t.title;document.title=t.title;document.documentElement.lang=lang},[lang]);
 
       // editor/client
       const [isClient,setIsClient]=useState(true);
@@ -449,7 +452,7 @@ const linesData=useMemo(()=>lines.map(L=>{
               <div className="row">
                 <button className="btn" onClick={exportCSV}>{t.exportCSV}</button>
                 <button className="btn" onClick={exportXLSX}>{t.exportXLSX}</button>
-                <button className="btn" onClick={()=>window.print()}>{t.exportPDF}</button>
+                <button className="btn" onClick={exportPDF}>{t.exportPDF}</button>
               </div>
             </div>
 
