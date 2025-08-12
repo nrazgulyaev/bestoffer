@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Installments • Editor / Client (v7)</title>
+  <title>Installments • Editor / Client (v7.1)</title>
   <style>
     *{box-sizing:border-box}
     :root{--bg:#0b0d12;--card:#0f1420;--line:#1c2233;--muted:#9fb0d0;--ink:#e7ebf3}
@@ -36,7 +36,7 @@
 </head>
 <body>
   <div class="wrap">
-    <h1 id="app-title">Калькулятор рассрочки • Editor / Client (v7)</h1>
+    <h1 id="app-title">Калькулятор рассрочки • Editor / Client (v7.1)</h1>
     <div id="root"></div>
   </div>
 
@@ -51,102 +51,30 @@
 
     // i18n
     const T = {
-      ru: {
-        title: 'Калькулятор рассрочки • Editor / Client (v7)',
-        editor: 'Редактор',
-        client: 'Клиент',
-        lang: 'Язык интерфейса',
-        currencyDisplay: 'Валюта отображения',
-        idrRate: 'IDR за 1 USD',
-        eurRate: 'EUR за 1 USD',
-        handoverMonth: 'Месяц получения ключей',
-        globalTerm: 'Глобальный срок post‑handover (6–24 мес)',
-        globalRate: 'Глобальная ставка, %/мес',
-        clientTerm: 'Срок post‑handover (мес)',
-        rateHidden: 'Ставка (скрыта)',
-        stagesTitle: 'Этапы ДО ключей',
-        stage: 'Этап',
-        percent: '%',
-        month: 'Месяц',
-        addStage: 'Добавить этап',
-        shareEditor: 'Поделиться (редактор)',
-        shareClient: 'Поделиться (клиенту)',
-        banner: 'Клиентский режим: ставка и сумма процентов скрыты. Можно менять: цену, % «до ключей», первый платёж после ключей и этапы.',
-        villasTitle: 'Список вилл',
-        name: 'Название',
-        area: 'м²',
-        ppsm: '$ / м²',
-        price: 'Цена (USD)',
-        prePct: 'До ключей, %',
-        ownPost: 'СВОИ post‑условия',
-        months: 'Срок, мес',
-        rate: 'Ставка, %/мес',
-        firstPost: 'Первый платёж после ключей',
-        delete: 'Удалить',
-        addVilla: 'Добавить виллу',
-        cashflowTitle: 'Сводный кэшфлоу по месяцам',
-        cashMonth: 'Месяц',
-        cashDesc: 'Описание',
-        cashTotal: 'Сумма (в выбранной валюте)',
-        totals: 'Итоги',
-        base: 'База',
-        prepay: 'Оплата до ключей',
-        after: 'Остаток после ключей',
-        interestTotal: 'Проценты (post)',
-        final: 'Итоговая цена',
-        projects: 'Вилл',
-        keys: 'Ключи: мес.',
-        chartTitle: 'Платежи по месяцам',
-        shareCopied: 'Ссылка скопирована',
-      },
-      en: {
-        title: 'Installments Calculator • Editor / Client (v7)',
-        editor: 'Editor',
-        client: 'Client',
-        lang: 'Language',
-        currencyDisplay: 'Display currency',
-        idrRate: 'IDR per 1 USD',
-        eurRate: 'EUR per 1 USD',
-        handoverMonth: 'Handover month',
-        globalTerm: 'Global post‑handover term (6–24 mo)',
-        globalRate: 'Global rate, %/month',
-        clientTerm: 'Post‑handover term (months)',
-        rateHidden: 'Rate (hidden)',
-        stagesTitle: 'Pre‑handover stages',
-        stage: 'Stage',
-        percent: '%',
-        month: 'Month',
-        addStage: 'Add stage',
-        shareEditor: 'Share (editor)',
-        shareClient: 'Share (client)',
-        banner: 'Client view: rate and interest are hidden. You can change price, pre‑handover %, first post‑handover payment and stages.',
-        villasTitle: 'Villas',
-        name: 'Name',
-        area: 'sqm',
-        ppsm: '$ / sqm',
-        price: 'Price (USD)',
-        prePct: 'Pre‑handover, %',
-        ownPost: 'Own post‑terms',
-        months: 'Term, mo',
-        rate: 'Rate, %/mo',
-        firstPost: 'First payment after handover',
-        delete: 'Delete',
-        addVilla: 'Add villa',
-        cashflowTitle: 'Monthly consolidated cashflow',
-        cashMonth: 'Month',
-        cashDesc: 'Description',
-        cashTotal: 'Amount (display currency)',
-        totals: 'Totals',
-        base: 'Base',
-        prepay: 'Paid before keys',
-        after: 'Balance after keys',
-        interestTotal: 'Interest (post)',
-        final: 'Final price',
-        projects: 'Villas',
-        keys: 'Keys: mo.',
-        chartTitle: 'Payments by month',
-        shareCopied: 'Link copied',
-      }
+      ru: { title:'Калькулятор рассрочки • Editor / Client (v7.1)', editor:'Редактор', client:'Клиент',
+        lang:'Язык интерфейса', currencyDisplay:'Валюта отображения', idrRate:'IDR за 1 USD', eurRate:'EUR за 1 USD',
+        handoverMonth:'Месяц получения ключей', globalTerm:'Глобальный срок post‑handover (6–24 мес)', globalRate:'Глобальная ставка, %/мес',
+        clientTerm:'Срок post‑handover (мес)', rateHidden:'Ставка (скрыта)', stagesTitle:'Этапы ДО ключей', stage:'Этап', percent:'%', month:'Месяц',
+        addStage:'Добавить этап', shareEditor:'Поделиться (редактор)', shareClient:'Поделиться (клиенту)',
+        banner:'Клиентский режим: ставка и сумма процентов скрыты. Можно менять: цену, % «до ключей», первый платёж после ключей и этапы.',
+        villasTitle:'Список вилл', name:'Название', area:'м²', ppsm:'$ / м²', price:'Цена (USD)', prePct:'До ключей, %',
+        ownPost:'СВОИ post‑условия', months:'Срок, мес', rate:'Ставка, %/мес', firstPost:'Первый платёж после ключей', delete:'Удалить',
+        addVilla:'Добавить виллу', cashflowTitle:'Сводный кэшфлоу по месяцам', cashMonth:'Месяц', cashDesc:'Описание',
+        cashTotal:'Сумма (в выбранной валюте)', totals:'Итоги', base:'База', prepay:'Оплата до ключей',
+        after:'Остаток после ключей', interestTotal:'Проценты (post)', final:'Итоговая цена',
+        projects:'Вилл', keys:'Ключи: мес.', chartTitle:'Платежи по месяцам', shareCopied:'Ссылка скопирована' },
+      en: { title:'Installments Calculator • Editor / Client (v7.1)', editor:'Editor', client:'Client',
+        lang:'Language', currencyDisplay:'Display currency', idrRate:'IDR per 1 USD', eurRate:'EUR per 1 USD',
+        handoverMonth:'Handover month', globalTerm:'Global post‑handover term (6–24 mo)', globalRate:'Global rate, %/month',
+        clientTerm:'Post‑handover term (months)', rateHidden:'Rate (hidden)', stagesTitle:'Pre‑handover stages', stage:'Stage', percent:'%', month:'Month',
+        addStage:'Add stage', shareEditor:'Share (editor)', shareClient:'Share (client)',
+        banner:'Client view: rate and interest are hidden. You can change price, pre‑handover %, first post‑handover payment and stages.',
+        villasTitle:'Villas', name:'Name', area:'sqm', ppsm:'$ / sqm', price:'Price (USD)', prePct:'Pre‑handover, %',
+        ownPost:'Own post‑terms', months:'Term, mo', rate:'Rate, %/mo', firstPost:'First payment after handover', delete:'Delete',
+        addVilla:'Add villa', cashflowTitle:'Monthly consolidated cashflow', cashMonth:'Month', cashDesc:'Description',
+        cashTotal:'Amount (display currency)', totals:'Totals', base:'Base', prepay:'Paid before keys',
+        after:'Balance after keys', interestTotal:'Interest (post)', final:'Final price',
+        projects:'Villas', keys:'Keys: mo.', chartTitle:'Payments by month', shareCopied:'Link copied' }
     };
 
     const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -183,21 +111,21 @@
       const [lang,setLang] = useState('ru');
       const t = T[lang];
 
-      // client/editor flag
+      // client/editor
       const [isClient,setIsClient] = useState(false);
 
-      // currency (both modes can change display currency; rates editable only in editor)
+      // currency (both can change display currency; rates edit only in editor)
       const [currency,setCurrency] = useState('USD');
       const [idrPerUsd,setIdrPerUsd] = useState(16500);
       const [eurPerUsd,setEurPerUsd] = useState(0.92);
       const toCurrency = usd => currency==='USD' ? usd : currency==='IDR' ? usd*idrPerUsd : usd*eurPerUsd;
 
-      // global terms
+      // terms
       const [handoverMonth,setHandoverMonth] = useState(12);
       const [months,setMonths] = useState(12);
       const [monthlyRatePct,setMonthlyRatePct] = useState(8.33);
 
-      // stages (global)
+      // stages
       const [stages,setStages] = useState([
         {id:1,label:'Договор', pct:30, month:0},
         {id:2,label:'50% готовности', pct:30, month:6},
@@ -215,7 +143,7 @@
       // restore / persist
       useEffect(()=>{
         const fromUrl = decodeStateFromUrl();
-        const saved = fromUrl?.state || JSON.parse(localStorage.getItem('installments_v7')||'null');
+        const saved = fromUrl?.state || JSON.parse(localStorage.getItem('installments_v71')||'null');
         if(saved){
           try{
             if(saved.lang) setLang(saved.lang);
@@ -233,13 +161,12 @@
       },[]);
       useEffect(()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
-        localStorage.setItem('installments_v7', JSON.stringify(state));
-        // update meta titles
+        localStorage.setItem('installments_v71', JSON.stringify(state));
         document.getElementById('app-title').textContent = t.title;
         document.title = t.title;
       },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas]);
 
-      // ------- calculations per-villa -------
+      // calcs
       const stagesSumPct = useMemo(()=> stages.reduce((s,x)=>s+(+x.pct||0),0), [stages]);
 
       const villasData = useMemo(()=>{
@@ -247,7 +174,6 @@
           const baseComputed = v.area * v.ppsm;
           const base = v.override ? (v.base||0) : baseComputed;
 
-          // pre-handover: distribute by global stages scaled to v.prePct
           const k = stagesSumPct===0 ? 0 : (v.prePct||0)/stagesSumPct;
           const preSchedule = stages.map(s=>({
             month: Math.max(0, Math.min(handoverMonth, Math.round(+s.month||0))),
@@ -256,11 +182,9 @@
           })).filter(r=>r.amountUSD>0).sort((a,b)=>a.month-b.month);
           const preTotal = preSchedule.reduce((s,r)=>s+r.amountUSD,0);
 
-          // post-handover: first immediate payment then equal principal + monthly interest
           const vMonths = v.ownTerms && v.months ? v.months : months;
           const rate = (v.ownTerms && v.monthlyRatePct!=null) ? (v.monthlyRatePct/100) : (monthlyRatePct/100);
 
-          // balance after keys BEFORE interest: base - preTotal - firstPost
           const firstPostUSD = Math.max(0, +v.firstPostUSD||0);
           const principalBase = Math.max(0, base - preTotal - firstPostUSD);
 
@@ -282,12 +206,11 @@
             bal -= principalShare;
           }
 
-          const finalPrice = base + totalInterest; // === что увидит клиент как «итог»
+          const finalPrice = base + totalInterest;
           return { v, base, preSchedule, preTotal, firstPostUSD, postRows, totalInterest, finalPrice, principalBase };
         });
       },[villas, stages, stagesSumPct, handoverMonth, months, monthlyRatePct, lang]);
 
-      // ------- project-level aggregates & cashflow -------
       const project = useMemo(()=>{
         const totals = {
           baseUSD: villasData.reduce((s,x)=>s+x.base,0),
@@ -295,10 +218,8 @@
           interestUSD: villasData.reduce((s,x)=>s+x.totalInterest,0),
           finalUSD: villasData.reduce((s,x)=>s+x.finalPrice,0),
         };
-        // Остаток после ключей = Итоговая цена − Оплата до ключей
         totals.afterUSD = totals.finalUSD - totals.preUSD;
 
-        // Consolidated cashflow per month (includes: pre stages, first post payment, and post schedule)
         const m = new Map();
         const push = (month, amt, desc) => {
           if(amt<=0) return;
@@ -316,7 +237,7 @@
         return { totals, cashflow };
       },[villasData, handoverMonth, lang]);
 
-      // ------- chart -------
+      // chart
       const chartRef = useRef(null);
       const chartObj = useRef(null);
       useEffect(()=>{
@@ -327,46 +248,42 @@
         if(chartObj.current){ chartObj.current.destroy(); }
         chartObj.current = new Chart(ctx, {
           type: 'bar',
-          data: { labels, datasets: [{ label: (T[lang].chartTitle), data }] },
+          data: { labels, datasets: [{ label: T[lang].chartTitle, data }] },
           options: {
             responsive: true,
             plugins: { legend: { display: false }, tooltip: { callbacks: {
               label: (ctx)=> fmtMoney(ctx.parsed.y, currency)
             }}},
-            scales: {
-              y: { ticks: { callback: v => fmtMoney(v, currency) } }
-            }
+            scales: { y: { ticks: { callback: v => fmtMoney(v, currency) } } }
           }
         });
       },[project.cashflow, currency, idrPerUsd, eurPerUsd, lang]);
 
-      // ------- actions -------
+      // actions
       const updateVilla = (id, patch)=> setVillas(prev=> prev.map(v=> v.id===id? {...v, ...patch}: v));
       const addVilla = ()=> setVillas(prev=>{
-        const last = prev[prev.length-1];
-        const id = (last?.id || 0) + 1;
-        return [...prev, {id,name: (lang==='ru'?'Новая вилла':'New villa'), area:last?last.area:100, ppsm:last?last.ppsm:2500, override:false, base:last?last.base:250000, prePct:last?last.prePct:70, ownTerms:false, months:null, monthlyRatePct:null, firstPostUSD:0}];
+        const last = prev[prev.length-1]; const id=(last?.id||0)+1;
+        return [...prev, {id,name:(lang==='ru'?'Новая вилла':'New villa'),area:last?last.area:100,ppsm:last?last.ppsm:2500,override:false,base:last?last.base:250000,prePct:last?last.prePct:70,ownTerms:false,months:null,monthlyRatePct:null,firstPostUSD:0}];
       });
       const removeVilla = (id)=> setVillas(prev=> prev.filter(v=> v.id!==id));
 
       const shareEditor = async ()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
         const url = encodeStateToUrl(state, {view:null});
-        if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
+        if(url){ await navigator.clipboard.writeText(url); alert(T[lang].shareCopied); }
       };
       const shareClient = async ()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
         const url = encodeStateToUrl(state, {view:'client'});
-        if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
+        if(url){ await navigator.clipboard.writeText(url); alert(T[lang].shareCopied); }
       };
 
-      // ------- UI -------
+      // UI
       return (
         <div className="grid">
           <div className="card col-4">
             {isClient && <div className="banner">{t.banner}</div>}
 
-            {/* Language */}
             <div className="field">
               <label>{t.lang}</label>
               <select value={lang} onChange={e=>setLang(e.target.value)}>
@@ -375,7 +292,6 @@
               </select>
             </div>
 
-            {/* Currency (both modes), rates only in editor */}
             <div className="field">
               <label>{t.currencyDisplay}</label>
               <select value={currency} onChange={e=>setCurrency(e.target.value)}>
@@ -429,7 +345,7 @@
 
             <div className="hr"></div>
 
-            {/* Stages (editable in both modes) */}
+            {/* Stages */}
             <h3 style={{margin:'6px 0'}}>{t.stagesTitle}</h3>
             <div className="scroll" style={{maxHeight:'26vh',border:'1px dashed #223',borderRadius:'8px',padding:'6px'}}>
               <table>
@@ -449,8 +365,7 @@
             <div className="row" style={{marginTop:8}}>
               <button className="btn" onClick={()=>{
                 setStages(prev=>{
-                  const last = prev[prev.length-1];
-                  const id = (last?.id||0)+1;
+                  const last = prev[prev.length-1]; const id=(last?.id||0)+1;
                   const nextMonth = Math.min(handoverMonth, (last?.month ?? 0)+1);
                   return [...prev,{id,label:(lang==='ru'?'Этап':'Stage'),pct:5,month:nextMonth}];
                 })
@@ -459,7 +374,7 @@
 
             <div className="hr"></div>
 
-            {/* Share (editor only; в клиенте скрыто полностью) */}
+            {/* Share — editor only */}
             {!isClient && (
               <div className="row">
                 <button className="btn" onClick={shareEditor}>{t.shareEditor}</button>
@@ -479,7 +394,7 @@
               <div className="muted">{isClient ? t.client : t.editor}</div>
             </div>
 
-            {/* KPIs — after = final − prepay */}
+            {/* KPIs */}
             {isClient ? (
               <div className="kpis" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
                 <KPI label={t.final} value={fmtMoney(toCurrency(project.totals.finalUSD), currency)}/>
@@ -520,7 +435,7 @@
                       <td><input type="number" min="1" step="0.1" value={vc.v.area} onChange={e=>updateVilla(vc.v.id,{area:clamp(parseFloat(e.target.value||0),1,100000), ...(isClient?{override:false}:{})})}/></td>
                       <td><input type="number" min="0" step="1" value={vc.v.ppsm} onChange={e=>updateVilla(vc.v.id,{ppsm:clamp(parseFloat(e.target.value||0),0,1e9), ...(isClient?{override:false}:{})})}/></td>
                       <td>
-                        <label className="pill" style={{display:'inline-flex',gap:6,alignItems:'center',margin-bottom:6px}}>
+                        <label className="pill" style={{display:'inline-flex',gap:6,alignItems:'center',marginBottom:6}}>
                           <input type="checkbox" checked={vc.v.override} onChange={e=>updateVilla(vc.v.id,{override:e.target.checked})}/>
                           {lang==='ru'?'вручную':'manual'}
                         </label>
@@ -528,7 +443,7 @@
                       </td>
                       <td>
                         <input type="range" min="0" max="100" step="1" value={vc.v.prePct} onChange={e=>updateVilla(vc.v.id,{prePct:parseInt(e.target.value,10)})}/>
-                        <div className="pill" style={{display:'inline-block',margin-top:6px}}>{vc.v.prePct}%</div>
+                        <div className="pill" style={{display:'inline-block',marginTop:6}}>{vc.v.prePct}%</div>
                       </td>
 
                       {!isClient && (
@@ -590,7 +505,7 @@
 
             <div className="hr"></div>
 
-            <h3 style={{margin:'6px 0'}}>{t.chartTitle}</h3>
+            <h3 style={{margin:'6px 0'}}>{T[lang].chartTitle}</h3>
             <canvas id="paymentsChart" height="200" ref={chartRef}></canvas>
 
             <div className="hr"></div>
