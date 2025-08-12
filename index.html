@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Installments • Editor / Client (v6)</title>
+  <title>Installments • Editor / Client (v7)</title>
   <style>
     *{box-sizing:border-box}
     :root{--bg:#0b0d12;--card:#0f1420;--line:#1c2233;--muted:#9fb0d0;--ink:#e7ebf3}
@@ -36,21 +36,23 @@
 </head>
 <body>
   <div class="wrap">
-    <h1 id="app-title">Калькулятор рассрочки • Editor / Client (v6)</h1>
+    <h1 id="app-title">Калькулятор рассрочки • Editor / Client (v7)</h1>
     <div id="root"></div>
   </div>
 
+  <!-- libs -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <script type="text/babel">
-    const {useEffect,useMemo,useState} = React;
+    const {useEffect,useMemo,useRef,useState} = React;
 
     // i18n
     const T = {
       ru: {
-        title: 'Калькулятор рассрочки • Editor / Client (v6)',
+        title: 'Калькулятор рассрочки • Editor / Client (v7)',
         editor: 'Редактор',
         client: 'Клиент',
         lang: 'Язык интерфейса',
@@ -69,7 +71,7 @@
         addStage: 'Добавить этап',
         shareEditor: 'Поделиться (редактор)',
         shareClient: 'Поделиться (клиенту)',
-        banner: 'Клиентский режим: ставка и сумма процентов скрыты. Можно менять цену, % «до ключей», первый платёж после ключей и этапы.',
+        banner: 'Клиентский режим: ставка и сумма процентов скрыты. Можно менять: цену, % «до ключей», первый платёж после ключей и этапы.',
         villasTitle: 'Список вилл',
         name: 'Название',
         area: 'м²',
@@ -82,12 +84,10 @@
         firstPost: 'Первый платёж после ключей',
         delete: 'Удалить',
         addVilla: 'Добавить виллу',
-        postTitle: 'Post‑handover (помесячно)',
-        villa: 'Вилла',
-        principal: 'Основной долг (USD)',
-        interest: '% (USD)',
-        payment: 'Платёж (USD)',
-        balance: 'Остаток (USD)',
+        cashflowTitle: 'Сводный кэшфлоу по месяцам',
+        cashMonth: 'Месяц',
+        cashDesc: 'Описание',
+        cashTotal: 'Сумма (в выбранной валюте)',
         totals: 'Итоги',
         base: 'База',
         prepay: 'Оплата до ключей',
@@ -96,10 +96,11 @@
         final: 'Итоговая цена',
         projects: 'Вилл',
         keys: 'Ключи: мес.',
+        chartTitle: 'Платежи по месяцам',
         shareCopied: 'Ссылка скопирована',
       },
       en: {
-        title: 'Installments Calculator • Editor / Client (v6)',
+        title: 'Installments Calculator • Editor / Client (v7)',
         editor: 'Editor',
         client: 'Client',
         lang: 'Language',
@@ -131,12 +132,10 @@
         firstPost: 'First payment after handover',
         delete: 'Delete',
         addVilla: 'Add villa',
-        postTitle: 'Post‑handover (monthly)',
-        villa: 'Villa',
-        principal: 'Principal (USD)',
-        interest: 'Interest (USD)',
-        payment: 'Payment (USD)',
-        balance: 'Balance (USD)',
+        cashflowTitle: 'Monthly consolidated cashflow',
+        cashMonth: 'Month',
+        cashDesc: 'Description',
+        cashTotal: 'Amount (display currency)',
         totals: 'Totals',
         base: 'Base',
         prepay: 'Paid before keys',
@@ -145,6 +144,7 @@
         final: 'Final price',
         projects: 'Villas',
         keys: 'Keys: mo.',
+        chartTitle: 'Payments by month',
         shareCopied: 'Link copied',
       }
     };
@@ -186,7 +186,7 @@
       // client/editor flag
       const [isClient,setIsClient] = useState(false);
 
-      // currency (editor can change; client may change display currency, NOT rates)
+      // currency (both modes can change display currency; rates editable only in editor)
       const [currency,setCurrency] = useState('USD');
       const [idrPerUsd,setIdrPerUsd] = useState(16500);
       const [eurPerUsd,setEurPerUsd] = useState(0.92);
@@ -215,7 +215,7 @@
       // restore / persist
       useEffect(()=>{
         const fromUrl = decodeStateFromUrl();
-        const saved = fromUrl?.state || JSON.parse(localStorage.getItem('installments_v6')||'null');
+        const saved = fromUrl?.state || JSON.parse(localStorage.getItem('installments_v7')||'null');
         if(saved){
           try{
             if(saved.lang) setLang(saved.lang);
@@ -233,21 +233,21 @@
       },[]);
       useEffect(()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
-        localStorage.setItem('installments_v6', JSON.stringify(state));
-        // update <title> and H1 when language changes
+        localStorage.setItem('installments_v7', JSON.stringify(state));
+        // update meta titles
         document.getElementById('app-title').textContent = t.title;
         document.title = t.title;
       },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas]);
 
-      // calcs
+      // ------- calculations per-villa -------
       const stagesSumPct = useMemo(()=> stages.reduce((s,x)=>s+(+x.pct||0),0), [stages]);
 
-      const villaCalcs = useMemo(()=>{
+      const villasData = useMemo(()=>{
         return villas.map(v=>{
           const baseComputed = v.area * v.ppsm;
           const base = v.override ? (v.base||0) : baseComputed;
 
-          // pre-handover split scaled by v.prePct
+          // pre-handover: distribute by global stages scaled to v.prePct
           const k = stagesSumPct===0 ? 0 : (v.prePct||0)/stagesSumPct;
           const preSchedule = stages.map(s=>({
             month: Math.max(0, Math.min(handoverMonth, Math.round(+s.month||0))),
@@ -256,60 +256,91 @@
           })).filter(r=>r.amountUSD>0).sort((a,b)=>a.month-b.month);
           const preTotal = preSchedule.reduce((s,r)=>s+r.amountUSD,0);
 
-          const afterAmountRaw = Math.max(0, base - preTotal);
-          const firstPostUSD = Math.max(0, +v.firstPostUSD||0);
-          const afterAmount = Math.max(0, afterAmountRaw - firstPostUSD);
-
+          // post-handover: first immediate payment then equal principal + monthly interest
           const vMonths = v.ownTerms && v.months ? v.months : months;
-          const vRate   = (v.ownTerms && v.monthlyRatePct!=null) ? (v.monthlyRatePct/100) : (monthlyRatePct/100);
+          const rate = (v.ownTerms && v.monthlyRatePct!=null) ? (v.monthlyRatePct/100) : (monthlyRatePct/100);
+
+          // balance after keys BEFORE interest: base - preTotal - firstPost
+          const firstPostUSD = Math.max(0, +v.firstPostUSD||0);
+          const principalBase = Math.max(0, base - preTotal - firstPostUSD);
 
           const postRows=[];
-          let bal = afterAmount, totalI=0;
-          const principal = vMonths>0 ? afterAmount / vMonths : 0;
+          let bal = principalBase, totalInterest=0;
+          const principalShare = vMonths>0 ? principalBase / vMonths : 0;
           for(let i=1;i<=vMonths;i++){
-            const interest = bal * vRate;
-            totalI += interest;
-            const payment = principal + interest;
+            const interest = bal * rate;
+            totalInterest += interest;
+            const payment = principalShare + interest;
             postRows.push({
               month: handoverMonth + i,
-              label: (lang==='ru' ? 'Месяц ' : 'Month ') + i,
-              principalUSD: principal,
+              label: (lang==='ru'?'Месяц ':'Month ')+i,
+              principalUSD: principalShare,
               interestUSD: interest,
               paymentUSD: payment,
-              balanceAfterUSD: Math.max(0, bal - principal),
+              balanceAfterUSD: Math.max(0, bal - principalShare),
             });
-            bal -= principal;
+            bal -= principalShare;
           }
 
-          const finalPrice = base + totalI;
-          return { v, baseComputed, base, preSchedule, preTotal, firstPostUSD, afterAmount, postRows, totalInterest: totalI, finalPrice, vMonths, vRatePct: vRate*100 };
+          const finalPrice = base + totalInterest; // === что увидит клиент как «итог»
+          return { v, base, preSchedule, preTotal, firstPostUSD, postRows, totalInterest, finalPrice, principalBase };
         });
       },[villas, stages, stagesSumPct, handoverMonth, months, monthlyRatePct, lang]);
 
+      // ------- project-level aggregates & cashflow -------
       const project = useMemo(()=>{
+        const totals = {
+          baseUSD: villasData.reduce((s,x)=>s+x.base,0),
+          preUSD: villasData.reduce((s,x)=>s+x.preTotal,0),
+          interestUSD: villasData.reduce((s,x)=>s+x.totalInterest,0),
+          finalUSD: villasData.reduce((s,x)=>s+x.finalPrice,0),
+        };
+        // Остаток после ключей = Итоговая цена − Оплата до ключей
+        totals.afterUSD = totals.finalUSD - totals.preUSD;
+
+        // Consolidated cashflow per month (includes: pre stages, first post payment, and post schedule)
         const m = new Map();
-        const push = (month, amt, label) => {
+        const push = (month, amt, desc) => {
+          if(amt<=0) return;
           const prev = m.get(month) || {month, items:[], amountUSD:0};
-          prev.items.push(label);
+          prev.items.push(desc);
           prev.amountUSD += amt;
           m.set(month, prev);
         };
-        villaCalcs.forEach(vc=>{
+        villasData.forEach(vc=>{
           vc.preSchedule.forEach(r=> push(r.month, r.amountUSD, `${vc.v.name}: ${r.label}`));
+          if(vc.firstPostUSD>0) push(handoverMonth+1, vc.firstPostUSD, `${vc.v.name}: ${lang==='ru'?'Первый платёж':'First payment'}`);
           vc.postRows.forEach(r=> push(r.month, r.paymentUSD, `${vc.v.name}: ${r.label}`));
         });
         const cashflow = Array.from(m.values()).sort((a,b)=>a.month-b.month);
-        const totals = {
-          baseUSD: villaCalcs.reduce((s,x)=>s+x.base,0),
-          preUSD: villaCalcs.reduce((s,x)=>s+x.preTotal,0),
-          postPrincipalUSD: villaCalcs.reduce((s,x)=>s+x.afterAmount,0),
-          interestUSD: villaCalcs.reduce((s,x)=>s+x.totalInterest,0),
-          finalUSD: villaCalcs.reduce((s,x)=>s+x.finalPrice,0),
-        };
-        return {cashflow, totals};
-      },[villaCalcs]);
+        return { totals, cashflow };
+      },[villasData, handoverMonth, lang]);
 
-      // actions
+      // ------- chart -------
+      const chartRef = useRef(null);
+      const chartObj = useRef(null);
+      useEffect(()=>{
+        const ctx = chartRef.current?.getContext('2d');
+        if(!ctx) return;
+        const labels = project.cashflow.map(c=>String(c.month));
+        const data = project.cashflow.map(c=> toCurrency(c.amountUSD));
+        if(chartObj.current){ chartObj.current.destroy(); }
+        chartObj.current = new Chart(ctx, {
+          type: 'bar',
+          data: { labels, datasets: [{ label: (T[lang].chartTitle), data }] },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false }, tooltip: { callbacks: {
+              label: (ctx)=> fmtMoney(ctx.parsed.y, currency)
+            }}},
+            scales: {
+              y: { ticks: { callback: v => fmtMoney(v, currency) } }
+            }
+          }
+        });
+      },[project.cashflow, currency, idrPerUsd, eurPerUsd, lang]);
+
+      // ------- actions -------
       const updateVilla = (id, patch)=> setVillas(prev=> prev.map(v=> v.id===id? {...v, ...patch}: v));
       const addVilla = ()=> setVillas(prev=>{
         const last = prev[prev.length-1];
@@ -329,12 +360,13 @@
         if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
       };
 
+      // ------- UI -------
       return (
         <div className="grid">
           <div className="card col-4">
             {isClient && <div className="banner">{t.banner}</div>}
 
-            {/* Language switcher */}
+            {/* Language */}
             <div className="field">
               <label>{t.lang}</label>
               <select value={lang} onChange={e=>setLang(e.target.value)}>
@@ -343,7 +375,7 @@
               </select>
             </div>
 
-            {/* Display currency — available for both modes; rates editable only in editor */}
+            {/* Currency (both modes), rates only in editor */}
             <div className="field">
               <label>{t.currencyDisplay}</label>
               <select value={currency} onChange={e=>setCurrency(e.target.value)}>
@@ -397,7 +429,7 @@
 
             <div className="hr"></div>
 
-            {/* Stages — now editable in BOTH modes (as requested) */}
+            {/* Stages (editable in both modes) */}
             <h3 style={{margin:'6px 0'}}>{t.stagesTitle}</h3>
             <div className="scroll" style={{maxHeight:'26vh',border:'1px dashed #223',borderRadius:'8px',padding:'6px'}}>
               <table>
@@ -427,7 +459,7 @@
 
             <div className="hr"></div>
 
-            {/* Share — in client mode we HIDE editor link completely */}
+            {/* Share (editor only; в клиенте скрыто полностью) */}
             {!isClient && (
               <div className="row">
                 <button className="btn" onClick={shareEditor}>{t.shareEditor}</button>
@@ -447,18 +479,18 @@
               <div className="muted">{isClient ? t.client : t.editor}</div>
             </div>
 
-            {/* KPIs */}
+            {/* KPIs — after = final − prepay */}
             {isClient ? (
               <div className="kpis" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
                 <KPI label={t.final} value={fmtMoney(toCurrency(project.totals.finalUSD), currency)}/>
                 <KPI label={t.prepay} value={fmtMoney(toCurrency(project.totals.preUSD), currency)}/>
-                <KPI label={t.after} value={fmtMoney(toCurrency(project.totals.postPrincipalUSD), currency)}/>
+                <KPI label={t.after} value={fmtMoney(toCurrency(project.totals.afterUSD), currency)}/>
               </div>
             ) : (
               <div className="kpis">
                 <KPI label={t.base} value={fmtMoney(toCurrency(project.totals.baseUSD), currency)}/>
                 <KPI label={t.prepay} value={fmtMoney(toCurrency(project.totals.preUSD), currency)}/>
-                <KPI label={t.after} value={fmtMoney(toCurrency(project.totals.postPrincipalUSD), currency)}/>
+                <KPI label={t.after} value={fmtMoney(toCurrency(project.totals.afterUSD), currency)}/>
                 <KPI label={t.interestTotal} value={fmtMoney(toCurrency(project.totals.interestUSD), currency)}/>
                 <KPI label={t.final} value={fmtMoney(toCurrency(project.totals.finalUSD), currency)}/>
               </div>
@@ -480,7 +512,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {villaCalcs.map(vc=>(
+                  {villasData.map(vc=>(
                     <tr key={vc.v.id}>
                       <td style={{textAlign:'left'}}>
                         <input type="text" value={vc.v.name} onChange={e=>updateVilla(vc.v.id,{name:e.target.value})}/>
@@ -488,7 +520,7 @@
                       <td><input type="number" min="1" step="0.1" value={vc.v.area} onChange={e=>updateVilla(vc.v.id,{area:clamp(parseFloat(e.target.value||0),1,100000), ...(isClient?{override:false}:{})})}/></td>
                       <td><input type="number" min="0" step="1" value={vc.v.ppsm} onChange={e=>updateVilla(vc.v.id,{ppsm:clamp(parseFloat(e.target.value||0),0,1e9), ...(isClient?{override:false}:{})})}/></td>
                       <td>
-                        <label className="pill" style={{display:'inline-flex',gap:6,alignItems:'center',marginBottom:6}}>
+                        <label className="pill" style={{display:'inline-flex',gap:6,alignItems:'center',margin-bottom:6px}}>
                           <input type="checkbox" checked={vc.v.override} onChange={e=>updateVilla(vc.v.id,{override:e.target.checked})}/>
                           {lang==='ru'?'вручную':'manual'}
                         </label>
@@ -496,7 +528,7 @@
                       </td>
                       <td>
                         <input type="range" min="0" max="100" step="1" value={vc.v.prePct} onChange={e=>updateVilla(vc.v.id,{prePct:parseInt(e.target.value,10)})}/>
-                        <div className="pill" style={{display:'inline-block',marginTop:6}}>{vc.v.prePct}%</div>
+                        <div className="pill" style={{display:'inline-block',margin-top:6px}}>{vc.v.prePct}%</div>
                       </td>
 
                       {!isClient && (
@@ -536,30 +568,30 @@
 
             <div className="hr"></div>
 
-            <h3 style={{margin:'6px 0'}}>{t.postTitle}</h3>
+            <h3 style={{margin:'6px 0'}}>{t.cashflowTitle}</h3>
             <div className="scroll">
               <table>
                 <thead>
                   <tr>
-                    <th>{t.villa}</th><th>{t.month}</th><th>{t.principal}</th>
-                    {!isClient && <th>{t.interest}</th>}
-                    <th>{t.payment}</th><th>{t.balance}</th>
+                    <th>{t.cashMonth}</th><th>{t.cashDesc}</th><th>{t.cashTotal}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {villaCalcs.flatMap(vc=> vc.postRows.map(r=>(
-                    <tr key={vc.v.id + '-' + r.month}>
-                      <td style={{textAlign:'left'}}>{vc.v.name}</td>
-                      <td>{r.month}</td>
-                      <td>{fmtMoney(toCurrency(r.principalUSD), currency)}</td>
-                      {!isClient && <td>{fmtMoney(toCurrency(r.interestUSD), currency)}</td>}
-                      <td>{fmtMoney(toCurrency(r.paymentUSD), currency)}</td>
-                      <td>{fmtMoney(toCurrency(r.balanceAfterUSD), currency)}</td>
+                  {project.cashflow.map(c=>(
+                    <tr key={c.month}>
+                      <td>{c.month}</td>
+                      <td style={{textAlign:'left'}}>{(c.items||[]).join(' + ')}</td>
+                      <td>{fmtMoney(toCurrency(c.amountUSD), currency)}</td>
                     </tr>
-                  )))}
+                  ))}
                 </tbody>
               </table>
             </div>
+
+            <div className="hr"></div>
+
+            <h3 style={{margin:'6px 0'}}>{t.chartTitle}</h3>
+            <canvas id="paymentsChart" height="200" ref={chartRef}></canvas>
 
             <div className="hr"></div>
 
@@ -567,7 +599,7 @@
             <div className="kpis" style={{gridTemplateColumns: isClient ? 'repeat(3,1fr)' : 'repeat(5,1fr)'}}>
               {!isClient && <KPI label={t.base} value={fmtMoney(toCurrency(project.totals.baseUSD), currency)}/>}
               <KPI label={t.prepay} value={fmtMoney(toCurrency(project.totals.preUSD), currency)}/>
-              <KPI label={t.after} value={fmtMoney(toCurrency(project.totals.postPrincipalUSD), currency)}/>
+              <KPI label={t.after} value={fmtMoney(toCurrency(project.totals.afterUSD), currency)}/>
               {!isClient && <KPI label={t.interestTotal} value={fmtMoney(toCurrency(project.totals.interestUSD), currency)}/>}
               <KPI label={t.final} value={fmtMoney(toCurrency(project.totals.finalUSD), currency)}/>
             </div>
