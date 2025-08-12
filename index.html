@@ -50,6 +50,24 @@
       --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Отступы и размеры */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-2xl: 48px;
+      
+      /* Высота блоков */
+      --block-min-height: 200px;
+      --block-max-height: 600px;
+      
+      /* Z-index слои */
+      --z-base: 1;
+      --z-card: 10;
+      --z-modal: 1000;
+      --z-tooltip: 1100;
     }
     
     /* Базовые стили */
@@ -147,6 +165,7 @@
       transition:all var(--transition-normal);
       position:relative;
       overflow:hidden;
+      margin-bottom: var(--spacing-lg);
     }
     
     .card::before{
@@ -206,6 +225,11 @@
       border-radius:2px;
     }
     
+    .card-actions{
+      display:flex;
+      gap:8px;
+    }
+    
     /* Современные кнопки */
     .btn{
       appearance:none;
@@ -225,6 +249,7 @@
       align-items:center;
       gap:8px;
       text-decoration:none;
+      white-space: nowrap;
     }
     
     .btn::before{
@@ -359,6 +384,46 @@
       border-color:var(--line-hover);
       background:var(--card-hover);
     }
+    
+    /* Компактные поля для настроек */
+    .field.compact {
+      min-width: 120px;
+      max-width: 180px;
+    }
+    
+    .field.compact input,
+    .field.compact select {
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    
+    /* Строки с полями */
+    .row{
+      display:flex;
+      gap:var(--spacing-lg);
+      align-items:flex-end;
+      margin-bottom:var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+    
+    .row .field{
+      flex:1;
+      margin-bottom:0;
+      min-width: 140px;
+    }
+    
+    /* Адаптивность для строк */
+    @media (max-width: 768px) {
+      .row {
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+      
+      .row .field {
+        margin-bottom: var(--spacing-md);
+        min-width: auto;
+      }
+    }
 
         /* Современные таблицы */
     .calc-scroll{
@@ -368,6 +433,7 @@
       border-radius:var(--radius-sm);
       background:var(--card);
       position:relative;
+      margin-bottom: var(--spacing-lg);
     }
     
     .calc-scroll::before{
@@ -385,6 +451,7 @@
       min-width:800px;
       border-collapse:separate;
       border-spacing:0;
+      width: 100%;
     }
     
     .calc-table th{
@@ -419,6 +486,179 @@
     
     .calc-table tr:hover td:first-child{
       border-left:3px solid var(--primary);
+    }
+    
+    /* Оптимизированная таблица этапов */
+    .stages-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    
+    .stages-table th,
+    .stages-table td {
+      padding: var(--spacing-sm);
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .stages-table th {
+      background: var(--card-hover);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--line);
+    }
+    
+    .stages-table .col-stage {
+      width: 40%;
+      min-width: 150px;
+      text-align: left;
+    }
+    
+    .stages-table .col-percent {
+      width: 15%;
+      min-width: 80px;
+      max-width: 100px;
+    }
+    
+    .stages-table .col-month {
+      width: 15%;
+      min-width: 80px;
+      max-width: 100px;
+    }
+    
+    .stages-table .col-actions {
+      width: 20%;
+      min-width: 100px;
+    }
+    
+    .stages-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .stages-table tr:hover {
+      background: var(--card-hover);
+    }
+    
+    .stages-table tr:hover td {
+      border-color: var(--line-hover);
+    }
+    
+    /* Стилизованные поля для этапов */
+    .stage-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-size: 13px;
+      transition: all var(--transition-fast);
+    }
+    
+    .stage-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--card-hover);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .stage-number-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-size: 13px;
+      text-align: center;
+      max-width: 80px;
+    }
+    
+    .stage-number-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--card-hover);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    /* Кнопки действий для этапов */
+    .stage-actions {
+      display: flex;
+      gap: var(--spacing-xs);
+      justify-content: center;
+    }
+    
+    .delete-stage-btn {
+      padding: 6px 10px;
+      background: var(--danger);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: white;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+    
+    .delete-stage-btn:hover {
+      background: var(--danger-hover);
+      transform: translateY(-1px);
+    }
+    
+    /* Таблица кэшфлоу */
+    .cashflow-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    
+    .cashflow-table th {
+      background: var(--card-hover);
+      border-bottom: 2px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: var(--spacing-md);
+      font-weight: 600;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    .cashflow-table th:last-child {
+      border-right: none;
+    }
+    
+    .cashflow-table td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: var(--spacing-md);
+      text-align: center;
+    }
+    
+    .cashflow-table td:last-child {
+      border-right: none;
+    }
+    
+    .cashflow-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .cashflow-table tbody tr:hover {
+      background: var(--card-hover);
+    }
+    
+    .cashflow-table tbody tr:hover td {
+      border-color: var(--line-hover);
     }
     
     /* Современные модальные окна */
@@ -481,8 +721,8 @@
       overflow-y:auto;
       max-height:60vh;
     }
-    
-    /* Современные формы */
+
+        /* Современные формы */
     .form-section{
       margin-bottom:24px;
     }
@@ -641,6 +881,39 @@
       transform:scale(1);
     }
     
+    /* Дополнительные элементы */
+    .pill{
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.2);
+      font-size:12px;
+      color:var(--ink);
+    }
+    
+    .badge{
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.2);
+      padding:4px 8px;
+      border-radius:6px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    
+    .muted{color:var(--muted)}
+    
+    .hr{
+      height:1px;
+      background:var(--line);
+      border:0;
+      margin:var(--spacing-lg) 0;
+    }
+    
+    .scroll{
+      overflow:auto;
+      max-height:50vh;
+    }
+    
     /* Адаптивность */
     @media (max-width: 767px) {
       .form-row {
@@ -659,8 +932,29 @@
         margin: 20px;
         max-width: calc(100vw - 40px);
       }
+      
+      .stages-table .col-stage {
+        min-width: 120px;
+      }
+      
+      .stages-table .col-percent,
+      .stages-table .col-month {
+        min-width: 60px;
+        max-width: 70px;
+      }
     }
-
+    
+    @media (min-width: 1200px) {
+      .settings-row {
+        gap: var(--spacing-2xl);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .field.compact {
+        min-width: 100px;
+      }
+    }
 
       </style>
 </head>
@@ -678,6 +972,7 @@
   <script crossorigin src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script crossorigin src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script crossorigin src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <!-- boot diagnostics: ловим CDN/JSX ошибки и запускаем компиляцию -->
   <script>
@@ -889,7 +1184,7 @@
 
       const [catalog,setCatalog]=useState(DEFAULT_CATALOG);
 
-      const [lines,setLines]=useState([
+            const [lines,setLines]=useState([
         {id:1,projectId:'enso',villaId:'enso-2br',qty:1,prePct:70,ownTerms:false,months:null,monthlyRatePct:null,firstPostUSD:0,discountPct:0,
          snapshot:{name:'Enso 2BR',area:100,ppsm:2500,baseUSD:250000}}
       ]);
@@ -1067,7 +1362,7 @@
 
         const qty=Math.max(1,parseInt(line.qty||1,10));
         const preScheduleQ=preSchedule.map(r=>({...r,amountUSD:r.amountUSD*qty}));
-                const postRowsQ=postRows.map(r=>({...r,principalUSD:r.principalUSD*qty,interestUSD:r.interestUSD*qty,paymentUSD:r.paymentUSD*qty}));
+        const postRowsQ=postRows.map(r=>({...r,principalUSD:r.principalUSD*qty,interestUSD:r.interestUSD*qty,paymentUSD:r.paymentUSD*qty}));
         const preTotal=preTotalOne*qty;
         const firstPostQ=firstPostUSD*qty;
         const baseQ=base*qty;
@@ -1116,12 +1411,87 @@
         const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
         const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_cashflow_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
       };
+      
       const exportXLSX=()=>{
         const ws1=XLSX.utils.json_to_sheet(project.cashflow.map(c=>({[t.cashMonth]:c.month,[t.cashDesc]:(c.items||[]).join(' + '),[t.cashTotal]:toCurrency(c.amountUSD),[t.cashBalance]:toCurrency(c.balanceUSD)})));
         const ws2=XLSX.utils.json_to_sheet(linesData.map(ld=>({[t.project]:findProject(ld.line.projectId)?.projectName||ld.line.projectId,[t.villa]:ld.line.snapshot?.name,[t.qty]:ld.qty,[t.area]:ld.line.snapshot?.area,[t.ppsm]:ld.line.snapshot?.ppsm,[t.price]:ld.base,[t.discount]:(ld.discountPct||0)+'%',[t.prePct]:ld.line.prePct,[t.months]:ld.vMonths,[t.lineTotal]:ld.lineTotal})));
         const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws1,'Cashflow'); XLSX.utils.book_append_sheet(wb,ws2,'Lines'); XLSX.writeFile(wb,`arconique_installments_${new Date().toISOString().slice(0,10)}.xlsx`);
       };
-      const exportPDF=()=>window.print();
+      
+      // Исправленная функция экспорта в PDF
+      const exportPDF = () => {
+        if (!project) return;
+        
+        // Создаем чистый HTML для PDF
+        const pdfContent = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>${findProject(lines[0]?.projectId)?.projectName || 'Project'} - Cashflow Report</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              .header { text-align: center; margin-bottom: 30px; }
+              .header h1 { color: #333; margin: 0; }
+              .header .date { color: #666; margin-top: 10px; }
+              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+              th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+              th { background-color: #f5f5f5; font-weight: bold; }
+              .summary { margin: 20px 0; padding: 20px; background: #f9f9f9; }
+              .summary h3 { margin-top: 0; }
+              .amount { font-weight: bold; color: #2c5aa0; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <h1>${findProject(lines[0]?.projectId)?.projectName || 'Project'}</h1>
+              <div class="date">Отчет создан: ${new Date().toLocaleDateString('ru-RU')}</div>
+            </div>
+            
+            <div class="summary">
+              <h3>Сводка проекта</h3>
+              <p><strong>Общая сумма:</strong> <span class="amount">${fmtMoney(project.totals.baseUSD,'USD')}</span></p>
+              <p><strong>Итоговая цена:</strong> <span class="amount">${fmtMoney(project.totals.finalUSD,'USD')}</span></p>
+              <p><strong>Проценты:</strong> <span class="amount">${fmtMoney(project.totals.interestUSD,'USD')}</span></p>
+            </div>
+            
+            <h3>Денежный поток по месяцам</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Месяц</th>
+                  <th>Описание</th>
+                  <th>Сумма к оплате</th>
+                  <th>Остаток долга</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${project.cashflow.map(c => `
+                  <tr>
+                    <td>${c.month}</td>
+                    <td>${(c.items || []).join(' + ')}</td>
+                    <td class="amount">${fmtMoney(c.amountUSD,'USD')}</td>
+                    <td class="amount">${fmtMoney(c.balanceUSD,'USD')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </body>
+          </html>
+        `;
+        
+        // Используем html2pdf для создания PDF
+        const element = document.createElement('div');
+        element.innerHTML = pdfContent;
+        document.body.appendChild(element);
+        
+        html2pdf()
+          .from(element)
+          .save(`${findProject(lines[0]?.projectId)?.projectName || 'Project'}-cashflow-${new Date().toISOString().slice(0, 10)}.pdf`)
+          .then(() => {
+            document.body.removeChild(element);
+          });
+      };
 
       const share=async(view)=>{const url=encodeState(snapshot(),{view}); if(url){await navigator.clipboard.writeText(url); alert(t.shareCopied)}};
 
@@ -1144,52 +1514,56 @@
                 </div>
               )}
 
-              <div className="field">
-                <label>{t.lang}</label>
-                <select value={lang} onChange={e=>setLang(e.target.value)}>
-                  <option value="ru">Русский</option><option value="en">English</option>
-                </select>
-              </div>
-
-              <div className="field">
-                <label>{t.currencyDisplay}</label>
-                <select value={currency} onChange={e=>setCurrency(e.target.value)}>
-                  <option>USD</option><option>IDR</option><option>EUR</option>
-                </select>
+              {/* Оптимизированные поля настроек */}
+              <div className="row">
+                <div className="field compact">
+                  <label>{t.lang}</label>
+                  <select value={lang} onChange={e=>setLang(e.target.value)}>
+                    <option value="ru">Русский</option><option value="en">English</option>
+                  </select>
+                </div>
+                
+                <div className="field compact">
+                  <label>{t.currencyDisplay}</label>
+                  <select value={currency} onChange={e=>setCurrency(e.target.value)}>
+                    <option>USD</option><option>IDR</option><option>EUR</option>
+                  </select>
+                </div>
               </div>
 
               {!isClient && (
                 <div className="row">
-                  <div className="field" style={{flex:1}}>
+                  <div className="field compact">
                     <label>{t.idrRate}</label>
                     <input type="number" min="1" step="1" value={idrPerUsd} onChange={e=>setIdrPerUsd(clamp(parseFloat(e.target.value||0),1,1e9))}/>
                   </div>
-                  <div className="field" style={{flex:1}}>
+                  <div className="field compact">
                     <label>{t.eurRate}</label>
                     <input type="number" min="0.01" step="0.01" value={eurPerUsd} onChange={e=>setEurPerUsd(clamp(parseFloat(e.target.value||0),0.01,100))}/>
                   </div>
                 </div>
               )}
 
+              {/* Оптимизированные поля времени */}
               <div className="row">
-                <div className="field" style={{flex:1}}>
+                <div className="field compact">
                   <label>{t.handoverMonth}</label>
                   <input type="number" min="1" step="1" value={handoverMonth} onChange={e=>setHandoverMonth(clamp(parseInt(e.target.value||0,10),1,120))}/>
                 </div>
                 {!isClient ? (
                   <>
-                    <div className="field" style={{flex:1}}>
+                    <div className="field compact">
                       <label>{t.globalTerm}</label>
                       <input type="range" min="6" max="24" step="1" value={months} onChange={e=>setMonths(parseInt(e.target.value,10))}/>
                       <div className="pill">{t.months}: {months}</div>
                     </div>
-                    <div className="field" style={{flex:1}}>
+                    <div className="field compact">
                       <label>{t.globalRate}</label>
                       <input type="number" min="0" step="0.01" value={monthlyRatePct} onChange={e=>setMonthlyRatePct(clamp(parseFloat(e.target.value||0),0,1000))}/>
                     </div>
                   </>
                 ) : (
-                  <div className="field" style={{flex:1}}>
+                  <div className="field compact">
                     <label>{t.clientTerm}</label>
                     <input type="number" min="6" step="1" value={months} onChange={e=>setMonths(clamp(parseInt(e.target.value||0,10),6,120))}/>
                   </div>
@@ -1199,16 +1573,57 @@
               <div className="hr"></div>
 
               <h3 style={{margin:'6px 0'}}>{t.stagesTitle}</h3>
-              <div className="scroll" style={{maxHeight:'26vh',border:'1px dashed #223',borderRadius:'8px',padding:'6px'}}>
-                <table>
-                  <thead><tr><th>{t.stage}</th><th>{t.percent}</th><th>{t.month}</th><th></th></tr></thead>
+              
+              {/* Исправленная таблица этапов */}
+              <div className="scroll" style={{maxHeight:'26vh',border:'1px dashed #223',borderRadius:'8px',padding:'6px',marginBottom:'var(--spacing-lg)'}}>
+                <table className="stages-table">
+                  <thead>
+                    <tr>
+                      <th className="col-stage">{t.stage}</th>
+                      <th className="col-percent">{t.percent}</th>
+                      <th className="col-month">{t.month}</th>
+                      <th className="col-actions"></th>
+                    </tr>
+                  </thead>
                   <tbody>
                     {stages.map(s=>(
                       <tr key={s.id}>
-                        <td style={{textAlign:'left'}}><input type="text" value={s.label} onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,label:e.target.value}:x))}/></td>
-                        <td><input type="number" min="0" step="0.01" value={s.pct} onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,pct:clamp(parseFloat(e.target.value||0),0,100)}:x))}/></td>
-                        <td><input type="number" min="0" step="1" value={s.month} onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,month:clamp(parseInt(e.target.value||0,10),0,handoverMonth)}:x))}/></td>
-                        <td><button className="btn danger" onClick={()=>setStages(prev=>prev.filter(x=>x.id!==s.id))}>{t.delete}</button></td>
+                        <td className="col-stage">
+                          <input 
+                            type="text" 
+                            className="stage-input"
+                            value={s.label} 
+                            onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,label:e.target.value}:x))}
+                          />
+                        </td>
+                        <td className="col-percent">
+                          <input 
+                            type="number" 
+                            className="stage-number-input"
+                            min="0" 
+                            max="100"
+                            step="0.01" 
+                            value={s.pct} 
+                            onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,pct:clamp(parseFloat(e.target.value||0),0,100)}:x))}
+                          />
+                        </td>
+                        <td className="col-month">
+                          <input 
+                            type="number" 
+                            className="stage-number-input"
+                            min="0" 
+                            step="1" 
+                            value={s.month} 
+                            onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,month:clamp(parseInt(e.target.value||0,10),0,handoverMonth)}:x))}
+                          />
+                        </td>
+                        <td className="col-actions">
+                          <div className="stage-actions">
+                            <button className="delete-stage-btn" onClick={()=>setStages(prev=>prev.filter(x=>x.id!==s.id))}>
+                              {t.delete}
+                            </button>
+                          </div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -1239,7 +1654,9 @@
               {(!isClient && tab==='catalog') && (
                 <>
                   <h3 style={{margin:'6px 0'}}>{t.catalogTitle}</h3>
-                  <div className="row">
+                  
+                  {/* Оптимизированные кнопки каталога */}
+                  <div className="row" style={{gap:'var(--spacing-md)'}}>
                     <button className="btn success" onClick={addProject}>{t.addProject}</button>
                     <button className="btn" onClick={()=>{
                       const json=prompt('Paste catalog JSON:', JSON.stringify(catalog,null,2));
@@ -1251,6 +1668,7 @@
                       const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_catalog_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href);
                     }}>{t.exportJSON}</button>
                   </div>
+                  
                   <div className="scroll" style={{maxHeight:'32vh'}}>
                     {catalog.map(p=>(
                       <div key={p.projectId} className="catalog-card">
@@ -1359,7 +1777,8 @@
 
               <div className="hr"></div>
 
-              <div className="row" style={{justifyContent:'space-between',alignItems:'center'}}>
+              {/* Оптимизированный заголовок с кнопкой */}
+              <div className="calculation-header">
                 <h3 style={{margin:'6px 0'}}>{t.villasTitle}</h3>
                 {!isClient && <button className="btn success" onClick={()=>setModalOpen(true)}>{t.addFromCatalog}</button>}
               </div>
@@ -1390,18 +1809,14 @@
                       return (
                         <tr key={ld.line.id}>
                           <td className="col-project" style={{textAlign:'left'}}>
-                            <input 
-                              disabled 
-                              value={projName}
-                              style={{width:'100%',minWidth:'80px'}}
-                            />
+                            <div className="project-name-display">
+                              {projName}
+                            </div>
                           </td>
                           <td className="col-villa" style={{textAlign:'left'}}>
-                            <input 
-                              disabled 
-                              value={villaName}
-                              style={{width:'100%',minWidth:'100px'}}
-                            />
+                            <div className="villa-name-display">
+                              {villaName}
+                            </div>
                           </td>
                           <td className="col-qty">
                             <input 
@@ -1414,20 +1829,14 @@
                             />
                           </td>
                           <td className="col-area">
-                            <input 
-                              type="number" 
-                              value={ld.line.snapshot?.area||0} 
-                              disabled
-                              style={{width:'100%',minWidth:'50px'}}
-                            />
+                            <div className="area-display">
+                              {ld.line.snapshot?.area||0}
+                            </div>
                           </td>
                           <td className="col-ppsm">
-                            <input 
-                              type="number" 
-                              value={ld.line.snapshot?.ppsm||0} 
-                              disabled
-                              style={{width:'100%',minWidth:'60px'}}
-                            />
+                            <div className="ppsm-display">
+                              {ld.line.snapshot?.ppsm||0}
+                            </div>
                           </td>
                           <td className="col-base base-strong">
                             {fmtMoney(toCurrency(ld.base),currency)}
@@ -1525,8 +1934,9 @@
                 </div>
               </div>
 
+              {/* Исправленная таблица кэшфлоу */}
               <div className="scroll">
-                <table>
+                <table className="cashflow-table">
                   <thead>
                     <tr>
                       <th>{t.cashMonth}</th>
@@ -1637,7 +2047,7 @@
                           step="0.1" 
                           placeholder="100"
                           value={newVillaForm.area}
-                          onChange={e => setNewVillaForm(prev => ({ ...prev, area: parseFloat(e.target.value) || 0 }))}
+                                                    onChange={e => setNewVillaForm(prev => ({ ...prev, area: parseFloat(e.target.value) || 0 }))}
                         />
                       </div>
                       <div className="form-group">
@@ -1826,3 +2236,5 @@
   </script>
 </body>
 </html>
+
+                                      
