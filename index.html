@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Installments • Editor / Client (v7.2)</title>
+  <title>Installments • Editor / Client (v7.3)</title>
   <style>
     *{box-sizing:border-box}
     :root{--bg:#0b0d12;--card:#0f1420;--line:#1c2233;--muted:#9fb0d0;--ink:#e7ebf3;--warn:#ffb3b3}
@@ -31,13 +31,24 @@
     .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:10px 0}
     .kpi{background:#0f1420;border:1px solid #1c2233;border-radius:10px;padding:10px 12px}
     .kpi .v{font-size:18px;font-weight:700}
-    .hint{font-size:12px;color:#bcd3ff;marginLeft:8px}
+    .hint{font-size:12px;color:#bcd3ff;margin-left:8px}
     .hint.warn{color:var(--warn)}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+    @media print{
+      body{background:#fff;color:#000}
+      .wrap{max-width:none;margin:0;padding:0}
+      .grid{display:block}
+      .card{border:0;border-radius:0}
+      .col-4,.col-8,.col-12{grid-column:auto}
+      .hr{margin:12px 0}
+      .toolbar,.row button,.field select,.field input{display:none !important}
+      canvas{break-inside:avoid}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1 id="app-title">Калькулятор рассрочки • Editor / Client (v7.2)</h1>
+    <h1 id="app-title">Калькулятор рассрочки • Editor / Client (v7.3)</h1>
     <div id="root"></div>
   </div>
 
@@ -46,6 +57,7 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script crossorigin src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <script type="text/babel">
     const {useEffect,useMemo,useRef,useState} = React;
@@ -53,7 +65,7 @@
     // i18n
     const T = {
       ru: {
-        title: 'Калькулятор рассрочки • Editor / Client (v7.2)',
+        title: 'Калькулятор рассрочки • Editor / Client (v7.3)',
         editor: 'Редактор',
         client: 'Клиент',
         lang: 'Язык интерфейса',
@@ -86,7 +98,8 @@
         cashflowTitle: 'Сводный кэшфлоу по месяцам',
         cashMonth: 'Месяц',
         cashDesc: 'Описание',
-        cashTotal: 'Сумма (в выбранной валюте)',
+        cashTotal: 'Сумма к оплате',
+        cashBalance: 'Остаток долга',
         totals: 'Итоги',
         base: 'База',
         prepay: 'Оплата до ключей',
@@ -100,10 +113,13 @@
         targetPrepay: 'Целевой % до ключей',
         mismatch: '— отличается от целевого',
         mixedTargets: 'разные цели у вилл',
-        shareCopied: 'Ссылка скопирована'
+        shareCopied: 'Ссылка скопирована',
+        exportCSV: 'Экспорт CSV',
+        exportXLSX: 'Экспорт Excel',
+        exportPDF: 'Сохранить в PDF'
       },
       en: {
-        title: 'Installments Calculator • Editor / Client (v7.2)',
+        title: 'Installments Calculator • Editor / Client (v7.3)',
         editor: 'Editor',
         client: 'Client',
         lang: 'Language',
@@ -136,7 +152,8 @@
         cashflowTitle: 'Monthly consolidated cashflow',
         cashMonth: 'Month',
         cashDesc: 'Description',
-        cashTotal: 'Amount (display currency)',
+        cashTotal: 'Amount due',
+        cashBalance: 'Remaining balance',
         totals: 'Totals',
         base: 'Base',
         prepay: 'Paid before keys',
@@ -150,7 +167,10 @@
         targetPrepay: 'Target pre‑handover %',
         mismatch: '— differs from target',
         mixedTargets: 'different villa targets',
-        shareCopied: 'Link copied'
+        shareCopied: 'Link copied',
+        exportCSV: 'Export CSV',
+        exportXLSX: 'Export Excel',
+        exportPDF: 'Save to PDF'
       }
     };
 
@@ -220,7 +240,7 @@
       // restore / persist
       useEffect(()=>{
         const fromUrl = decodeStateFromUrl();
-        const saved = fromUrl?.state || JSON.parse(localStorage.getItem('installments_v72')||'null');
+        const saved = fromUrl?.state || JSON.parse(localStorage.getItem('installments_v73')||'null');
         if(saved){
           try{
             if(saved.lang) setLang(saved.lang);
@@ -238,7 +258,7 @@
       },[]);
       useEffect(()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
-        localStorage.setItem('installments_v72', JSON.stringify(state));
+        localStorage.setItem('installments_v73', JSON.stringify(state));
         document.getElementById('app-title').textContent = t.title;
         document.title = t.title;
       },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas]);
@@ -288,6 +308,7 @@
         });
       },[villas, stages, stagesSumPct, handoverMonth, months, monthlyRatePct, lang]);
 
+      // Project totals and consolidated cashflow
       const project = useMemo(()=>{
         const totals = {
           baseUSD: villasData.reduce((s,x)=>s+x.base,0),
@@ -297,6 +318,7 @@
         };
         totals.afterUSD = totals.finalUSD - totals.preUSD;
 
+        // consolidated cashflow (USD)
         const m = new Map();
         const push = (month, amt, desc) => {
           if(amt<=0) return;
@@ -310,7 +332,16 @@
           if(vc.firstPostUSD>0) push(handoverMonth+1, vc.firstPostUSD, `${vc.v.name}: ${lang==='ru'?'Первый платёж':'First payment'}`);
           vc.postRows.forEach(r=> push(r.month, r.paymentUSD, `${vc.v.name}: ${r.label}`));
         });
-        const cashflow = Array.from(m.values()).sort((a,b)=>a.month-b.month);
+        const raw = Array.from(m.values()).sort((a,b)=>a.month-b.month);
+
+        // add running balance (USD)
+        let cumulative=0;
+        const cashflow = raw.map(row=>{
+          cumulative += row.amountUSD;
+          const balanceUSD = Math.max(0, totals.finalUSD - cumulative);
+          return {...row, cumulativeUSD: cumulative, balanceUSD};
+        });
+
         return { totals, cashflow };
       },[villasData, handoverMonth, lang]);
 
@@ -328,15 +359,67 @@
           data: { labels, datasets: [{ label: T[lang].chartTitle, data }] },
           options: {
             responsive: true,
-            plugins: { legend: { display: false }, tooltip: { callbacks: {
-              label: (ctx)=> fmtMoney(ctx.parsed.y, currency)
-            }}},
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx)=> fmtMoney(ctx.parsed.y, currency) }}},
             scales: { y: { ticks: { callback: v => fmtMoney(v, currency) } } }
           }
         });
       },[project.cashflow, currency, idrPerUsd, eurPerUsd, lang]);
 
-      // actions
+      // Stage sum check helpers
+      const prePctValues = villas.map(v=> v.prePct ?? 0);
+      const minPre = Math.min(...prePctValues);
+      const maxPre = Math.max(...prePctValues);
+      const allSame = prePctValues.every(p=> p === prePctValues[0]);
+      const targetText = allSame ? `${prePctValues[0]}%` : `${minPre}%–${maxPre}%`;
+      const mismatch = allSame ? (Math.round(stagesSumPct*100)/100 !== prePctValues[0]) : true;
+
+      // exports
+      const exportCSV = ()=>{
+        const rows = [
+          [t.cashMonth, t.cashDesc, t.cashTotal, t.cashBalance],
+          ...project.cashflow.map(c=>[
+            c.month,
+            (c.items||[]).join(' + '),
+            (toCurrency(c.amountUSD)).toFixed(2),
+            (toCurrency(c.balanceUSD)).toFixed(2),
+          ])
+        ];
+        const csv = rows.map(r=> r.map(v=>{
+          const s = String(v).replace(/"/g,'""');
+          return `"${s}"`;
+        }).join(',')).join('\n');
+        const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `cashflow_${new Date().toISOString().slice(0,10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      };
+
+      const exportXLSX = ()=>{
+        const ws1 = XLSX.utils.json_to_sheet(project.cashflow.map(c=>({
+          [t.cashMonth]: c.month,
+          [t.cashDesc]: (c.items||[]).join(' + '),
+          [t.cashTotal]: toCurrency(c.amountUSD),
+          [t.cashBalance]: toCurrency(c.balanceUSD),
+        })));
+        const ws2 = XLSX.utils.json_to_sheet(villasData.map(vc=>({
+          [t.name]: vc.v.name,
+          [t.area]: vc.v.area,
+          [t.ppsm]: vc.v.ppsm,
+          [t.price]: vc.base,
+          [t.prePct]: vc.v.prePct,
+          [t.firstPost]: vc.firstPostUSD,
+        })));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws1, 'Cashflow');
+        XLSX.utils.book_append_sheet(wb, ws2, 'Villas');
+        XLSX.writeFile(wb, `installments_${new Date().toISOString().slice(0,10)}.xlsx`);
+      };
+
+      const exportPDF = ()=> window.print();
+
+      // helpers UI
       const updateVilla = (id, patch)=> setVillas(prev=> prev.map(v=> v.id===id? {...v, ...patch}: v));
       const addVilla = ()=> setVillas(prev=>{
         const last = prev[prev.length-1]; const id=(last?.id||0)+1;
@@ -347,21 +430,13 @@
       const shareEditor = async ()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
         const url = encodeStateToUrl(state, {view:null});
-        if(url){ await navigator.clipboard.writeText(T[lang].shareCopied ? url : url); alert(T[lang].shareCopied); }
+        if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
       };
       const shareClient = async ()=>{
         const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
         const url = encodeStateToUrl(state, {view:'client'});
-        if(url){ await navigator.clipboard.writeText(T[lang].shareCopied ? url : url); alert(T[lang].shareCopied); }
+        if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
       };
-
-      // helpers for stage sum check
-      const prePctValues = villas.map(v=> v.prePct ?? 0);
-      const minPre = Math.min(...prePctValues);
-      const maxPre = Math.max(...prePctValues);
-      const allSame = prePctValues.every(p=> p === prePctValues[0]);
-      const targetText = allSame ? `${prePctValues[0]}%` : `${minPre}%–${maxPre}%`;
-      const mismatch = allSame ? (Math.round(stagesSumPct*100)/100 !== prePctValues[0]) : true;
 
       // UI
       return (
@@ -416,7 +491,7 @@
                 </>
               ) : (
                 <>
-                  {/* в клиентском режиме ничего про ставку не показываем вообще */}
+                  {/* в клиентском режиме — без ставки вообще */}
                   <div className="field" style={{flex:1}}>
                     <label>{t.clientTerm}</label>
                     <input type="number" min="6" step="1" value={months} onChange={e=>setMonths(clamp(parseInt(e.target.value||0,10),6,120))}/>
@@ -454,9 +529,13 @@
                 })
               }}>{t.addStage}</button>
 
-              <div className={`hint ${mismatch ? 'warn' : ''}`}>
-                {t.sumStages}: {Math.round(stagesSumPct*100)/100}% · {t.targetPrepay}: {targetText} {mismatch ? (allSame ? ` ${t.mismatch}` : ` (${t.mixedTargets})`) : ''}
-              </div>
+              <StageHint
+                stagesSumPct={stagesSumPct}
+                prePctValues={prePctValues}
+                allSame={allSame}
+                targetText={targetText}
+                t={t}
+              />
             </div>
 
             <div className="hr"></div>
@@ -464,16 +543,8 @@
             {/* Share — editor only */}
             {!isClient && (
               <div className="row">
-                <button className="btn" onClick={async()=>{
-                  const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
-                  const url = encodeStateToUrl(state, {view:null});
-                  if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
-                }}>{t.shareEditor}</button>
-                <button className="btn" onClick={async()=>{
-                  const state = {lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,villas};
-                  const url = encodeStateToUrl(state, {view:'client'});
-                  if(url){ await navigator.clipboard.writeText(url); alert(t.shareCopied); }
-                }}>{t.shareClient}</button>
+                <button className="btn" onClick={shareEditor}>{t.shareEditor}</button>
+                <button className="btn" onClick={shareClient}>{t.shareClient}</button>
               </div>
             )}
           </div>
@@ -505,11 +576,20 @@
               updateVilla={updateVilla}
               removeVilla={removeVilla}
               addVilla={addVilla}
+              lang={lang}
             />
 
             <div className="hr"></div>
 
-            <h3 style={{margin:'6px 0'}}>{t.cashflowTitle}</h3>
+            <div className="row" style={{justifyContent:'space-between',alignItems:'center'}}>
+              <h3 style={{margin:'6px 0'}}>{t.cashflowTitle}</h3>
+              <div className="toolbar">
+                <button className="btn" onClick={exportCSV}>{t.exportCSV}</button>
+                <button className="btn" onClick={exportXLSX}>{t.exportXLSX}</button>
+                <button className="btn" onClick={exportPDF}>{t.exportPDF}</button>
+              </div>
+            </div>
+
             <CashflowTable cashflow={project.cashflow} t={t} currency={currency} toCurrency={toCurrency}/>
 
             <div className="hr"></div>
@@ -522,6 +602,15 @@
             <h3 style={{margin:'6px 0'}}>{t.totals}</h3>
             <KPIBlock isClient={isClient} t={t} totals={project.totals} currency={currency} toCurrency={toCurrency}/>
           </div>
+        </div>
+      );
+    }
+
+    function StageHint({stagesSumPct, prePctValues, allSame, targetText, t}){
+      const mismatch = allSame ? (Math.round(stagesSumPct*100)/100 !== prePctValues[0]) : true;
+      return (
+        <div className={`hint ${mismatch ? 'warn' : ''}`}>
+          {t.sumStages}: {Math.round(stagesSumPct*100)/100}% · {t.targetPrepay}: {targetText} {mismatch ? (allSame ? ` ${t.mismatch}` : ` (${t.mixedTargets})`) : ''}
         </div>
       );
     }
@@ -544,7 +633,7 @@
       );
     }
 
-    function VillaTable({isClient, t, villasData, months, monthlyRatePct, currency, updateVilla, removeVilla, addVilla}){
+    function VillaTable({isClient, t, villasData, months, monthlyRatePct, currency, updateVilla, removeVilla, addVilla, lang}){
       return (
         <>
           <div className="scroll" style={{maxHeight:'34vh'}}>
@@ -570,7 +659,7 @@
                     <td>
                       <label className="pill" style={{display:'inline-flex',gap:6,alignItems:'center',marginBottom:6}}>
                         <input type="checkbox" checked={vc.v.override} onChange={e=>updateVilla(vc.v.id,{override:e.target.checked})}/>
-                        {t.lang==='Русский'?'вручную':'manual'}
+                        {lang==='ru'?'вручную':'manual'}
                       </label>
                       <input type="number" min="0" step="1" value={vc.v.override ? vc.v.base : Math.round(vc.v.area*vc.v.ppsm)} onChange={e=>updateVilla(vc.v.id,{base:Math.min(1e12,Math.max(0,parseFloat(e.target.value||0))), override:true})}/>
                     </td>
@@ -623,7 +712,7 @@
           <table>
             <thead>
               <tr>
-                <th>{t.cashMonth}</th><th>{t.cashDesc}</th><th>{t.cashTotal}</th>
+                <th>{t.cashMonth}</th><th>{t.cashDesc}</th><th>{t.cashTotal}</th><th>{t.cashBalance}</th>
               </tr>
             </thead>
             <tbody>
@@ -632,6 +721,7 @@
                   <td>{c.month}</td>
                   <td style={{textAlign:'left'}}>{(c.items||[]).join(' + ')}</td>
                   <td>{fmtMoney(toCurrency(c.amountUSD), currency)}</td>
+                  <td>{fmtMoney(toCurrency(c.balanceUSD), currency)}</td>
                 </tr>
               ))}
             </tbody>
