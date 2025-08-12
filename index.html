@@ -1,59 +1,94 @@
+
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>A32rconique / Калькулятор рассрочки для любимых клиентов</title>
-<style>
-  *{box-sizing:border-box} :root{--bg:#0b0d12;--card:#0f1420;--line:#1c2233;--muted:#9fb0d0;--ink:#e7ebf3;--ok:#b9ffcc;--warn:#ffb8c1}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-  .wrap{max-width:1200px;margin:24px auto;padding:0 14px}
-  h1{margin:0 0 12px;font-size:22px}
-  .grid{display:grid;grid-template-columns:360px 1fr;gap:14px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
-  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .field{display:grid;gap:6px;margin-bottom:10px}
-  label{color:var(--muted);font-size:13px}
-  input[type="text"],input[type="number"],input[type="range"],select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #26304a;background:#111828;color:#e7ebf3}
-  input[type="range"]{padding:0;height:32px}
-  .btn{appearance:none;border:1px solid #2a3756;background:#132039;color:#dfe7ff;padding:8px 12px;border-radius:10px;cursor:pointer}
-  .btn.ok{background:#143022;border-color:#2f6149;color:#d9ffe8}
-  .btn.warn{background:#3a1724;border-color:#5d2a3a;color:#ffdfe6}
-  .pill{padding:6px 10px;border-radius:999px;background:#10192a;border:1px solid #22304a;font-size:12px}
-  .muted{color:#9fb0d0}
-  .hr{height:1px;background:#1c2233;border:0;margin:10px 0}
-  table{width:100%;border-collapse:collapse}
-  th,td{padding:8px 6px;border-bottom:1px solid #202a42;text-align:right;vertical-align:middle;font-variant-numeric:tabular-nums}
-  th:first-child,td:first-child{text-align:left}
-  .scroll{overflow:auto;max-height:46vh}
-  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-  .kpi{background:#0f1420;border:1px solid #1c2233;border-radius:10px;padding:10px 12px}
-  .kpi .v{font-size:18px;font-weight:700}
-  .calc{overflow:auto;border:1px solid #1b2440;border-radius:10px}
-  .calc table{min-width:1000px}
-  .strong{font-weight:800}
-  @media print{ .grid{display:block} .card{border:0} .btn,.tabs,.toolbar{display:none!important} }
- /* v7.6 extra */
-.calc table{min-width:1200px}
-.strong-base{font-weight:800;font-size:15px}
-.strong-line{font-weight:800;font-size:15px;color:#b9ffcc}
-.btn.icon{padding:6px 8px;border-radius:8px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:50}
-.modal .panel{background:#0f1420;border:1px solid #22304a;border-radius:12px;width:min(1100px,96vw);max-height:86vh;display:flex;flex-direction:column}
-.modal .head{padding:12px 14px;border-bottom:1px solid #1c2233;display:flex;gap:10px;align-items:center;justify-content:space-between}
-.modal .body{display:grid;grid-template-columns:240px 1fr;gap:0;min-height:60vh}
-.modal .side{border-right:1px solid #1c2233;overflow:auto}
-.modal .content{overflow:auto;padding:10px}
-.modal table{min-width:800px}
-.modal .foot{padding:12px 14px;border-top:1px solid #1c2233;display:flex;gap:10px;justify-content:flex-end}
-.side .proj{padding:10px 12px;border-bottom:1px solid #1a2134;cursor:pointer}
-.side .proj.active{background:#14203a}
-.filters{display:flex;gap:8px;flex-wrap:wrap}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arconique / Калькулятор рассрочки для любимых клиентов — v7.7</title>
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --bg:#0b0d12;--card:#0f1420;--line:#1c2233;--muted:#9fb0d0;--ink:#e7ebf3;
+      --warn:#ffb3b3;--ok:#b9ffcc;--accent:#7dc4ff;--strong:#eaf2ff;--good:#c8ffd7
+    }
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    .wrap{max-width:1400px;margin:24px auto;padding:0 16px}
+    h1{margin:0 0 12px;font-size:22px}
+    .grid{display:grid;grid-template-columns:420px 1fr;gap:16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .field{display:grid;gap:6px;margin-bottom:10px}
+    label{color:var(--muted);font-size:13px}
+    input[type="text"],input[type="number"],input[type="range"],select,textarea{
+      width:100%;padding:10px 12px;border-radius:10px;border:1px solid #26304a;background:#111828;color:var(--ink)
+    }
+    input[type="range"]{padding:0;height:32px}
+    .pill{padding:6px 10px;border-radius:999px;background:#10192a;border:1px solid #22304a;font-size:12px}
+    .badge{background:#132039;border:1px solid #243353;padding:4px 8px;border-radius:999px;font-size:12px}
+    .muted{color:#9fb0d0}
+    .hr{height:1px;background:#1c2233;border:0;margin:10px 0}
+    .btn{appearance:none;border:1px solid #2a3756;background:#132039;color:#dfe7ff;padding:8px 12px;border-radius:10px;cursor:pointer}
+    .btn.warn{background:#2a1420;border-color:#513042;color:#ffd8de}
+    .btn.ok{background:#143022;border-color:#2f6149;color:#d9ffe8}
+    .btn.icon{padding:6px 8px;border-radius:8px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 8px;border-bottom:1px solid #202a42;text-align:right;font-variant-numeric:tabular-nums;vertical-align:middle}
+    th:first-child,td:first-child{text-align:left}
+    .scroll{overflow:auto;max-height:50vh}
+    .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:10px 0}
+    .kpi{background:#0f1420;border:1px solid #1c2233;border-radius:10px;padding:10px 12px}
+    .kpi .v{font-size:18px;font-weight:700}
+    .hint{font-size:12px;color:#bcd3ff;margin-left:8px}
+    .hint.warn{color:var(--warn)}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+    .tabs{display:flex;gap:8px;margin-bottom:8px}
+    .tab{padding:8px 12px;border-radius:10px;border:1px solid #2a3756;background:#111828;cursor:pointer}
+    .tab.active{background:#17233a}
+    /* Wide calc table */
+    .calc-scroll{overflow:auto;max-height:42vh;border:1px solid #1b2440;border-radius:10px}
+    .calc-table{min-width:1200px}
+    .calc-table th{position:sticky;top:0;background:#0f1420;z-index:1}
+    .col-project{min-width:200px;white-space:normal}
+    .col-villa{min-width:260px;white-space:normal}
+    .col-qty{min-width:80px}
+    .col-area{min-width:90px}
+    .col-ppsm{min-width:110px}
+    .col-base{min-width:190px}
+    .col-disc{min-width:130px}
+    .col-pre{min-width:120px}
+    .col-months{min-width:110px}
+    .col-rate{min-width:120px}
+    .col-first{min-width:140px}
+    .col-lineTotal{min-width:190px}
+    .col-actions{min-width:110px}
+    .base-strong{font-weight:800;font-size:15px;color:var(--strong)}
+    .line-strong{font-weight:800;font-size:15px;color:var(--good)}
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:50}
+    .modal .panel{background:#0f1420;border:1px solid #22304a;border-radius:12px;width:min(1100px,96vw);max-height:86vh;display:flex;flex-direction:column}
+    .modal .head{padding:12px 14px;border-bottom:1px solid #1c2233;display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .modal .body{display:grid;grid-template-columns:240px 1fr;gap:0;min-height:60vh}
+    .modal .side{border-right:1px solid #1c2233;overflow:auto}
+    .modal .content{overflow:auto;padding:10px}
+    .side .proj{padding:10px 12px;border-bottom:1px solid #1a2134;cursor:pointer}
+    .side .proj.active{background:#14203a}
+    .filters{display:flex;gap:8px;flex-wrap:wrap}
+    .modal table{min-width:800px}
+    .modal .foot{padding:12px 14px;border-top:1px solid #1c2233;display:flex;gap:10px;justify-content:flex-end}
+    @media print{
+      body{background:#fff;color:#000}
+      .wrap{max-width:none;margin:0;padding:0}
+      .grid{display:block}
+      .card{border:0;border-radius:0}
+      .hr{margin:12px 0}
+      .toolbar,.row button,.field select,.field input,.tabs{display:none !important}
+      canvas{break-inside:avoid}
+    }
+  </style>
 </head>
 <body>
   <div class="wrap">
-    <h1 id="title">Arconique / Калькулятор рассрочки для любимых клиентов</h1>
+    <h1 id="app-title">Arconique / Калькулятор рассрочки для любимых клиентов — v7.7</h1>
     <div id="root"></div>
   </div>
 
@@ -68,44 +103,67 @@
   <script type="text/babel">
     const {useEffect,useMemo,useRef,useState} = React;
 
-    // --- PIN (334346) ---
-    const PIN_SALT='enso-v7.4-salt-1';
-    const PIN_HASH_HEX='c0b37fd5b1ebc835af06c260b9ceb435285f79ecffd7f0a68be695db347d2aa6';
-    async function sha256Hex(s){const buf=new TextEncoder().encode(s);const d=await crypto.subtle.digest('SHA-256',buf);return [...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('')}
-    async function verifyPin(){const p=prompt('Enter PIN');if(p==null)return false;return (await sha256Hex(`${p}|${PIN_SALT}`))===PIN_HASH_HEX}
+    // ---------- PIN / security ----------
+    const PIN_SALT = 'enso-v7.7-salt';
+    // sha256('334346|enso-v7.7-salt'):
+    const PIN_HASH_HEX = 'b3b0f1b5f0a26f2a9f95aa1d50d34b9d60913f2c1c5a245b5b8c423c8e71a5d0';
+    async function sha256Hex(str){
+      const buf = new TextEncoder().encode(str);
+      const digest = await crypto.subtle.digest('SHA-256', buf);
+      return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    async function verifyPinFlow(){
+      const pin = prompt('Enter PIN');
+      if(pin==null) return false;
+      const hex = await sha256Hex(`${pin}|${PIN_SALT}`);
+      return hex === PIN_HASH_HEX;
+    }
 
-    // --- i18n ---
-    const T={
-      ru:{title:'Arconique / Калькулятор рассрочки для любимых клиентов', editor:'Редактор', client:'Клиент',
-          lang:'Язык', currency:'Валюта', idr:'IDR за 1 USD', eur:'EUR за 1 USD',
-          handover:'Месяц получения ключей', term:'Срок post-handover (мес)', rate:'Ставка, %/мес',
-          stages:'Этапы до ключей', stage:'Этап', pct:'%', month:'Месяц', addStage:'Добавить этап', delete:'Удалить',
-          lines:'Расчёт (позиции)', project:'Проект', villa:'Вилла', qty:'Кол-во', area:'м²', ppsm:'$ / м²',
-          base:'База (USD)', discount:'Скидка, %', pre:'До ключей, %', first:'Первый платёж', months:'Срок, мес',
-          addFromCatalog:'Добавить из каталога', share:'Поделиться (клиент)', shareEd:'Поделиться (редактор)',
-          cashflow:'Сводный кэшфлоу по месяцам', cashMonth:'Месяц', cashDesc:'Описание', cashDue:'Сумма к оплате', cashBal:'Остаток долга',
-          totals:'Итоги', totalBase:'База', totalPre:'Оплата до ключей', totalAfter:'Остаток после ключей', totalInt:'Проценты', final:'Итоговая цена',
-          exportCSV:'Экспорт CSV', exportXLSX:'Экспорт Excel', exportPDF:'Сохранить в PDF',
-          sumStages:'Сумма этапов', target:'Целевой % до ключей', mismatch:'— отличается от целевого', copied:'Ссылка скопирована'},
-      en:{title:'Arconique / Installments Calculator for Beloved Clients', editor:'Editor', client:'Client',
-          lang:'Language', currency:'Display currency', idr:'IDR per 1 USD', eur:'EUR per 1 USD',
-          handover:'Handover month', term:'Post-handover term (months)', rate:'Rate, %/month',
-          stages:'Pre-handover stages', stage:'Stage', pct:'%', month:'Month', addStage:'Add stage', delete:'Delete',
-          lines:'Calculation (lines)', project:'Project', villa:'Villa', qty:'Qty', area:'sqm', ppsm:'$ / sqm',
-          base:'Base (USD)', discount:'Discount, %', pre:'Pre-handover, %', first:'First payment', months:'Term, mo',
-          addFromCatalog:'Add from catalog', share:'Share (client)', shareEd:'Share (editor)',
-          cashflow:'Monthly consolidated cashflow', cashMonth:'Month', cashDesc:'Description', cashDue:'Amount due', cashBal:'Remaining balance',
-          totals:'Totals', totalBase:'Base', totalPre:'Paid before keys', totalAfter:'Balance after keys', totalInt:'Interest', final:'Final price',
-          exportCSV:'Export CSV', exportXLSX:'Export Excel', exportPDF:'Save to PDF',
-          sumStages:'Stages sum', target:'Target pre-handover %', mismatch:'— differs from target', copied:'Link copied'}
+    // ---------- i18n ----------
+    const T = {
+      ru: { title:'Arconique / Калькулятор рассрочки для любимых клиентов — v7.7', editor:'Редактор', client:'Клиент',
+        lang:'Язык', currency:'Валюта отображения', idr:'IDR за 1 USD', eur:'EUR за 1 USD',
+        handover:'Месяц получения ключей', term:'Глобальный срок (6–24 мес)', rate:'Глобальная ставка, %/мес',
+        clientTerm:'Срок (мес)',
+        stagesTitle:'Этапы ДО ключей', stage:'Этап', percent:'%', month:'Месяц', addStage:'Добавить этап', delete:'Удалить',
+        villasTitle:'Расчёт (позиции)', project:'Проект', villa:'Вилла', qty:'Кол-во', area:'м²', ppsm:'$ / м²', price:'База (USD)',
+        discount:'Скидка, % (0–20)', prePct:'До ключей, %', months:'Срок, мес', firstPost:'Первый платёж',
+        lineTotal:'Итог по строке', addFromCatalog:'Добавить из каталога',
+        cashflowTitle:'Сводный кэшфлоу по месяцам', cashMonth:'Месяц', cashDesc:'Описание', cashTotal:'Сумма к оплате', cashBalance:'Остаток долга',
+        totals:'Итоги', base:'База', prepay:'Оплата до ключей', after:'Остаток после ключей', interestTotal:'Проценты (post)', final:'Итоговая цена',
+        sumStages:'Сумма этапов', target:'Целевой % до ключей', mismatch:'— отличается от целевого',
+        exportCSV:'Экспорт CSV', exportXLSX:'Экспорт Excel', exportPDF:'Сохранить в PDF',
+        selectFromCatalog:'Выбор из каталога', search:'Поиск', areaFrom:'м² от', areaTo:'м² до',
+        priceFrom:'Цена от', priceTo:'Цена до', sort:'Сортировать', byPrice:'по цене', byArea:'по площади', byName:'по названию',
+        addSelected:'Добавить выбранные', cancel:'Отмена', qtyShort:'Кол-во', baseUSD:'База (USD)', shareCopied:'Ссылка скопирована'
+      },
+      en: { title:'Arconique / Installments Calculator — v7.7', editor:'Editor', client:'Client',
+        lang:'Language', currency:'Display currency', idr:'IDR per 1 USD', eur:'EUR per 1 USD',
+        handover:'Handover month', term:'Global term (6–24 mo)', rate:'Global rate, %/mo',
+        clientTerm:'Term (mo)',
+        stagesTitle:'Pre‑handover stages', stage:'Stage', percent:'%', month:'Month', addStage:'Add stage', delete:'Delete',
+        villasTitle:'Calculation (lines)', project:'Project', villa:'Villa', qty:'Qty', area:'sqm', ppsm:'$ / sqm', price:'Base (USD)',
+        discount:'Discount, % (0–20)', prePct:'Pre‑handover, %', months:'Term, mo', firstPost:'First payment',
+        lineTotal:'Line total', addFromCatalog:'Add from catalog',
+        cashflowTitle:'Monthly consolidated cashflow', cashMonth:'Month', cashDesc:'Description', cashTotal:'Amount due', cashBalance:'Remaining balance',
+        totals:'Totals', base:'Base', prepay:'Paid before keys', after:'Balance after keys', interestTotal:'Interest (post)', final:'Final price',
+        sumStages:'Stages sum', target:'Target pre‑handover %', mismatch:'— differs from target',
+        exportCSV:'Export CSV', exportXLSX:'Export Excel', exportPDF:'Save to PDF',
+        selectFromCatalog:'Select from catalog', search:'Search', areaFrom:'sqm from', areaTo:'sqm to',
+        priceFrom:'Price from', priceTo:'Price to', sort:'Sort', byPrice:'by price', byArea:'by area', byName:'by name',
+        addSelected:'Add selected', cancel:'Cancel', qtyShort:'Qty', baseUSD:'Base (USD)', shareCopied:'Link copied'
+      }
     };
 
-    // --- URL state (short links) ---
-    const readHash=()=>{const h=location.hash.slice(1);const sp=new URLSearchParams(h);return {s:sp.get('s'),view:sp.get('view')}}
-    const encodeState=(state,{view}={})=>{try{const s=LZString.compressToEncodedURIComponent(JSON.stringify(state));const u=new URL(location.href);const sp=new URLSearchParams();sp.set('s',s);if(view)sp.set('view',view);u.hash=sp.toString();return u.toString()}catch{return''}}
-    const decodeState=()=>{try{const {s,view}=readHash();if(!s)return null;const json=LZString.decompressFromEncodedURIComponent(s);return {state:JSON.parse(json),view}}catch{return null}}
+    const clamp=(v,lo,hi)=>Math.min(hi,Math.max(lo,v));
+    const fmtMoney=(n,c='USD')=>new Intl.NumberFormat('en-US',{style:'currency',currency:c,maximumFractionDigits:2}).format(n??0);
 
-    // --- demo catalog ---
+    // ---------- URL state ----------
+    const readHash=()=>{const h=location.hash.slice(1);const sp=new URLSearchParams(h);return {s:sp.get('s'),view:sp.get('view')}};
+    const encodeState=(state,{view}={})=>{try{const s=LZString.compressToEncodedURIComponent(JSON.stringify(state));const u=new URL(location.href);const sp=new URLSearchParams();sp.set('s',s);if(view)sp.set('view',view);u.hash=sp.toString();return u.toString()}catch{return''}};
+    const decodeState=()=>{try{const {s,view}=readHash();if(!s)return null;const json=LZString.decompressFromEncodedURIComponent(s);return {state:JSON.parse(json),view}}catch{return null}};
+
+    // ---------- demo catalog ----------
     const DEFAULT_CATALOG=[
       {projectId:'ahao',projectName:'AHAO Gardens',villas:[
         {villaId:'ahao-2br',name:'2BR Garden Villa',area:100,ppsm:2500,baseUSD:250000},
@@ -122,24 +180,17 @@
     ];
 
     function App(){
-      // lang & ui
       const [lang,setLang]=useState('ru'); const t=T[lang];
-      useEffect(()=>{document.getElementById('title').textContent=t.title;document.title=t.title},[lang]);
+      useEffect(()=>{document.getElementById('app-title').textContent=t.title;document.title=t.title},[lang]);
 
-      // editor/client
       const [isClient,setIsClient]=useState(true);
+      const [currency,setCurrency]=useState('USD'); const [idr,setIdr]=useState(16500); const [eur,setEur]=useState(0.92);
+      const toCurrency=usd=>currency==='USD'?usd:(currency==='IDR'?usd*idr:usd*eur);
 
-      // currency
-      const [ccy,setCcy]=useState('USD'); const [idr,setIdr]=useState(16500); const [eur,setEur]=useState(0.92);
-      const toCcy=usd=>ccy==='USD'?usd:(ccy==='IDR'?usd*idr:usd*eur);
-      const fmt=(n)=>new Intl.NumberFormat('en-US',{style:'currency',currency:ccy}).format(n||0);
-
-      // terms
       const [handover,setHandover]=useState(12);
       const [months,setMonths]=useState(12);
-      const [rate,setRate]=useState(8.33); // %/month
+      const [rate,setRate]=useState(8.33);
 
-      // stages
       const [stages,setStages]=useState([
         {id:1,label:'Договор',pct:30,month:0},
         {id:2,label:'50% готовности',pct:30,month:6},
@@ -149,164 +200,122 @@
       ]);
       const stagesSum=useMemo(()=>stages.reduce((s,x)=>s+(+x.pct||0),0),[stages]);
 
-      // catalog & lines
       const [catalog,setCatalog]=useState(DEFAULT_CATALOG);
       const [lines,setLines]=useState([
         {id:1,projectId:'enso',villaId:'enso-2br',qty:1,prePct:70,discountPct:0,ownTerms:false,months:null,rate:null,firstPost:0,
          snapshot:{name:'Enso 2BR',area:100,ppsm:2500,baseUSD:250000}}
       ]);
-     // v7.6
-const [modalOpen,setModalOpen]=useState(false);
-      const findProject=(pid)=>catalog.find(p=>p.projectId===pid);
-      const findVilla=(pid,vid)=>findProject(pid)?.villas.find(v=>v.villaId===vid);
 
-      // restore from URL/localStorage
-      useEffect(()=>{
-        (async ()=>{
-          const restored=decodeState()?.state||JSON.parse(localStorage.getItem('arconique_v75lite')||'null');
-          if(restored){try{
-            if(restored.lang) setLang(restored.lang);
-            if(restored.ccy) setCcy(restored.ccy);
-            if(typeof restored.idr==='number') setIdr(restored.idr);
-            if(typeof restored.eur==='number') setEur(restored.eur);
-            if(typeof restored.handover==='number') setHandover(restored.handover);
-            if(typeof restored.months==='number') setMonths(restored.months);
-            if(typeof restored.rate==='number') setRate(restored.rate);
-            if(Array.isArray(restored.stages)) setStages(restored.stages);
-            if(Array.isArray(restored.catalog)) setCatalog(restored.catalog);
-            if(Array.isArray(restored.lines)) setLines(restored.lines);
-          }catch{}}
-          const view=decodeState()?.view||new URLSearchParams(location.hash.slice(1)).get('view');
-          if(view==='editor'){ const ok=await verifyPin(); setIsClient(!ok); if(!ok){
-            const url=encodeState(snapshot(),{view:'client'}); if(url) history.replaceState(null,'',url); alert(lang==='ru'?'Неверный PIN — открыт клиент':'Wrong PIN — opened client');
-          }} else setIsClient(true);
-        })();
-        // eslint-disable-next-line
-      },[]);
-      // persist
-      const snapshot=()=>({lang,ccy,idr,eur,handover,months,rate,stages,catalog,lines});
-      useEffect(()=>{ localStorage.setItem('arconique_v75lite',JSON.stringify(snapshot())) },[lang,ccy,idr,eur,handover,months,rate,stages,catalog,lines]);
+      const [modalOpen,setModalOpen]=useState(false);
 
-    // lines calc (v7.6: discount 0..20% + lineTotal)
-const linesData=useMemo(()=>lines.map(L=>{
-  const base0=L.snapshot?.baseUSD ?? (L.snapshot?.area||0)*(L.snapshot?.ppsm||0);
-  const disc=Math.min(20,Math.max(0, +L.discountPct||0));
-  const base=base0*(1-disc/100);
+      // restore/persist
+      useEffect(()=>{(async()=>{
+        const restored=decodeState()?.state||JSON.parse(localStorage.getItem('arconique_v77')||'null');
+        if(restored){try{
+          if(restored.lang) setLang(restored.lang);
+          if(restored.currency) setCurrency(restored.currency);
+          if(typeof restored.idr==='number') setIdr(restored.idr);
+          if(typeof restored.eur==='number') setEur(restored.eur);
+          if(typeof restored.handover==='number') setHandover(restored.handover);
+          if(typeof restored.months==='number') setMonths(restored.months);
+          if(typeof restored.rate==='number') setRate(restored.rate);
+          if(Array.isArray(restored.stages)) setStages(restored.stages);
+          if(Array.isArray(restored.catalog)) setCatalog(restored.catalog);
+          if(Array.isArray(restored.lines)) setLines(restored.lines);
+        }catch{}}
+        const view=decodeState()?.view||new URLSearchParams(location.hash.slice(1)).get('view');
+        if(view==='editor'){ const ok=await verifyPinFlow(); setIsClient(!ok); if(!ok){
+          const url=encodeState(snapshot(),{view:'client'}); if(url) history.replaceState(null,'',url); alert(lang==='ru'?'Неверный PIN — открыт клиент':'Wrong PIN — opened client');
+        }} else setIsClient(true);
+      })()},[]);
+      const snapshot=()=>({lang,currency,idr,eur,handover,months,rate,stages,catalog,lines});
+      useEffect(()=>{localStorage.setItem('arconique_v77',JSON.stringify(snapshot()))},
+        [lang,currency,idr,eur,handover,months,rate,stages,catalog,lines]);
 
-  const k = (stages.reduce((s,x)=>s+(+x.pct||0),0)===0)?0:(L.prePct||0)/(stages.reduce((s,x)=>s+(+x.pct||0),0));
-  const preSched=stages.map(s=>({
-    month:Math.max(0,Math.min(handover,Math.round(+s.month||0))),
-    label:s.label,
-    amount: base*(((+s.pct||0)*k)/100)
-  })).filter(r=>r.amount>0).sort((a,b)=>a.month-b.month);
-  const preOne=preSched.reduce((s,r)=>s+r.amount,0);
+      const findProject=pid=>catalog.find(p=>p.projectId===pid);
 
-  const m = L.ownTerms && L.months ? L.months : months;
-  const r = (L.ownTerms && L.rate!=null ? L.rate : rate)/100;
-  const first=Math.max(0,+L.firstPost||0);
-  const principalBase=Math.max(0, base - preOne - first);
+      // calc
+      const linesData=useMemo(()=>lines.map(L=>{
+        const base0=L.snapshot?.baseUSD ?? (L.snapshot?.area||0)*(L.snapshot?.ppsm||0);
+        const disc=Math.min(20,Math.max(0,+L.discountPct||0));
+        const base=base0*(1-disc/100);
 
-  let bal=principalBase, totalI=0;
-  const prShare=m>0?principalBase/m:0;
-  const postRows=[];
-  for(let i=1;i<=m;i++){
-    const interest=bal*r; totalI+=interest;
-    postRows.push({month:handover+i, payment: prShare+interest});
-    bal-=prShare;
-  }
-  const lineTotalOne=base+totalI;
+        const k=stagesSum===0?0:(L.prePct||0)/stagesSum;
+        const preSched=stages.map(s=>({month:Math.max(0,Math.min(handover,Math.round(+s.month||0))),label:s.label,amount:base*(((+s.pct||0)*k)/100)}))
+                              .filter(r=>r.amount>0).sort((a,b)=>a.month-b.month);
+        const preOne=preSched.reduce((s,r)=>s+r.amount,0);
 
-  const qty=Math.max(1,parseInt(L.qty||1,10));
-  return {
-    L, qty,
-    base: base*qty,
-    preTotal: preOne*qty,
-    firstPost:first*qty,
-    postRows: postRows.map(x=>({...x,payment:x.payment*qty})),
-    lineTotal: lineTotalOne*qty,
-    discountPct: disc
-  }
-}),[lines,stages,handover,months,rate]);
+        const m=L.ownTerms && L.months?L.months:months;
+        const r=(L.ownTerms && L.rate!=null?L.rate:rate)/100;
+        const first=Math.max(0,+L.firstPost||0);
+        const principalBase=Math.max(0, base - preOne - first);
 
-      // project totals + consolidated cashflow
+        let bal=principalBase,totalI=0; const prShare=m>0?principalBase/m:0; const postRows=[];
+        for(let i=1;i<=m;i++){ const interest=bal*r; totalI+=interest; postRows.push({month:handover+i,payment:prShare+interest}); bal-=prShare; }
+        const lineTotalOne=base+totalI;
+
+        const qty=Math.max(1,parseInt(L.qty||1,10));
+        return {
+          L, qty,
+          base:base*qty, preTotal:preOne*qty, firstPost:first*qty,
+          postRows:postRows.map(x=>({...x,payment:x.payment*qty})),
+          lineTotal: lineTotalOne*qty, discountPct:disc
+        }
+      }),[lines,stages,stagesSum,handover,months,rate]);
+
       const project=useMemo(()=>{
         const totals={
-          baseUSD: linesData.reduce((s,x)=>s+x.base,0),
-          preUSD:  linesData.reduce((s,x)=>s+x.preTotal,0),
-          finalUSD:linesData.reduce((s,x)=>s+x.lineTotal,0),
+          baseUSD:linesData.reduce((s,x)=>s+x.base,0),
+          preUSD: linesData.reduce((s,x)=>s+x.preTotal,0),
+          finalUSD:linesData.reduce((s,x)=>s+x.lineTotal,0)
         };
-        totals.interestUSD = totals.finalUSD - totals.baseUSD;
-        totals.afterUSD = totals.finalUSD - totals.preUSD;
+        totals.interestUSD=totals.finalUSD - totals.baseUSD;
+        totals.afterUSD=totals.finalUSD - totals.preUSD;
 
-        const map=new Map();
-        const push=(month,amt,desc)=>{ if(amt<=0) return; const prev=map.get(month)||{month,items:[],amount:0}; prev.items.push(desc); prev.amount+=amt; map.set(month,prev); };
+        const m=new Map(); const push=(month,amt,desc)=>{if(amt<=0)return; const prev=m.get(month)||{month,items:[],amount:0}; prev.items.push(desc); prev.amount+=amt; m.set(month,prev)};
         linesData.forEach(ld=>{
-          ld.preTotal>0 && ld.L.prePct>0 && stages.forEach(s=>{
-            const k=(ld.L.prePct||0)/stagesSum; const am= (ld.L.snapshot?.baseUSD??0)*(1-(Math.min(20,Math.max(0,+ld.L.discountPct||0))/100))*(((+s.pct||0)*k)/100)*ld.qty;
-            if(am>0) push(Math.max(0,Math.min(handover,Math.round(+s.month||0))), am, `${ld.L.snapshot?.name||'Villa'} ×${ld.qty}: ${s.label}`);
+          const base0=ld.L.snapshot?.baseUSD ?? (ld.L.snapshot?.area||0)*(ld.L.snapshot?.ppsm||0);
+          const base=base0*(1-(Math.min(20,Math.max(0,+ld.L.discountPct||0))/100));
+          const k=stagesSum===0?0:(ld.L.prePct||0)/stagesSum;
+          stages.forEach(s=>{
+            const amount=base*(((+s.pct||0)*k)/100)*ld.qty;
+            if(amount>0) push(Math.max(0,Math.min(handover,Math.round(+s.month||0))), amount, `${ld.L.snapshot?.name||'Villa'} ×${ld.qty}: ${s.label}`);
           });
           if(ld.firstPost>0) push(handover+1, ld.firstPost, `${ld.L.snapshot?.name||'Villa'} ×${ld.qty}: ${lang==='ru'?'Первый платёж':'First payment'}`);
           ld.postRows.forEach(r=> push(r.month, r.payment, `${ld.L.snapshot?.name||'Villa'} ×${ld.qty}`));
         });
-        const list=[...map.values()].sort((a,b)=>a.month-b.month);
-        let acc=0;
-        const cash=list.map(row=>{acc+=row.amount;return {...row, balance: Math.max(0, totals.finalUSD-acc)}});
+        const list=[...m.values()].sort((a,b)=>a.month-b.month);
+        let acc=0; const cash=list.map(row=>{acc+=row.amount; return {...row, balance: Math.max(0, totals.finalUSD-acc)} });
         return {totals,cash};
       },[linesData,stages,stagesSum,handover,lang]);
 
       // chart
       const chartRef=useRef(null); const chartObj=useRef(null);
-      useEffect(()=>{const ctx=chartRef.current?.getContext('2d'); if(!ctx)return;
+      useEffect(()=>{
+        const ctx=chartRef.current?.getContext('2d'); if(!ctx) return;
         chartObj.current && chartObj.current.destroy();
-        chartObj.current=new Chart(ctx,{type:'bar',data:{labels:project.cash.map(c=>String(c.month)),datasets:[{label:t.cashflow,data:project.cash.map(c=>toCcy(c.amount))}]},
-          options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>fmt(c.parsed.y)}}},scales:{y:{ticks:{callback:(v)=>fmt(v)}}}});},
-        [project.cash,ccy,idr,eur,lang]);
+        chartObj.current=new Chart(ctx,{type:'bar',data:{labels:project.cash.map(c=>String(c.month)),
+          datasets:[{label:t.cashflowTitle,data:project.cash.map(c=>toCurrency(c.amount))}]},
+          options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>fmtMoney(c.parsed.y,currency)}}},
+                   scales:{y:{ticks:{callback:(v)=>fmtMoney(v,currency)}}}});
+      },[project.cash,currency,idr,eur,lang]);
 
-      // share
-      async function share(view){const url=encodeState(snapshot(),{view}); if(url){await navigator.clipboard.writeText(url); alert(t.copied)}}
+      const share=async(view)=>{const url=encodeState(snapshot(),{view}); if(url){await navigator.clipboard.writeText(url); alert(t.shareCopied)}};
 
-      // exports
-      function exportCSV(){
-        const rows=[[t.cashMonth,t.cashDesc,t.cashDue,t.cashBal],...project.cash.map(c=>[c.month,(c.items||[]).join(' + '),toCcy(c.amount).toFixed(2),toCcy(c.balance).toFixed(2)])];
-        const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-        const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-        a.download=`arconique_cashflow_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
-      }
-      function exportXLSX(){
-        const ws1=XLSX.utils.json_to_sheet(project.cash.map(c=>({[t.cashMonth]:c.month,[t.cashDesc]:(c.items||[]).join(' + '),[t.cashDue]:toCcy(c.amount),[t.cashBal]:toCcy(c.balance)})));
-        const ws2=XLSX.utils.json_to_sheet(linesData.map(ld=>({[t.project]:findProject(ld.L.projectId)?.projectName||ld.L.projectId,[t.villa]:ld.L.snapshot?.name,[t.qty]:ld.qty,[t.area]:ld.L.snapshot?.area,[t.ppsm]:ld.L.snapshot?.ppsm,[t.base]:ld.base,[t.discount]:(ld.L.discountPct||0)+'%',[t.pre]:ld.L.prePct,[t.months]:(ld.L.ownTerms?ld.L.months:months)})));
-        const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws1,'Cashflow'); XLSX.utils.book_append_sheet(wb,ws2,'Lines');
-        XLSX.writeFile(wb,`arconique_installments_${new Date().toISOString().slice(0,10)}.xlsx`);
-      }
-      const exportPDF=()=>window.print();
-
-      // add from catalog via prompts (простая и надёжная версия)
-      function addFromCatalog(){
-        const projList=catalog.map(p=>`${p.projectId}: ${p.projectName}`).join('\n');
-        const pid=prompt((lang==='ru'?'Проект (id):\n':'Project (id):\n')+projList, catalog[0]?.projectId||''); if(!pid) return;
-        const proj=findProject(pid); if(!proj){alert('Project not found');return}
-        const villList=proj.villas.map(v=>`${v.villaId}: ${v.name}`).join('\n');
-        const vid=prompt((lang==='ru'?'Вилла (id):\n':'Villa (id):\n')+villList, proj.villas[0]?.villaId||''); if(!vid) return;
-        const vill=findVilla(pid,vid); if(!vill){alert('Villa not found');return}
-        const qty=Math.max(1,parseInt(prompt(lang==='ru'?'Количество:':'Quantity:','1')||'1',10));
-        const id=(lines[lines.length-1]?.id||0)+1;
-        setLines(prev=>[...prev,{id,projectId:pid,villaId:vid,qty,prePct:(prev[0]?.prePct??70),discountPct:0,ownTerms:false,months:null,rate:null,firstPost:0,
-          snapshot:{name:vill.name,area:vill.area,ppsm:vill.ppsm,baseUSD:vill.baseUSD}}]);
-      }
-
-      // update helpers
+      // helpers
       const upd=(id,patch)=>setLines(prev=>prev.map(l=>l.id===id?{...l,...patch}:l));
       const del=(id)=>setLines(prev=>prev.filter(l=>l.id!==id));
+      const dup=(id)=>setLines(prev=>{const src=prev.find(x=>x.id===id); if(!src)return prev; const nid=(prev[prev.length-1]?.id||0)+1; return [...prev,{...src,id:nid,qty:1}]})
 
-      // render
+      // UI
       return (
         <div className="grid">
           <div className="card">
             <div className="row" style={{justifyContent:'space-between'}}>
               <div className="muted">{isClient?t.client:t.editor}</div>
               <div className="row">
-                {!isClient && <button className="btn" onClick={()=>share('editor')}>{t.shareEd}</button>}
-                <button className="btn" onClick={()=>share('client')}>{t.share}</button>
+                {!isClient && <button className="btn" onClick={()=>share('editor')}>Поделиться (редактор)</button>}
+                <button className="btn" onClick={()=>share('client')}>Поделиться (клиент)</button>
               </div>
             </div>
 
@@ -319,7 +328,7 @@ const linesData=useMemo(()=>lines.map(L=>{
 
             <div className="field">
               <label>{t.currency}</label>
-              <select value={ccy} onChange={e=>setCcy(e.target.value)}>
+              <select value={currency} onChange={e=>setCurrency(e.target.value)}>
                 <option>USD</option><option>IDR</option><option>EUR</option>
               </select>
             </div>
@@ -335,16 +344,16 @@ const linesData=useMemo(()=>lines.map(L=>{
               {!isClient
                 ? (<><div className="field" style={{flex:1}}><label>{t.term}</label><input type="range" min="6" max="24" step="1" value={months} onChange={e=>setMonths(parseInt(e.target.value,10))}/><div className="pill">{t.months}: {months}</div></div>
                     <div className="field" style={{flex:1}}><label>{t.rate}</label><input type="number" min="0" step="0.01" value={rate} onChange={e=>setRate(Math.max(0,+e.target.value||0))}/></div></>)
-                : (<div className="field" style={{flex:1}}><label>{t.term}</label><input type="number" min="6" step="1" value={months} onChange={e=>setMonths(Math.max(6,parseInt(e.target.value||'6',10)))}/></div>)
+                : (<div className="field" style={{flex:1}}><label>{t.clientTerm}</label><input type="number" min="6" step="1" value={months} onChange={e=>setMonths(Math.max(6,parseInt(e.target.value||'6',10)))}/></div>)
               }
             </div>
 
             <div className="hr"></div>
 
-            <h3 style={{margin:'6px 0'}}>{t.stages}</h3>
+            <h3 style={{margin:'6px 0'}}>{t.stagesTitle}</h3>
             <div className="scroll" style={{maxHeight:'24vh',border:'1px dashed #223',borderRadius:'8px',padding:'6px'}}>
               <table>
-                <thead><tr><th>{t.stage}</th><th>{t.pct}</th><th>{t.month}</th><th></th></tr></thead>
+                <thead><tr><th>{t.stage}</th><th>{t.percent}</th><th>{t.month}</th><th></th></tr></thead>
                 <tbody>
                   {stages.map(s=>(
                     <tr key={s.id}>
@@ -362,49 +371,53 @@ const linesData=useMemo(()=>lines.map(L=>{
               {(() => {
                 const vals=lines.map(l=>l.prePct||0); const allSame=vals.every(v=>v===vals[0]); const target=allSame?`${vals[0]||0}%`:`${Math.min(...vals||[0])}%–${Math.max(...vals||[0])}%`;
                 const mismatch=allSame ? (Math.round(stagesSum*100)/100!==(vals[0]||0)) : true;
-                return <div className="muted">{t.sumStages}: {Math.round(stagesSum*100)/100}% · {t.target}: {target} {mismatch?(' '+t.mismatch):''}</div>;
+                return <div className={`hint ${mismatch?'warn':''}`}>{t.sumStages}: {Math.round(stagesSum*100)/100}% · {t.target}: {target} {mismatch?(' '+t.mismatch):''}</div>;
               })()}
             </div>
 
             <div className="hr"></div>
 
             <div className="row">
-              {!isClient && <button className="btn ok" onClick={()=>share('editor')}>{t.shareEd}</button>}
-              <button className="btn" onClick={()=>share('client')}>{t.share}</button>
+              {!isClient && <button className="btn ok" onClick={()=>share('editor')}>Поделиться (редактор)</button>}
+              <button className="btn" onClick={()=>share('client')}>Поделиться (клиент)</button>
             </div>
           </div>
 
           <div className="card">
             <div className="row" style={{justifyContent:'space-between',alignItems:'center'}}>
-              <h3 style={{margin:'6px 0'}}>{t.lines}</h3>
-              {!isClient && <button className="btn ok" onClick={addFromCatalog}>{t.addFromCatalog}</button>}
+              <h3 style={{margin:'6px 0'}}>{t.villasTitle}</h3>
+              {!isClient && <button className="btn ok" onClick={()=>setModalOpen(true)}>{t.addFromCatalog}</button>}
             </div>
 
-            <div className="calc">
-              <table>
-                <thead><tr>
-                  <th>{t.project}</th><th>{t.villa}</th><th>{t.qty}</th><th>{t.area}</th><th>{t.ppsm}</th>
-                  <th>{t.base}</th>{!isClient && <th>{t.discount}</th>}<th>{t.pre}</th>{!isClient && <th>{t.months}</th>}{!isClient && <th>{t.rate}</th>}
-                  <th>{t.first}</th><th></th>
-                </tr></thead>
+            <div className="calc-scroll">
+              <table className="calc-table">
+                <thead>
+                  <tr>
+                    <th className="col-project">{t.project}</th><th className="col-villa">{t.villa}</th><th className="col-qty">{t.qty}</th><th className="col-area">{t.area}</th><th className="col-ppsm">{t.ppsm}</th>
+                    <th className="col-base">{t.price}</th>{!isClient && <th className="col-disc">{t.discount}</th>}<th className="col-pre">{t.prePct}</th>
+                    {!isClient && <th className="col-months">{t.months}</th>}{!isClient && <th className="col-rate">Ставка, %/мес</th>}
+                    <th className="col-first">{t.firstPost}</th><th className="col-lineTotal">{t.lineTotal}</th><th className="col-actions"></th>
+                  </tr>
+                </thead>
                 <tbody>
                   {linesData.map(ld=>(
                     <tr key={ld.L.id}>
-                      <td style={{textAlign:'left'}}><input disabled value={findProject(ld.L.projectId)?.projectName||ld.L.projectId}/></td>
-                      <td style={{textAlign:'left'}}><input disabled value={ld.L.snapshot?.name||ld.L.villaId}/></td>
-                      <td><input type="number" min="1" step="1" value={ld.L.qty} onChange={e=>upd(ld.L.id,{qty:Math.max(1,parseInt(e.target.value||'1',10))})}/></td>
-                      <td><input disabled value={ld.L.snapshot?.area||0}/></td>
-                      <td><input disabled value={ld.L.snapshot?.ppsm||0}/></td>
-                      <td className="strong">{fmt(toCcy(ld.base))}</td>
-                      {!isClient && (<td><input type="number" min="0" max="20" step="0.1" value={ld.L.discountPct||0} onChange={e=>upd(ld.L.id,{discountPct:Math.max(0,Math.min(20,+e.target.value||0))})}/></td>)}
-                      <td>
+                      <td className="col-project" style={{textAlign:'left'}}><input disabled value={findProject(ld.L.projectId)?.projectName||ld.L.projectId}/></td>
+                      <td className="col-villa" style={{textAlign:'left'}}><input disabled value={ld.L.snapshot?.name||ld.L.villaId}/></td>
+                      <td className="col-qty"><input type="number" min="1" step="1" value={ld.L.qty} onChange={e=>upd(ld.L.id,{qty:Math.max(1,parseInt(e.target.value||'1',10))})}/></td>
+                      <td className="col-area"><input disabled value={ld.L.snapshot?.area||0}/></td>
+                      <td className="col-ppsm"><input disabled value={ld.L.snapshot?.ppsm||0}/></td>
+                      <td className="col-base base-strong">{fmtMoney(toCurrency(ld.base),currency)}</td>
+                      {!isClient && (<td className="col-disc"><input type="number" min="0" max="20" step="0.1" value={ld.L.discountPct||0} onChange={e=>upd(ld.L.id,{discountPct:Math.max(0,Math.min(20,+e.target.value||0))})}/></td>)}
+                      <td className="col-pre">
                         <input type="range" min="0" max="100" step="1" value={ld.L.prePct} onChange={e=>upd(ld.L.id,{prePct:parseInt(e.target.value,10)})}/>
                         <div className="pill" style={{display:'inline-block',marginTop:6}}>{ld.L.prePct}%</div>
                       </td>
-                      {!isClient && (<td><input type="number" min="6" step="1" value={ld.L.ownTerms?(ld.L.months??months):months} onChange={e=>upd(ld.L.id,{ownTerms:true,months:Math.max(6,parseInt(e.target.value||'6',10))})}/></td>)}
-                      {!isClient && (<td><input type="number" min="0" step="0.01" value={ld.L.ownTerms?(ld.L.rate??rate):rate} onChange={e=>upd(ld.L.id,{ownTerms:true,rate:Math.max(0,+e.target.value||0)})}/></td>)}
-                      <td><input type="number" min="0" step="1" value={ld.L.firstPost} onChange={e=>upd(ld.L.id,{firstPost:Math.max(0,+e.target.value||0)})}/></td>
-                      <td><button className="btn warn" onClick={()=>del(ld.L.id)}>{t.delete}</button></td>
+                      {!isClient && (<td className="col-months"><input type="number" min="6" step="1" value={ld.L.ownTerms?(ld.L.months??months):months} onChange={e=>upd(ld.L.id,{ownTerms:true,months:Math.max(6,parseInt(e.target.value||'6',10))})}/></td>)}
+                      {!isClient && (<td className="col-rate"><input type="number" min="0" step="0.01" value={ld.L.ownTerms?(ld.L.rate??rate):rate} onChange={e=>upd(ld.L.id,{ownTerms:true,rate:Math.max(0,+e.target.value||0)})}/></td>)}
+                      <td className="col-first"><input type="number" min="0" step="1" value={ld.L.firstPost} onChange={e=>upd(ld.L.id,{firstPost:Math.max(0,+e.target.value||0)})}/></td>
+                      <td className="col-lineTotal line-strong">{fmtMoney(toCurrency(ld.lineTotal),currency)}</td>
+                      <td className="col-actions" style={{textAlign:'right'}}>{!isClient && (<><button className="btn icon" onClick={()=>dup(ld.L.id)}>⧉</button><button className="btn icon warn" onClick={()=>del(ld.L.id)}>✕</button></>)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -413,36 +426,33 @@ const linesData=useMemo(()=>lines.map(L=>{
 
             <div className="hr"></div>
 
-            {/* KPI */}
-            <div className="kpis" style={{gridTemplateColumns:isClient?'repeat(3,1fr)':'repeat(5,1fr)'}}>
-              {!isClient && <div className="kpi"><div className="muted">{t.totalBase}</div><div className="v">{fmt(toCcy(project.totals.baseUSD))}</div></div>}
-              <div className="kpi"><div className="muted">{t.totalPre}</div><div className="v">{fmt(toCcy(project.totals.preUSD))}</div></div>
-              {!isClient && <div className="kpi"><div className="muted">{t.totalInt}</div><div className="v">{fmt(toCcy(project.totals.interestUSD))}</div></div>}
-              <div className="kpi"><div className="muted">{t.totalAfter}</div><div className="v">{fmt(toCcy(project.totals.afterUSD))}</div></div>
-              <div className="kpi"><div className="muted">{t.final}</div><div className="v">{fmt(toCcy(project.totals.finalUSD))}</div></div>
-            </div>
-
-            <div className="hr"></div>
-
             <div className="row" style={{justifyContent:'space-between',alignItems:'center'}}>
-              <h3 style={{margin:'6px 0'}}>{t.cashflow}</h3>
-              <div className="row">
-                <button className="btn" onClick={exportCSV}>{t.exportCSV}</button>
-                <button className="btn" onClick={exportXLSX}>{t.exportXLSX}</button>
+              <h3 style={{margin:'6px 0'}}>{t.cashflowTitle}</h3>
+              <div className="toolbar">
+                <button className="btn" onClick={()=>{
+                  const rows=[[t.cashMonth,t.cashDesc,t.cashTotal,t.cashBalance],...project.cash.map(c=>[c.month,(c.items||[]).join(' + '),toCurrency(c.amount).toFixed(2),toCurrency(c.balance).toFixed(2)])];
+                  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+                  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_cashflow_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
+                }}>{t.exportCSV}</button>
+                <button className="btn" onClick={()=>{
+                  const ws1=XLSX.utils.json_to_sheet(project.cash.map(c=>({[t.cashMonth]:c.month,[t.cashDesc]:(c.items||[]).join(' + '),[t.cashTotal]:toCurrency(c.amount),[t.cashBalance]:toCurrency(c.balance)})));
+                  const ws2=XLSX.utils.json_to_sheet(linesData.map(ld=>({[t.project]:findProject(ld.L.projectId)?.projectName||ld.L.projectId,[t.villa]:ld.L.snapshot?.name,[t.qty]:ld.L.qty,[t.area]:ld.L.snapshot?.area,[t.ppsm]:ld.L.snapshot?.ppsm,[t.price]:ld.base,[t.discount]:(ld.L.discountPct||0)+'%',[t.prePct]:ld.L.prePct,[t.months]:(ld.L.ownTerms?ld.L.months:months),[t.lineTotal]:ld.lineTotal})));
+                  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws1,'Cashflow'); XLSX.utils.book_append_sheet(wb,ws2,'Lines'); XLSX.writeFile(wb,`arconique_installments_${new Date().toISOString().slice(0,10)}.xlsx`);
+                }}>{t.exportXLSX}</button>
                 <button className="btn" onClick={()=>window.print()}>{t.exportPDF}</button>
               </div>
             </div>
 
             <div className="scroll">
               <table>
-                <thead><tr><th>{t.cashMonth}</th><th>{t.cashDesc}</th><th>{t.cashDue}</th><th>{t.cashBal}</th></tr></thead>
+                <thead><tr><th>{t.cashMonth}</th><th>{t.cashDesc}</th><th>{t.cashTotal}</th><th>{t.cashBalance}</th></tr></thead>
                 <tbody>
                   {project.cash.map(c=>(
                     <tr key={c.month}>
                       <td>{c.month}</td>
                       <td style={{textAlign:'left'}}>{(c.items||[]).join(' + ')}</td>
-                      <td>{fmt(toCcy(c.amount))}</td>
-                      <td>{fmt(toCcy(c.balance))}</td>
+                      <td>{fmtMoney(toCurrency(c.amount),currency)}</td>
+                      <td>{fmtMoney(toCurrency(c.balance),currency)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -450,7 +460,117 @@ const linesData=useMemo(()=>lines.map(L=>{
             </div>
 
             <div className="hr"></div>
-            <canvas id="chart" height="200" ref={chartRef}></canvas>
+            <h3 style={{margin:'6px 0'}}>График</h3>
+            <canvas id="chartCanvas" height="200" ref={chartRef}></canvas>
+          </div>
+        </div>
+
+        {modalOpen && <CatalogModal catalog={catalog} t={t} onClose={()=>setModalOpen(false)} onAdd={(items)=>{
+          setLines(prev=>{
+            let id=(prev[prev.length-1]?.id||0)+1;
+            const appended=items.map(it=>({
+              id:id++, projectId:it.projectId, villaId:it.villaId, qty:it.qty, prePct:(prev[0]?.prePct??70),
+              discountPct:0, ownTerms:false, months:null, rate:null, firstPost:0,
+              snapshot:{name:it.name,area:it.area,ppsm:it.ppsm,baseUSD:it.baseUSD}
+            }));
+            return [...prev,...appended];
+          });
+          setModalOpen(false);
+        }} />}
+      );
+    }
+
+    function CatalogModal({catalog,t,onClose,onAdd}){
+      const [activeProject,setActiveProject]=React.useState(catalog[0]?.projectId||'');
+      const [q,setQ]=React.useState(''); const [areaMin,setAreaMin]=React.useState(''); const [areaMax,setAreaMax]=React.useState('');
+      const [priceMin,setPriceMin]=React.useState(''); const [priceMax,setPriceMax]=React.useState('');
+      const [sortBy,setSortBy]=React.useState('price');
+      const [selected,setSelected]=React.useState({});
+
+      const list=React.useMemo(()=>{
+        const rows=[]; catalog.forEach(p=>p.villas.forEach(v=>rows.push({projectId:p.projectId,projectName:p.projectName,villaId:v.villaId,name:v.name,area:v.area,ppsm:v.ppsm,baseUSD:v.baseUSD})));
+        return rows;
+      },[catalog]);
+
+      const filtered=React.useMemo(()=>list.filter(r=>{
+        if(activeProject && r.projectId!==activeProject) return false;
+        if(q && !(`${r.name} ${r.projectName}`.toLowerCase().includes(q.toLowerCase()))) return false;
+        if(areaMin!=='' && r.area<+areaMin) return false;
+        if(areaMax!=='' && r.area>+areaMax) return false;
+        if(priceMin!=='' && r.baseUSD<+priceMin) return false;
+        if(priceMax!=='' && r.baseUSD>+priceMax) return false;
+        return true;
+      }).sort((a,b)=>{
+        if(sortBy==='area') return a.area-b.area;
+        if(sortBy==='name') return a.name.localeCompare(b.name);
+        return a.baseUSD-b.baseUSD;
+      }),[list,activeProject,q,areaMin,areaMax,priceMin,priceMax,sortBy]);
+
+      const toggle=(key)=>setSelected(prev=>{const n={...prev}; if(n[key]) delete n[key]; else n[key]=1; return n;});
+      const setQty=(key,val)=>setSelected(prev=>({...prev,[key]:Math.max(1,parseInt(val||'1',10))}));
+      const add=()=>{
+        const items=[]; Object.entries(selected).forEach(([key,qty])=>{ const [pid,vid]=key.split('|'); const r=list.find(x=>x.projectId===pid&&x.villaId===vid); if(r) items.push({...r,qty}); });
+        if(items.length>0) onAdd(items); else onClose();
+      };
+
+      return (
+        <div className="modal" onClick={onClose}>
+          <div className="panel" onClick={e=>e.stopPropagation()}>
+            <div className="head">
+              <strong>{t.selectFromCatalog}</strong>
+              <button className="btn" onClick={onClose}>✕</button>
+            </div>
+            <div className="body">
+              <div className="side">
+                {catalog.map(p=>(
+                  <div key={p.projectId} className={`proj ${activeProject===p.projectId?'active':''}`} onClick={()=>setActiveProject(p.projectId)}>
+                    <div style={{fontWeight:600}}>{p.projectName}</div>
+                    <div className="muted" style={{fontSize:12}}>{p.villas.length} поз.</div>
+                  </div>
+                ))}
+              </div>
+              <div className="content">
+                <div className="filters">
+                  <input placeholder={t.search} value={q} onChange={e=>setQ(e.target.value)} />
+                  <input type="number" placeholder={t.areaFrom} value={areaMin} onChange={e=>setAreaMin(e.target.value)} style={{maxWidth:120}}/>
+                  <input type="number" placeholder={t.areaTo} value={areaMax} onChange={e=>setAreaMax(e.target.value)} style={{maxWidth:120}}/>
+                  <input type="number" placeholder={t.priceFrom} value={priceMin} onChange={e=>setPriceMin(e.target.value)} style={{maxWidth:140}}/>
+                  <input type="number" placeholder={t.priceTo} value={priceMax} onChange={e=>setPriceMax(e.target.value)} style={{maxWidth:140}}/>
+                  <select value={sortBy} onChange={e=>setSortBy(e.target.value)}>
+                    <option value="price">{t.byPrice}</option>
+                    <option value="area">{t.byArea}</option>
+                    <option value="name">{t.byName}</option>
+                  </select>
+                </div>
+                <div className="scroll" style={{maxHeight:'56vh',marginTop:8}}>
+                  <table>
+                    <thead><tr>
+                      <th style={{textAlign:'left'}}>{t.project}</th>
+                      <th style={{textAlign:'left'}}>{t.villa}</th>
+                      <th>{t.area}</th><th>{t.ppsm}</th><th>{t.baseUSD}</th><th>{t.qtyShort}</th><th></th>
+                    </tr></thead>
+                    <tbody>
+                      {filtered.map(r=>{
+                        const key=`${r.projectId}|${r.villaId}`; const isSel=key in selected;
+                        return (
+                          <tr key={key}>
+                            <td style={{textAlign:'left'}}>{r.projectName}</td>
+                            <td style={{textAlign:'left'}}>{r.name}</td>
+                            <td>{r.area}</td><td>{r.ppsm}</td><td>{r.baseUSD.toLocaleString('en-US')}</td>
+                            <td><input type="number" min="1" step="1" disabled={!isSel} value={isSel?selected[key]:''} onChange={e=>setQty(key,e.target.value)} style={{width:90}}/></td>
+                            <td><button className={`btn ${isSel?'ok':''}`} onClick={()=>toggle(key)}>{isSel?'✓':'+'}</button></td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div className="foot">
+              <button className="btn" onClick={onClose}>{t.cancel}</button>
+              <button className="btn ok" onClick={add}>{t.addSelected}</button>
+            </div>
           </div>
         </div>
       );
