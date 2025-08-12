@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arconique / Калькулятор рассрочки для любимых клиентов — v7.6</title>
+  <title>v7.6</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
@@ -510,7 +510,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      z-index:var(--z-modal);
+      z-index:1000;
       padding:var(--spacing-md);
     }
     
@@ -800,6 +800,46 @@
     .cashflow-balance {
       width: 120px;
       text-align: right;
+    }
+    
+    /* Специальные стили для заголовка расчета */
+    .calculation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .calculation-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    
+    /* Стили для каталога проектов */
+    .catalog-projects {
+      display: grid;
+      gap: var(--spacing-md);
+    }
+    
+    /* Стили для поиска и фильтрации */
+    .search-filter {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+      align-items: center;
+    }
+    
+    .search-input {
+      flex: 1;
+      max-width: 300px;
+    }
+    
+    .filter-select {
+      min-width: 150px;
     }
   </style>
 </head>
@@ -1135,9 +1175,9 @@
         const preTotal=preTotalOne*line.qty;
         const firstPostQ=firstPostUSD*line.qty;
         const baseQ=base*line.qty;
-        const lineTotal=lineTotalOne*line.qty;
+        const lineTotal=preTotal+firstPostQ;
 
-        return {line,qty,baseOne:base,base:baseQ,preSchedule:preScheduleQ,preTotal,firstPostUSD:firstPostQ,postRows:postRowsQ,lineTotal,vMonths,rate,discountPct:line.discountPct};
+        return {line,qty,baseOne:base,base:baseQ,preSchedule:preSchedule,preTotal,firstPostUSD:firstPostQ,postRows:postRowsQ,lineTotal,vMonths,rate,discountPct:line.discountPct};
       }),[lines,stages,stagesSumPct,handoverMonth,months,monthlyRatePct,lang]);
 
       const project=useMemo(()=>{
@@ -1179,7 +1219,7 @@
         const newProject = {
           id: projectId,
           name: newProjectForm.projectName,
-          villas: []
+          villas: {}
         };
         
         // Добавляем проект в каталог
@@ -1389,7 +1429,7 @@
                               />
                             </td>
                             <td>
-                              <button className="btn warn icon" onClick={()=>removeStage(s.id)}>{t.removeStage}</button>
+                              <button className="btn warn icon" onClick={()=>removeStage(s.id)}>×</button>
                             </td>
                           </tr>
                         ))}
@@ -1405,7 +1445,7 @@
 
               <div className="card">
                 <div className="calculation-header">
-                  <h3 style={{margin:'0 0 var(--spacing-md) 0'}}>{t.villasTitle}</h3>
+                  <h3>{t.villasTitle}</h3>
                   {!isClient && (
                     <button className="btn success" onClick={()=>setModalOpen(true)}>{t.addFromCatalog}</button>
                   )}
@@ -1790,4 +1830,3 @@
   </script>
 </body>
 </html>
-
