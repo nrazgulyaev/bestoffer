@@ -58,8 +58,8 @@
   </div>
 
   <!-- libs -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script crossorigin src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script crossorigin src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -68,11 +68,20 @@
   <script type="text/babel">
     const {useEffect,useMemo,useRef,useState} = React;
 
-    // --- PIN (334346) ---
+    // --- PIN ---
     const PIN_SALT='enso-v7.4-salt-1';
     const PIN_HASH_HEX='c0b37fd5b1ebc835af06c260b9ceb435285f79ecffd7f0a68be695db347d2aa6';
     async function sha256Hex(s){const buf=new TextEncoder().encode(s);const d=await crypto.subtle.digest('SHA-256',buf);return [...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('')}
-    async function verifyPin(){const p=prompt('Enter PIN');if(p==null)return false;return (await sha256Hex(`${p}|${PIN_SALT}`))===PIN_HASH_HEX}
+    async function verifyPin(){
+      try{
+        const p=prompt('Enter PIN');
+        if(p==null) return false;
+        return (await sha256Hex(`${p}|${PIN_SALT}`))===PIN_HASH_HEX;
+      }catch{
+        alert('PIN check unavailable in this environment');
+        return false;
+      }
+    }
 
     // --- i18n ---
     const T={
@@ -155,15 +164,14 @@
         {id:1,projectId:'enso',villaId:'enso-2br',qty:1,prePct:70,discountPct:0,ownTerms:false,months:null,rate:null,firstPost:0,
          snapshot:{name:'Enso 2BR',area:100,ppsm:2500,baseUSD:250000}}
       ]);
-     // v7.6
-const [modalOpen,setModalOpen]=useState(false);
       const findProject=(pid)=>catalog.find(p=>p.projectId===pid);
       const findVilla=(pid,vid)=>findProject(pid)?.villas.find(v=>v.villaId===vid);
 
       // restore from URL/localStorage
       useEffect(()=>{
         (async ()=>{
-          const restored=decodeState()?.state||JSON.parse(localStorage.getItem('arconique_v75lite')||'null');
+          const decoded=decodeState();
+          const restored=decoded?.state||JSON.parse(localStorage.getItem('arconique_v75lite')||'null');
           if(restored){try{
             if(restored.lang) setLang(restored.lang);
             if(restored.ccy) setCcy(restored.ccy);
@@ -176,10 +184,12 @@ const [modalOpen,setModalOpen]=useState(false);
             if(Array.isArray(restored.catalog)) setCatalog(restored.catalog);
             if(Array.isArray(restored.lines)) setLines(restored.lines);
           }catch{}}
-          const view=decodeState()?.view||new URLSearchParams(location.hash.slice(1)).get('view');
-          if(view==='editor'){ const ok=await verifyPin(); setIsClient(!ok); if(!ok){
-            const url=encodeState(snapshot(),{view:'client'}); if(url) history.replaceState(null,'',url); alert(lang==='ru'?'Неверный PIN — открыт клиент':'Wrong PIN — opened client');
-          }} else setIsClient(true);
+          const view=decoded?.view||new URLSearchParams(location.hash.slice(1)).get('view');
+          if(view==='editor'){
+            const ok=await verifyPin(); setIsClient(!ok); if(!ok){
+              const url=encodeState(snapshot(),{view:'client'}); if(url) history.replaceState(null,'',url); alert(lang==='ru'?'Неверный PIN — открыт клиент':'Wrong PIN — opened client');
+            }
+          } else setIsClient(true);
         })();
         // eslint-disable-next-line
       },[]);
@@ -263,7 +273,17 @@ const linesData=useMemo(()=>lines.map(L=>{
         [project.cash,ccy,idr,eur,lang]);
 
       // share
-      async function share(view){const url=encodeState(snapshot(),{view}); if(url){await navigator.clipboard.writeText(url); alert(t.copied)}}
+      async function share(view){
+        const url=encodeState(snapshot(),{view});
+        if(!url) return;
+        try{ await navigator.clipboard.writeText(url); }
+        catch{
+          const ta=document.createElement('textarea');
+          ta.value=url; ta.style.position='fixed'; ta.style.opacity='0';
+          document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        }
+        alert(t.copied);
+      }
 
       // exports
       function exportCSV(){
