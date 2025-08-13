@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Arconique / Калькулятор рассрочки для любимых клиентов </title>
+    <title>Arconique / Калькулятор рассрочки для любимых клиентов — v8.1</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
@@ -143,6 +143,12 @@
         
         @media (max-width: 1023px) {
             .grid { grid-template-columns: 1fr; gap: 16px; }
+        }
+        
+        /* Полноширинный блок для каталога */
+        .full-width-block {
+            grid-column: 1 / -1;
+            margin-top: 24px;
         }
         
         /* Современные карточки */
@@ -475,7 +481,7 @@
             .row .field { margin-bottom: var(--spacing-md); min-width: auto; }
         }
 
-              /* Современные таблицы */
+                /* Современные таблицы */
         .calc-scroll{
             overflow:auto;
             max-height:35vh;
@@ -939,7 +945,7 @@
         }
         
         .settings-content.expanded {
-            max-height: 500px;
+            max-height: 800px; /* Увеличил высоту для корректного отображения */
         }
         
         .settings-content > div {
@@ -1018,7 +1024,7 @@
                 padding: 12px;
                 border: none;
                 background: transparent;
-                color: var(--muted);
+            color: var(--muted);
                 border-radius: var(--radius-sm);
                 transition: all var(--transition-fast);
                 display: flex;
@@ -1135,7 +1141,7 @@
             box-shadow: var(--shadow-sm);
         }
 
-              /* Дополнительные стили для каталога */
+                /* Дополнительные стили для каталога */
         .catalog-card {
             background: var(--card);
             border: 1px solid var(--line);
@@ -1345,7 +1351,7 @@
         
         /* ---------- PIN / security ---------- */
         const PIN_CODE = '334346';
-        const PIN_SALT = 'enso-v8.0-salt-1';
+        const PIN_SALT = 'enso-v8.1-salt-1';
         const PIN_HASH_HEX = 'c0b37fd5b1ebc835af06c260b9ceb435285f79ecffd7f0a68be695db347d2aa6';
         
         async function sha256Hex(str){
@@ -1699,8 +1705,8 @@
                 {villaId:'eternal-2br',name:'Eternal 2BR',area:110,ppsm:2550,baseUSD:280500}
             ]}
         ];
-        
-        /* ---------- Компоненты ---------- */
+
+                /* ---------- Компоненты ---------- */
         function App(){
             const [lang,setLang]=useState('ru');
             const t=T[lang];
@@ -1820,8 +1826,8 @@
                 if (entry.data.stages) setStages(entry.data.stages);
                 if (entry.data.catalog) setCatalog(entry.data.catalog);
             };
-
-                  // Функции для работы с заметками
+            
+            // Функции для работы с заметками
             const addNote = (type, content, targetId) => {
                 const newNote = {
                     id: Date.now(),
@@ -1964,7 +1970,7 @@
                     if (hasUnsavedChanges) {
                         setAutoSaveStatus('saving');
                         try {
-                            localStorage.setItem('arconique_v80', JSON.stringify(snapshot()));
+                            localStorage.setItem('arconique_v81', JSON.stringify(snapshot()));
                             setAutoSaveStatus('saved');
                             setHasUnsavedChanges(false);
                         } catch (error) {
@@ -2234,7 +2240,7 @@
             useEffect(()=>{(async()=>{
                 try{
                     const fromUrl=decodeState();
-                    const saved=fromUrl?.state || JSON.parse(localStorage.getItem('arconique_v80')||'null');
+                    const saved=fromUrl?.state || JSON.parse(localStorage.getItem('arconique_v81')||'null');
                     if(saved){
                         if(saved.lang) setLang(saved.lang);
                         if(saved.currency) setCurrency(saved.currency);
@@ -2268,34 +2274,45 @@
             })()},[]);
             
             useEffect(()=>{ 
-                localStorage.setItem('arconique_v80',JSON.stringify(snapshot())); 
+                localStorage.setItem('arconique_v81',JSON.stringify(snapshot())); 
                 document.getElementById('app-title').textContent=t.title; 
                 document.title=t.title; 
             },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,catalog,lines,tab]);
 
-                  // Компонент KPI блока
+                    // Компонент KPI блока с отображением валюты
             function KPIBlock({isClient, t, totals, currency, toCurrency}){
+                const getCurrencySymbol = (curr) => {
+                    switch(curr) {
+                        case 'USD': return '$';
+                        case 'IDR': return 'Rp';
+                        case 'EUR': return '€';
+                        default: return '$';
+                    }
+                };
+                
+                const currencySymbol = getCurrencySymbol(currency);
+                
                 return (
                     <div className="kpis">
                         <div className="kpi animate-fade-in">
                             <span className="muted">{t.base}</span>
-                            <div className="v">{toCurrency(totals.baseUSD)}</div>
+                            <div className="v">{currencySymbol} {toCurrency(totals.baseUSD).replace(/[^\d,.-]/g, '')}</div>
                         </div>
                         <div className="kpi animate-fade-in" style={{animationDelay: '0.1s'}}>
                             <span className="muted">{t.prepay}</span>
-                            <div className="v">{toCurrency(totals.preUSD)}</div>
+                            <div className="v">{currencySymbol} {toCurrency(totals.preUSD).replace(/[^\d,.-]/g, '')}</div>
                         </div>
                         <div className="kpi animate-fade-in" style={{animationDelay: '0.2s'}}>
                             <span className="muted">{t.after}</span>
-                            <div className="v">{toCurrency(totals.afterUSD)}</div>
+                            <div className="v">{currencySymbol} {toCurrency(totals.afterUSD).replace(/[^\d,.-]/g, '')}</div>
                         </div>
                         <div className="kpi animate-fade-in" style={{animationDelay: '0.3s'}}>
                             <span className="muted">{t.interestTotal}</span>
-                            <div className="v">{toCurrency(totals.interestUSD)}</div>
+                            <div className="v">{currencySymbol} {toCurrency(totals.interestUSD).replace(/[^\d,.-]/g, '')}</div>
                         </div>
                         <div className="kpi animate-fade-in" style={{animationDelay: '0.4s'}}>
                             <span className="muted">{t.final}</span>
-                            <div className="v">{toCurrency(totals.finalUSD)}</div>
+                            <div className="v">{currencySymbol} {toCurrency(totals.finalUSD).replace(/[^\d,.-]/g, '')}</div>
                         </div>
                     </div>
                 );
@@ -2316,11 +2333,6 @@
                                         <span className="tab-icon">📅</span>
                                         <span className="tab-label">{t.stages}</span>
                                         <span className="tab-counter">{stages.length}</span>
-                                    </button>
-                                    <button className={`smart-tab ${tab==='catalog'?'active':''}`} onClick={()=>setTab('catalog')}>
-                                        <span className="tab-icon">🏗️</span>
-                                        <span className="tab-label">{t.catalog}</span>
-                                        <span className="tab-counter">{catalog.length}</span>
                                     </button>
                                 </div>
                             )}
@@ -2372,13 +2384,13 @@
                                         {!isClient ? (
                                             <>
                                                 <div className="field compact">
+                                                    <label>{t.globalRate}</label>
+                                                    <input type="number" min="0" step="0.01" value={monthlyRatePct} onChange={e=>setMonthlyRatePct(clamp(parseFloat(e.target.value||0),0,1000))}/>
+                                                </div>
+                                                <div className="field compact">
                                                     <label>{t.globalTerm}</label>
                                                     <input type="range" min="6" max="24" step="1" value={months} onChange={e=>setMonths(parseInt(e.target.value,10))}/>
                                                     <div className="pill">{t.months}: {months}</div>
-                                                </div>
-                                                <div className="field compact">
-                                                    <label>{t.globalRate}</label>
-                                                    <input type="number" min="0" step="0.01" value={monthlyRatePct} onChange={e=>setMonthlyRatePct(clamp(parseFloat(e.target.value||0),0,1000))}/>
                                                 </div>
                                             </>
                                         ) : (
@@ -2420,10 +2432,7 @@
                                                                 <input type="number" className="stage-number-input" min="0" max="100" step="0.01" value={s.pct} onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,pct:clamp(parseFloat(e.target.value||0),0,100)}:x))} />
                                                             </td>
                                                             <td className="col-month">
-                                                                <div className="month-display">
-                                                                    <div className="month-number">{s.month}</div>
-                                                                    <div className="month-date">{s.realDate}</div>
-                                                                </div>
+                                                                <input type="number" className="stage-number-input" min="0" step="1" value={s.month} onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,month:clamp(parseInt(e.target.value||0,10),0,handoverMonth),realDate:calculateRealDate(clamp(parseInt(e.target.value||0,10),0,handoverMonth), lang)}:x))} />
                                                             </td>
                                                             <td className="col-actions">
                                                                 <div className="stage-actions">
@@ -2449,101 +2458,6 @@
                                                 const mismatch=allSame ? (Math.round(stagesSumPct*100)/100!==(vals[0]||0)) : true;
                                                 return <div className={`hint ${mismatch?'warn':''}`}>{t.sumStages}: {Math.round(stagesSumPct*100)/100}% · {t.targetPrepay}: {targetText} {mismatch? (allSame? ` ${t.mismatch}` : ` (${t.mixedTargets})`) : ''}</div>;
                                             })()}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            
-                            {/* Каталог */}
-                            {(!isClient && tab==='catalog') && (
-                                <div className="settings-group">
-                                    <div className="settings-header" onClick={() => toggleGroup('catalog')}>
-                                        <span className="group-icon">🏗️</span>
-                                        <span className="group-title">{t.catalogTitle}</span>
-                                        <span className="group-toggle">{expandedGroups.catalog ? '−' : '+'}</span>
-                                    </div>
-                                    <div className={`settings-content ${expandedGroups.catalog ? 'expanded' : ''}`}>
-                                        <div className="row" style={{gap:'var(--spacing-md)'}}>
-                                            <button className="btn success" onClick={addProject}>{t.addProject}</button>
-                                            <button className="btn" onClick={()=>{
-                                                const json=prompt('Paste catalog JSON:', JSON.stringify(catalog,null,2));
-                                                if(!json) return;
-                                                try{
-                                                    const obj=JSON.parse(json);
-                                                    if(Array.isArray(obj)) setCatalog(obj);
-                                                    else alert('Invalid JSON');
-                                                }catch{
-                                                    alert('Invalid JSON');
-                                                }
-                                            }}>{t.importJSON}</button>
-                                            <button className="btn" onClick={()=>{
-                                                const blob=new Blob([JSON.stringify(catalog,null,2)],{type:'application/json'});
-                                                const a=document.createElement('a');
-                                                a.href=URL.createObjectURL(blob);
-                                                a.download=`arconique_catalog_${new Date().toISOString().slice(0,10)}.json`;
-                                                a.click();
-                                                URL.revokeObjectURL(a.href);
-                                            }}>{t.exportJSON}</button>
-                                        </div>
-                                        
-                                        <div className="scroll" style={{maxHeight:'32vh'}}>
-                                            {catalog.map(p=>(
-                                                <div key={p.projectId} className="catalog-card">
-                                                    <div className="catalog-header">
-                                                        <div className="row" style={{flex:1}}>
-                                                            <span className="badge">{t.project}:</span>
-                                                            <input type="text" value={p.projectName} onChange={e=>setCatalog(prev=>prev.map(x=>x.projectId===p.projectId?{...x,projectName:e.target.value}:x))} style={{flex:1,marginRight:8}} />
-                                                            <span className="pill">{p.projectId}</span>
-                                                        </div>
-                                                        <div className="catalog-actions">
-                                                            <button className="btn primary" onClick={()=>addVilla(p.projectId)}>{t.addVilla}</button>
-                                                            <button className="btn danger" onClick={()=>{
-                                                                if(confirm(t.remove + ' ' + p.projectName + '?')) {
-                                                                    setCatalog(prev=>prev.filter(x=>x.projectId!==p.projectId));
-                                                                }
-                                                            }}>{t.remove}</button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <table className="catalog-table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th style={{textAlign:'left'}}>{t.villa}</th>
-                                                                <th>{t.area}</th>
-                                                                <th>{t.ppsm}</th>
-                                                                <th>{t.price}</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {p.villas.map(v=>(
-                                                                <tr key={v.villaId}>
-                                                                    <td style={{textAlign:'left'}}>
-                                                                        <input value={v.name} onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,name:e.target.value}:vv)}:pr))} />
-                                                                        <div className="muted" style={{fontSize:10}}>{v.villaId}</div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="number" min="1" step="0.1" value={v.area} onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,area:clamp(parseFloat(e.target.value||0),1,100000)}:vv)}:pr))} />
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="number" min="0" step="1" value={v.ppsm} onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,ppsm:clamp(parseFloat(e.target.value||0),0,1e9)}:vv)}:pr))} />
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="number" min="0" step="1" value={v.baseUSD} onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,baseUSD:clamp(parseFloat(e.target.value||0),0,1e12)}:vv)}:pr))} />
-                                                                    </td>
-                                                                    <td>
-                                                                        <button className="btn danger icon" onClick={()=>{
-                                                                            if(confirm(t.remove + ' ' + v.name + '?')) {
-                                                                                setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.filter(vv=>vv.villaId!==v.villaId)}:pr));
-                                                                            }
-                                                                        }}> ✕ </button>
-                                                                    </td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            ))}
                                         </div>
                                     </div>
                                 </div>
@@ -2719,6 +2633,98 @@
                         </div>
                     </div>
                     
+                    {/* Каталог проектов и вилл - перемещен вниз на всю ширину */}
+                    {!isClient && (
+                        <div className="full-width-block">
+                            <div className="card">
+                                <h3 style={{margin:'6px 0'}}>{t.catalogTitle}</h3>
+                                
+                                <div className="row" style={{gap:'var(--spacing-md)'}}>
+                                    <button className="btn success" onClick={addProject}>{t.addProject}</button>
+                                    <button className="btn" onClick={()=>{
+                                        const json=prompt('Paste catalog JSON:', JSON.stringify(catalog,null,2));
+                                        if(!json) return;
+                                        try{
+                                            const obj=JSON.parse(json);
+                                            if(Array.isArray(obj)) setCatalog(obj);
+                                            else alert('Invalid JSON');
+                                        }catch{
+                                            alert('Invalid JSON');
+                                        }
+                                    }}>{t.importJSON}</button>
+                                    <button className="btn" onClick={()=>{
+                                        const blob=new Blob([JSON.stringify(catalog,null,2)],{type:'application/json'});
+                                        const a=document.createElement('a');
+                                        a.href=URL.createObjectURL(blob);
+                                        a.download=`arconique_catalog_${new Date().toISOString().slice(0,10)}.json`;
+                                        a.click();
+                                        URL.revokeObjectURL(a.href);
+                                    }}>{t.exportJSON}</button>
+                                </div>
+                                
+                                <div className="scroll" style={{maxHeight:'32vh'}}>
+                                    {catalog.map(p=>(
+                                        <div key={p.projectId} className="catalog-card">
+                                            <div className="catalog-header">
+                                                <div className="row" style={{flex:1}}>
+                                                    <span className="badge">{t.project}:</span>
+                                                    <input type="text" value={p.projectName} onChange={e=>setCatalog(prev=>prev.map(x=>x.projectId===p.projectId?{...x,projectName:e.target.value}:x))} style={{flex:1,marginRight:8}} />
+                                                    <span className="pill">{p.projectId}</span>
+                                                </div>
+                                                <div className="catalog-actions">
+                                                    <button className="btn primary" onClick={()=>addVilla(p.projectId)}>{t.addVilla}</button>
+                                                    <button className="btn danger" onClick={()=>{
+                                                        if(confirm(t.remove + ' ' + p.projectName + '?')) {
+                                                            setCatalog(prev=>prev.filter(x=>x.projectId!==p.projectId));
+                                                        }
+                                                    }}>{t.remove}</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <table className="catalog-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style={{textAlign:'left'}}>{t.villa}</th>
+                                                        <th>{t.area}</th>
+                                                        <th>{t.ppsm}</th>
+                                                        <th>{t.price}</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {p.villas.map(v=>(
+                                                        <tr key={v.villaId}>
+                                                            <td style={{textAlign:'left'}}>
+                                                                <input value={v.name} onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,name:e.target.value}:vv)}:pr))} />
+                                                                <div className="muted" style={{fontSize:10}}>{v.villaId}</div>
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" min="1" step="0.1" value={v.area} onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,area:clamp(parseFloat(e.target.value||0),1,100000)}:vv)}:pr))} />
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" min="0" step="1" value={v.ppsm} onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,ppsm:clamp(parseFloat(e.target.value||0),0,1e9)}:vv)}:pr))} />
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" min="0" step="1" value={v.baseUSD} onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,baseUSD:clamp(parseFloat(e.target.value||0),0,1e12)}:vv)}:pr))} />
+                                                            </td>
+                                                            <td>
+                                                                <button className="btn danger icon" onClick={()=>{
+                                                                    if(confirm(t.remove + ' ' + v.name + '?')) {
+                                                                        setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.filter(vv=>vv.villaId!==v.villaId)}:pr));
+                                                                    }
+                                                                }}> ✕ </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    
                     {/* Модальные окна */}
                     {showAddProjectModal && (
                         <div className="modal-overlay" onClick={() => setShowAddProjectModal(false)}>
@@ -2828,10 +2834,6 @@
                         <button className={`mobile-nav-btn ${tab === 'stages' ? 'active' : ''}`} onClick={() => setTab('stages')}>
                             📅
                             <span>{t.stages}</span>
-                        </button>
-                        <button className={`mobile-nav-btn ${tab === 'catalog' ? 'active' : ''}`} onClick={() => setTab('catalog')}>
-                            🏗️
-                            <span>{t.catalog}</span>
                         </button>
                     </div>
                 </>
