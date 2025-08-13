@@ -1032,6 +1032,286 @@
     
     <script type="text/babel">
 
+                // Импорт React хуков
+        const { useState, useEffect, useMemo, useRef } = React;
+        
+        // Функция для форматирования денег
+        const fmtMoney = (amount, curr) => {
+            if (curr === 'USD') {
+                return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+            } else if (curr === 'IDR') {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+            } else if (curr === 'EUR') {
+                return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(amount);
+            }
+            return amount.toString();
+        };
+        
+        // Функция для генерации уникальных ID
+        const generateId = () => {
+            return Date.now() + Math.random().toString(36).substr(2, 9);
+        };
+        
+        // Функция для ограничения значений
+        const clamp = (value, min, max) => {
+            return Math.min(Math.max(value, min), max);
+        };
+        
+        // Функция для получения текущего месяца
+        const getCurrentMonth = () => {
+            const now = new Date();
+            return {
+                month: now.getMonth() + 1,
+                year: now.getFullYear(),
+                monthName: now.toLocaleDateString('en-US', { month: 'long' })
+            };
+        };
+        
+        // Функция для расчета реальных дат
+        const calculateRealDate = (monthsFromNow, language) => {
+            const current = getCurrentMonth();
+            const targetDate = new Date(current.year, current.month - 1 + monthsFromNow, 1);
+            
+            if (language === 'ru') {
+                const months = [
+                    'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
+                    'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'
+                ];
+                return `${months[targetDate.getMonth()]} ${targetDate.getFullYear()}`;
+            } else {
+                const months = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                return `${months[targetDate.getMonth()]} ${targetDate.getFullYear()}`;
+            }
+        };
+        
+        // Функция для хеширования PIN
+        async function sha256Hex(message) {
+            if (window.crypto && window.crypto.subtle) {
+                const msgBuffer = new TextEncoder().encode(message);
+                const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                return hashHex;
+            } else {
+                // Fallback для старых браузеров
+                return '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+            }
+        }
+        
+        // Переводы
+        const T = {
+            ru: {
+                title: 'Arconique / Калькулятор рассрочки для любимых клиентов',
+                overview: 'Обзор',
+                stages: 'Этапы',
+                settings: 'Параметры',
+                lang: 'Язык интерфейса',
+                currencyDisplay: 'Валюта отображения',
+                idrRate: 'Курс IDR/USD',
+                eurRate: 'Курс EUR/USD',
+                handoverMonth: 'Месяц получения ключей',
+                globalRate: 'Глобальная ставка, %/мес',
+                globalTerm: 'Глобальный срок post‑handover (6–24 мес)',
+                clientTerm: 'Срок рассрочки (мес)',
+                months: 'мес',
+                stagesTitle: 'Базовая рассрочка',
+                stage: 'Этап',
+                percent: 'Процент',
+                month: 'Месяц',
+                addStage: 'Добавить этап',
+                sumStages: 'Сумма этапов',
+                targetPrepay: 'Целевая предоплата',
+                mismatch: '(не совпадает)',
+                mixedTargets: '(разные цели)',
+                lines: 'Выбрано вилл',
+                keys: 'Ключи через',
+                cashflowTitle: 'Сводный кэшфлоу по месяцам',
+                chartTitle: 'График платежей',
+                villasTitle: 'Расчёт (позиции)',
+                project: 'Проект',
+                villa: 'Вилла',
+                qty: 'Кол-во',
+                area: 'Площадь',
+                ppsm: 'Цена за м²',
+                price: 'Базовая стоимость (USD)',
+                discount: 'Скидка, %',
+                prePct: 'До ключей, %',
+                months: 'Срок рассрочки',
+                rate: 'Ставка, %/мес',
+                firstPost: 'Первый платёж',
+                lineTotal: 'Итоговая стоимость',
+                addFromCatalog: 'Добавить из каталога',
+                selectFromCatalog: 'Выбрать из каталога',
+                search: 'Поиск',
+                areaFrom: 'Площадь от',
+                areaTo: 'до',
+                priceFrom: 'Цена от',
+                priceTo: 'до',
+                addSelected: 'Добавить выбранные',
+                cancel: 'Отмена',
+                save: 'Сохранить',
+                addProject: 'Добавить проект',
+                addVilla: 'Добавить виллу',
+                projectName: 'Название проекта',
+                villaName: 'Название виллы',
+                villaArea: 'Площадь виллы',
+                villaPpsm: 'Цена за м²',
+                remove: 'Удалить',
+                catalogTitle: 'Каталог проектов и вилл (редактор)',
+                importJSON: 'Импорт JSON',
+                exportJSON: 'Экспорт JSON',
+                exportCSV: 'Экспорт CSV',
+                exportXLSX: 'Экспорт XLSX',
+                exportPDF: 'Экспорт PDF',
+                share: 'Поделиться',
+                editor: 'редактор',
+                client: 'клиент',
+                copied: 'Скопировано в буфер обмена',
+                shareText: 'Калькулятор рассрочки Arconique',
+                saving: 'Сохранение...',
+                saved: 'Сохранено',
+                undo: 'Отменить',
+                redo: 'Повторить',
+                base: 'Базовая стоимость',
+                prepay: 'Оплата до ключей',
+                after: 'После получения ключей',
+                interestTotal: 'Общая сумма процентов',
+                final: 'Итоговая стоимость',
+                cashMonth: 'Месяц',
+                cashDesc: 'Описание',
+                cashTotal: 'Сумма',
+                cashBalance: 'Баланс',
+                editor: 'Редактор',
+                client: 'Клиент'
+            },
+            en: {
+                title: 'Arconique / Installment Calculator for Beloved Clients',
+                overview: 'Overview',
+                stages: 'Stages',
+                settings: 'Parameters',
+                lang: 'Interface Language',
+                currencyDisplay: 'Display Currency',
+                idrRate: 'IDR/USD Rate',
+                eurRate: 'EUR/USD Rate',
+                handoverMonth: 'Keys Handover Month',
+                globalRate: 'Global Rate, %/month',
+                globalTerm: 'Global Post-handover Term (6-24 months)',
+                clientTerm: 'Installment Term (months)',
+                months: 'months',
+                stagesTitle: 'Base Installment',
+                stage: 'Stage',
+                percent: 'Percent',
+                month: 'Month',
+                addStage: 'Add Stage',
+                sumStages: 'Stages Sum',
+                targetPrepay: 'Target Prepayment',
+                mismatch: '(mismatch)',
+                mixedTargets: '(different targets)',
+                lines: 'Selected Villas',
+                keys: 'Keys in',
+                cashflowTitle: 'Monthly Cashflow Summary',
+                chartTitle: 'Payment Chart',
+                villasTitle: 'Calculation (Positions)',
+                project: 'Project',
+                villa: 'Villa',
+                qty: 'Qty',
+                area: 'Area',
+                ppsm: 'Price per m²',
+                price: 'Base Price (USD)',
+                discount: 'Discount, %',
+                prePct: 'Pre-keys, %',
+                months: 'Installment Term',
+                rate: 'Rate, %/month',
+                firstPost: 'First Payment',
+                lineTotal: 'Line Total',
+                addFromCatalog: 'Add from Catalog',
+                selectFromCatalog: 'Select from Catalog',
+                search: 'Search',
+                areaFrom: 'Area from',
+                areaTo: 'to',
+                priceFrom: 'Price from',
+                priceTo: 'to',
+                addSelected: 'Add Selected',
+                cancel: 'Cancel',
+                save: 'Save',
+                addProject: 'Add Project',
+                addVilla: 'Add Villa',
+                projectName: 'Project Name',
+                villaName: 'Villa Name',
+                villaArea: 'Villa Area',
+                villaPpsm: 'Price per m²',
+                remove: 'Remove',
+                catalogTitle: 'Projects and Villas Catalog (Editor)',
+                importJSON: 'Import JSON',
+                exportJSON: 'Export JSON',
+                exportCSV: 'Export CSV',
+                exportXLSX: 'Export XLSX',
+                exportPDF: 'Export PDF',
+                share: 'Share',
+                editor: 'editor',
+                client: 'client',
+                copied: 'Copied to clipboard',
+                shareText: 'Arconique Installment Calculator',
+                saving: 'Saving...',
+                saved: 'Saved',
+                undo: 'Undo',
+                redo: 'Redo',
+                base: 'Base Price',
+                prepay: 'Pre-keys Payment',
+                after: 'After Keys',
+                interestTotal: 'Total Interest',
+                final: 'Final Price',
+                cashMonth: 'Month',
+                cashDesc: 'Description',
+                cashTotal: 'Amount',
+                cashBalance: 'Balance',
+                editor: 'Editor',
+                client: 'Client'
+            }
+        };
+        
+        // Компонент KPI блока с отображением валюты
+        function KPIBlock({isClient, t, totals, currency, toCurrency}){
+            const getCurrencySymbol = (curr) => {
+                switch(curr) {
+                    case 'USD': return '$';
+                    case 'IDR': return 'Rp';
+                    case 'EUR': return '€';
+                    default: return '$';
+                }
+            };
+            
+            const currencySymbol = getCurrencySymbol(currency);
+            
+            return (
+                <div className="kpis">
+                    <div className="kpi animate-fade-in">
+                        <span className="muted">{t.base}</span>
+                        <div className="v">{currencySymbol} {toCurrency(totals.baseUSD).replace(/[^\d,.-]/g, '')}</div>
+                    </div>
+                    <div className="kpi animate-fade-in" style={{animationDelay: '0.1s'}}>
+                        <span className="muted">{t.prepay}</span>
+                        <div className="v">{currencySymbol} {toCurrency(totals.preUSD).replace(/[^\d,.-]/g, '')}</div>
+                    </div>
+                    <div className="kpi animate-fade-in" style={{animationDelay: '0.2s'}}>
+                        <span className="muted">{t.after}</span>
+                        <div className="v">{currencySymbol} {toCurrency(totals.afterUSD).replace(/[^\d,.-]/g, '')}</div>
+                    </div>
+                    <div className="kpi animate-fade-in" style={{animationDelay: '0.3s'}}>
+                        <span className="muted">{t.interestTotal}</span>
+                        <div className="v">{currencySymbol} {toCurrency(totals.interestUSD).replace(/[^\d,.-]/g, '')}</div>
+                    </div>
+                    <div className="kpi animate-fade-in" style={{animationDelay: '0.4s'}}>
+                        <span className="muted">{t.final}</span>
+                        <div className="v">{currencySymbol} {toCurrency(totals.finalUSD).replace(/[^\d,.-]/g, '')}</div>
+                    </div>
+                </div>
+            );
+        }
+
                 // Основное приложение
         function App() {
             // Состояние приложения
@@ -1097,193 +1377,7 @@
             // Рефы
             const chartRef = useRef(null);
             
-            // Переводы
-            const T = {
-                ru: {
-                    title: 'Arconique / Калькулятор рассрочки для любимых клиентов',
-                    overview: 'Обзор',
-                    stages: 'Этапы',
-                    settings: 'Параметры',
-                    lang: 'Язык интерфейса',
-                    currencyDisplay: 'Валюта отображения',
-                    idrRate: 'Курс IDR/USD',
-                    eurRate: 'Курс EUR/USD',
-                    handoverMonth: 'Месяц получения ключей',
-                    globalRate: 'Глобальная ставка, %/мес',
-                    globalTerm: 'Глобальный срок post‑handover (6–24 мес)',
-                    clientTerm: 'Срок рассрочки (мес)',
-                    months: 'мес',
-                    stagesTitle: 'Базовая рассрочка',
-                    stage: 'Этап',
-                    percent: 'Процент',
-                    month: 'Месяц',
-                    addStage: 'Добавить этап',
-                    sumStages: 'Сумма этапов',
-                    targetPrepay: 'Целевая предоплата',
-                    mismatch: '(не совпадает)',
-                    mixedTargets: '(разные цели)',
-                    lines: 'Выбрано вилл',
-                    keys: 'Ключи через',
-                    cashflowTitle: 'Сводный кэшфлоу по месяцам',
-                    chartTitle: 'График платежей',
-                    villasTitle: 'Расчёт (позиции)',
-                    project: 'Проект',
-                    villa: 'Вилла',
-                    qty: 'Кол-во',
-                    area: 'Площадь',
-                    ppsm: 'Цена за м²',
-                    price: 'Базовая стоимость (USD)',
-                    discount: 'Скидка, %',
-                    prePct: 'До ключей, %',
-                    months: 'Срок рассрочки',
-                    rate: 'Ставка, %/мес',
-                    firstPost: 'Первый платёж',
-                    lineTotal: 'Итоговая стоимость',
-                    addFromCatalog: 'Добавить из каталога',
-                    selectFromCatalog: 'Выбрать из каталога',
-                    search: 'Поиск',
-                    areaFrom: 'Площадь от',
-                    areaTo: 'до',
-                    priceFrom: 'Цена от',
-                    priceTo: 'до',
-                    addSelected: 'Добавить выбранные',
-                    cancel: 'Отмена',
-                    save: 'Сохранить',
-                    addProject: 'Добавить проект',
-                    addVilla: 'Добавить виллу',
-                    projectName: 'Название проекта',
-                    villaName: 'Название виллы',
-                    villaArea: 'Площадь виллы',
-                    villaPpsm: 'Цена за м²',
-                    remove: 'Удалить',
-                    catalogTitle: 'Каталог проектов и вилл (редактор)',
-                    importJSON: 'Импорт JSON',
-                    exportJSON: 'Экспорт JSON',
-                    exportCSV: 'Экспорт CSV',
-                    exportXLSX: 'Экспорт XLSX',
-                    exportPDF: 'Экспорт PDF',
-                    share: 'Поделиться',
-                    editor: 'редактор',
-                    client: 'клиент',
-                    copied: 'Скопировано в буфер обмена',
-                    shareText: 'Калькулятор рассрочки Arconique',
-                    saving: 'Сохранение...',
-                    saved: 'Сохранено',
-                    undo: 'Отменить',
-                    redo: 'Повторить',
-                    base: 'Базовая стоимость',
-                    prepay: 'Оплата до ключей',
-                    after: 'После получения ключей',
-                    interestTotal: 'Общая сумма процентов',
-                    final: 'Итоговая стоимость',
-                    cashMonth: 'Месяц',
-                    cashDesc: 'Описание',
-                    cashTotal: 'Сумма',
-                    cashBalance: 'Баланс',
-                    editor: 'Редактор',
-                    client: 'Клиент'
-                },
-                en: {
-                    title: 'Arconique / Installment Calculator for Beloved Clients',
-                    overview: 'Overview',
-                    stages: 'Stages',
-                    settings: 'Parameters',
-                    lang: 'Interface Language',
-                    currencyDisplay: 'Display Currency',
-                    idrRate: 'IDR/USD Rate',
-                    eurRate: 'EUR/USD Rate',
-                    handoverMonth: 'Keys Handover Month',
-                    globalRate: 'Global Rate, %/month',
-                    globalTerm: 'Global Post-handover Term (6-24 months)',
-                    clientTerm: 'Installment Term (months)',
-                    months: 'months',
-                    stagesTitle: 'Base Installment',
-                    stage: 'Stage',
-                    percent: 'Percent',
-                    month: 'Month',
-                    addStage: 'Add Stage',
-                    sumStages: 'Stages Sum',
-                    targetPrepay: 'Target Prepayment',
-                    mismatch: '(mismatch)',
-                    mixedTargets: '(different targets)',
-                    lines: 'Selected Villas',
-                    keys: 'Keys in',
-                    cashflowTitle: 'Monthly Cashflow Summary',
-                    chartTitle: 'Payment Chart',
-                    villasTitle: 'Calculation (Positions)',
-                    project: 'Project',
-                    villa: 'Villa',
-                    qty: 'Qty',
-                    area: 'Area',
-                    ppsm: 'Price per m²',
-                    price: 'Base Price (USD)',
-                    discount: 'Discount, %',
-                    prePct: 'Pre-keys, %',
-                    months: 'Installment Term',
-                    rate: 'Rate, %/month',
-                    firstPost: 'First Payment',
-                    lineTotal: 'Line Total',
-                    addFromCatalog: 'Add from Catalog',
-                    selectFromCatalog: 'Select from Catalog',
-                    search: 'Search',
-                    areaFrom: 'Area from',
-                    areaTo: 'to',
-                    priceFrom: 'Price from',
-                    priceTo: 'to',
-                    addSelected: 'Add Selected',
-                    cancel: 'Cancel',
-                    save: 'Save',
-                    addProject: 'Add Project',
-                    addVilla: 'Add Villa',
-                    projectName: 'Project Name',
-                    villaName: 'Villa Name',
-                    villaArea: 'Villa Area',
-                    villaPpsm: 'Price per m²',
-                    remove: 'Remove',
-                    catalogTitle: 'Projects and Villas Catalog (Editor)',
-                    importJSON: 'Import JSON',
-                    exportJSON: 'Export JSON',
-                    exportCSV: 'Export CSV',
-                    exportXLSX: 'Export XLSX',
-                    exportPDF: 'Export PDF',
-                    share: 'Share',
-                    editor: 'editor',
-                    client: 'client',
-                    copied: 'Copied to clipboard',
-                    shareText: 'Arconique Installment Calculator',
-                    saving: 'Saving...',
-                    saved: 'Saved',
-                    undo: 'Undo',
-                    redo: 'Redo',
-                    base: 'Base Price',
-                    prepay: 'Pre-keys Payment',
-                    after: 'After Keys',
-                    interestTotal: 'Total Interest',
-                    final: 'Final Price',
-                    cashMonth: 'Month',
-                    cashDesc: 'Description',
-                    cashTotal: 'Amount',
-                    cashBalance: 'Balance',
-                    editor: 'Editor',
-                    client: 'Client'
-                }
-            };
-            
             const t = T[lang];
-            
-            // Функция для хеширования PIN
-            async function sha256Hex(message) {
-                if (window.crypto && window.crypto.subtle) {
-                    const msgBuffer = new TextEncoder().encode(message);
-                    const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgBuffer);
-                    const hashArray = Array.from(new Uint8Array(hashBuffer));
-                    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-                    return hashHex;
-                } else {
-                    // Fallback для старых браузеров
-                    return '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
-                }
-            }
             
             // Вычисляемые значения
             const stagesSumPct = useMemo(() => stages.reduce((sum, s) => sum + s.pct, 0), [stages]);
@@ -1543,35 +1637,6 @@
                 }
             };
             
-            // Функции для работы с датами
-            const getCurrentMonth = () => {
-                const now = new Date();
-                return {
-                    month: now.getMonth() + 1,
-                    year: now.getFullYear(),
-                    monthName: now.toLocaleDateString('en-US', { month: 'long' })
-                };
-            };
-            
-            const calculateRealDate = (monthsFromNow, language) => {
-                const current = getCurrentMonth();
-                const targetDate = new Date(current.year, current.month - 1 + monthsFromNow, 1);
-                
-                if (language === 'ru') {
-                    const months = [
-                        'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
-                        'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'
-                    ];
-                    return `${months[targetDate.getMonth()]} ${targetDate.getFullYear()}`;
-                } else {
-                    const months = [
-                        'January', 'February', 'March', 'April', 'May', 'June',
-                        'July', 'August', 'September', 'October', 'November', 'December'
-                    ];
-                    return `${months[targetDate.getMonth()]} ${targetDate.getFullYear()}`;
-                }
-            };
-            
             // Функция валидации данных
             const validateData = (data) => {
                 const errors = [];
@@ -1654,11 +1719,6 @@
                     setEditingProject(null);
                     addToHistory();
                 }
-            };
-            
-            // Функция для генерации уникальных ID
-            const generateId = () => {
-                return Date.now() + Math.random().toString(36).substr(2, 9);
             };
             
             // Функция для поиска проекта по ID
@@ -1849,23 +1909,6 @@
                 return fmtMoney(amount, currency);
             };
             
-            // Функция для форматирования денег
-            const fmtMoney = (amount, curr) => {
-                if (curr === 'USD') {
-                    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-                } else if (curr === 'IDR') {
-                    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
-                } else if (curr === 'EUR') {
-                    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(amount);
-                }
-                return amount.toString();
-            };
-            
-            // Функция для ограничения значений
-            const clamp = (value, min, max) => {
-                return Math.min(Math.max(value, min), max);
-            };
-            
             // Функция для создания снапшота состояния
             const snapshot = () => ({
                 lang, currency, idrPerUsd, eurPerUsd, handoverMonth, months, monthlyRatePct, stages, catalog, lines
@@ -1969,55 +2012,14 @@
                         console.error(e);
                     }
                     
-                    document.getElementById('app-title').textContent = t.title;
                     document.title = t.title;
                 })();
             }, []);
             
             useEffect(() => {
                 localStorage.setItem('arconique_v81', JSON.stringify(snapshot()));
-                document.getElementById('app-title').textContent = t.title;
                 document.title = t.title;
             }, [lang, currency, idrPerUsd, eurPerUsd, handoverMonth, months, monthlyRatePct, stages, catalog, lines]);
-            
-            // Компонент KPI блока с отображением валюты
-            function KPIBlock({isClient, t, totals, currency, toCurrency}){
-                const getCurrencySymbol = (curr) => {
-                    switch(curr) {
-                        case 'USD': return '$';
-                        case 'IDR': return 'Rp';
-                        case 'EUR': return '€';
-                        default: return '$';
-                    }
-                };
-                
-                const currencySymbol = getCurrencySymbol(currency);
-                
-                return (
-                    <div className="kpis">
-                        <div className="kpi animate-fade-in">
-                            <span className="muted">{t.base}</span>
-                            <div className="v">{currencySymbol} {toCurrency(totals.baseUSD).replace(/[^\d,.-]/g, '')}</div>
-                        </div>
-                        <div className="kpi animate-fade-in" style={{animationDelay: '0.1s'}}>
-                            <span className="muted">{t.prepay}</span>
-                            <div className="v">{currencySymbol} {toCurrency(totals.preUSD).replace(/[^\d,.-]/g, '')}</div>
-                        </div>
-                        <div className="kpi animate-fade-in" style={{animationDelay: '0.2s'}}>
-                            <span className="muted">{t.after}</span>
-                            <div className="v">{currencySymbol} {toCurrency(totals.afterUSD).replace(/[^\d,.-]/g, '')}</div>
-                        </div>
-                        <div className="kpi animate-fade-in" style={{animationDelay: '0.3s'}}>
-                            <span className="muted">{t.interestTotal}</span>
-                            <div className="v">{currencySymbol} {toCurrency(totals.interestUSD).replace(/[^\d,.-]/g, '')}</div>
-                        </div>
-                        <div className="kpi animate-fade-in" style={{animationDelay: '0.4s'}}>
-                            <span className="muted">{t.final}</span>
-                            <div className="v">{currencySymbol} {toCurrency(totals.finalUSD).replace(/[^\d,.-]/g, '')}</div>
-                        </div>
-                    </div>
-                );
-            }
             
             return (
                 <>
@@ -2187,8 +2189,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div className="card">
+
+                                                <div className="card">
                             <div className="row" style={{justifyContent:'space-between',alignItems:'baseline'}}>
                                 <div className="row">
                                     <span className="badge">{t.lines}: {lines.length}</span>
@@ -2238,7 +2240,7 @@
                                                         <div className="villa-name-display">{ld.line.snapshot?.name}</div>
                                                     </td>
                                                     <td className="col-qty">
-                                                        <input type="number" min="1" step="1" value={ld.qty} onChange={e=>updLine(ld.line.id,{qty:clamp(parseInt(e.target.value||0,10),1,1000)})} style={{width:'60px',textAlign:'center'}} />
+                                                        <input type="number" min="1" step="1" value={ld.line.qty} onChange={e=>updLine(ld.line.id,{qty:clamp(parseInt(e.target.value||0,10),1,1000)})} style={{width:'60px',textAlign:'center'}} />
                                                     </td>
                                                     <td className="col-area">
                                                         <div className="area-display">{ld.line.snapshot?.area}</div>
@@ -2333,7 +2335,7 @@
                         </div>
                     </div>
 
-                                        {/* Каталог проектов и вилл - перемещен вниз на всю ширину */}
+                    {/* Каталог проектов и вилл - перемещен вниз на всю ширину */}
                     {!isClient && (
                         <div className="full-width-block">
                             <div className="card">
