@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arconique / Калькулятор рассрочки для любимых клиентов </title>
+  <title>Arconique / Калькулятор рассрочки для любимых клиентов</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
@@ -154,7 +154,7 @@
       }
     }
 
-        /* Современные карточки */
+    /* Современные карточки */
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -722,7 +722,7 @@
       max-height:60vh;
     }
 
-        /* Современные формы */
+    /* Современные формы */
     .form-section{
       margin-bottom:24px;
     }
@@ -956,9 +956,564 @@
       }
     }
 
-      </style>
+        /* Улучшенные стили для каталога проектов */
+    .catalog-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+      transition: all var(--transition-normal);
+    }
+    
+    .catalog-card:hover {
+      background: var(--card-hover);
+      border-color: var(--line-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .catalog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+      padding-bottom: var(--spacing-sm);
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .catalog-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    
+    .catalog-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    
+    .catalog-table th {
+      background: var(--card-hover);
+      padding: var(--spacing-sm);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--line);
+      text-align: center;
+    }
+    
+    .catalog-table td {
+      padding: var(--spacing-sm);
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+      vertical-align: middle;
+    }
+    
+    .catalog-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .catalog-table tr:hover {
+      background: var(--card-hover);
+    }
+    
+    .catalog-table tr:hover td {
+      border-color: var(--line-hover);
+    }
+    
+    /* Оптимизированные столбцы каталога */
+    .catalog-table .col-villa {
+      width: 35%;
+      min-width: 200px;
+      text-align: left;
+    }
+    
+    .catalog-table .col-area {
+      width: 15%;
+      min-width: 70px;
+      max-width: 80px;
+    }
+    
+    .catalog-table .col-ppsm {
+      width: 20%;
+      min-width: 90px;
+      max-width: 100px;
+    }
+    
+    .catalog-table .col-price {
+      width: 20%;
+      min-width: 130px;
+      max-width: 140px;
+    }
+    
+    .catalog-table .col-actions {
+      width: 10%;
+      min-width: 60px;
+    }
+    
+    /* Стилизованные поля ввода каталога */
+    .catalog-table input {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-size: 13px;
+      transition: all var(--transition-fast);
+    }
+    
+    .catalog-table input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--card-hover);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .catalog-table input:hover {
+      border-color: var(--line-hover);
+      background: var(--card-hover);
+    }
+    
+    /* Специальные стили для заголовка расчета */
+    .calculation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .calculation-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    
+    /* Улучшенные стили для таблицы расчета */
+    .calc-table .col-project {
+      width: 15%;
+      min-width: 120px;
+      max-width: 150px;
+      text-align: left;
+    }
+    
+    .calc-table .col-villa {
+      width: 18%;
+      min-width: 150px;
+      max-width: 200px;
+      text-align: left;
+    }
+    
+    .calc-table .col-qty {
+      width: 8%;
+      min-width: 60px;
+      max-width: 80px;
+    }
+    
+    .calc-table .col-area {
+      width: 8%;
+      min-width: 70px;
+      max-width: 90px;
+    }
+    
+    .calc-table .col-ppsm {
+      width: 10%;
+      min-width: 90px;
+      max-width: 110px;
+    }
+    
+    .calc-table .col-base {
+      width: 12%;
+      min-width: 120px;
+      max-width: 150px;
+    }
+    
+    .calc-table .col-disc {
+      width: 10%;
+      min-width: 80px;
+      max-width: 100px;
+    }
+    
+    .calc-table .col-pre {
+      width: 12%;
+      min-width: 100px;
+      max-width: 120px;
+    }
+    
+    .calc-table .col-post {
+      width: 10%;
+      min-width: 100px;
+      max-width: 120px;
+    }
+    
+    .calc-table .col-months {
+      width: 10%;
+      min-width: 80px;
+      max-width: 100px;
+    }
+    
+    .calc-table .col-rate {
+      width: 10%;
+      min-width: 80px;
+      max-width: 100px;
+    }
+    
+    .calc-table .col-first {
+      width: 12%;
+      min-width: 100px;
+      max-width: 120px;
+    }
+    
+    .calc-table .col-lineTotal {
+      width: 12%;
+      min-width: 120px;
+      max-width: 150px;
+    }
+    
+    .calc-table .col-actions {
+      width: 8%;
+      min-width: 80px;
+      max-width: 100px;
+    }
+    
+    /* Стили для отображения названий проектов и вилл */
+    .project-name-display,
+    .villa-name-display {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+    }
+    
+    .project-name-display:hover,
+    .villa-name-display:hover {
+      background: var(--card-hover);
+      border-color: var(--line-hover);
+    }
+    
+    /* Стили для отображения площади и цены за м² */
+    .area-display,
+    .ppsm-display {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      min-width: 50px;
+      transition: all var(--transition-fast);
+    }
+    
+    .area-display:hover,
+    .ppsm-display:hover {
+      background: var(--card-hover);
+      border-color: var(--line-hover);
+    }
+    
+    /* Стили для базовой цены */
+    .base-strong {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 13px;
+      transition: all var(--transition-fast);
+    }
+    
+    .base-strong:hover {
+      background: var(--card-hover);
+      border-color: var(--line-hover);
+    }
+    
+    /* Стили для итоговой суммы по строке */
+    .line-total {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 13px;
+      transition: all var(--transition-fast);
+    }
+    
+    .line-total:hover {
+      background: var(--card-hover);
+      border-color: var(--line-hover);
+    }
+    
+    /* Стили для кнопок действий */
+    .row .btn.icon {
+      min-width: 36px;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Стили для экспортных кнопок */
+    .export-buttons {
+      display: flex;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+    }
+    
+    .export-buttons .btn {
+      min-width: 120px;
+      justify-content: center;
+    }
+    
+    /* Стили для поиска и фильтров */
+    .search-filters {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-size: 14px;
+      margin-bottom: var(--spacing-md);
+      transition: all var(--transition-fast);
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--card-hover);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .filter-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .filter-group {
+      display: grid;
+      gap: 6px;
+    }
+    
+    .filter-group label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    
+    .filter-group input,
+    .filter-group select {
+      padding: 8px 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-size: 13px;
+      transition: all var(--transition-fast);
+    }
+    
+    .filter-group input:focus,
+    .filter-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--card-hover);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    /* Стили для выбора из каталога */
+    .catalog-selection {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .catalog-selection-project {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .catalog-selection-project h4 {
+      margin: 0 0 var(--spacing-md) 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+      padding-bottom: var(--spacing-sm);
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .villas-selection {
+      display: grid;
+      gap: var(--spacing-sm);
+    }
+    
+    .villa-selection-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-sm);
+      background: var(--card-hover);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      transition: all var(--transition-fast);
+    }
+    
+    .villa-selection-item:hover {
+      background: var(--card-active);
+      border-color: var(--line-hover);
+    }
+    
+    .villa-info {
+      flex: 1;
+    }
+    
+    .villa-name {
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    
+    .villa-details {
+      display: flex;
+      gap: var(--spacing-md);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    
+    .villa-details span {
+      background: var(--card);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+    }
+    
+    /* Дополнительные утилиты */
+    .text-left { text-align: left; }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .font-medium { font-weight: 500; }
+    
+    .opacity-50 { opacity: 0.5; }
+    .opacity-75 { opacity: 0.75; }
+    
+    .cursor-pointer { cursor: pointer; }
+    .cursor-not-allowed { cursor: not-allowed; }
+    
+    .select-none { user-select: none; }
+    .select-text { user-select: text; }
+    
+    /* Анимации для загрузки */
+    .loading {
+      background: linear-gradient(90deg, var(--card) 25%, var(--card-hover) 50%, var(--card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    
+    /* Стили для подсказок */
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .hint.warn {
+      color: var(--warning);
+    }
+    
+    .hint.success {
+      color: var(--success);
+    }
+    
+    .hint.danger {
+      color: var(--danger);
+    }
+    
+    .hint.info {
+      color: var(--primary);
+    }
+    
+    /* Стили для чекбоксов */
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    
+    /* Стили для range input */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: var(--line);
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    input[type="range"]::-webkit-slider-thumb:hover {
+      background: var(--primary-hover);
+      transform: scale(1.1);
+    }
+    
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition-fast);
+    }
+    
+    input[type="range"]::-moz-range-thumb:hover {
+      background: var(--primary-hover);
+      transform: scale(1.1);
+    }
+  </style>
 </head>
-<body>
+
+  <body>
   <div class="wrap">
     <h1 id="app-title">Arconique / Калькулятор рассрочки для любимых клиентов</h1>
     <div id="boot-diagnostics" style="position:fixed;left:10px;top:10px;z-index:99999;background:#1b2336;color:#fff;border:1px solid #334;padding:8px 10px;border-radius:8px;font:12px/1.4 system-ui;max-width:80vw;display:none"></div>
@@ -1139,7 +1694,7 @@
 
     /* ---------- URL state (compressed hash) ---------- */
     const readHash=()=>{const h=location.hash.startsWith('#')?location.hash.slice(1):location.hash;const sp=new URLSearchParams(h);return {s:sp.get('s'),view:sp.get('view')}};
-    const encodeState=(state,{view}={})=>{try{const s=LZString.compressToEncodedURIComponent(JSON.stringify(state));const u=new URL(location.href);const sp=new URLSearchParams();sp.set('s',s);if(view)sp.set('view',view);u.hash=sp.toString();return u.toString()}catch{return''}};
+    const encodeState=(state,{view}={})=>{try{const s=LZString.compressToEncodedURIComponent(JSON.stringify(state));const u=new URL(location.href);const sp=new URLSearchParams();sp.set('s',s);if(view)sp.set('view',view);u.hash=sp.toString();return u.toString()}catch{return ''}};
     const decodeState=()=>{try{const {s,view}=readHash();if(!s)return null;const json=LZString.decompressFromEncodedURIComponent(s);return {state:JSON.parse(json),view}}catch{return null}};
 
     /* ---------- demo catalog ---------- */
@@ -1158,7 +1713,7 @@
       ]}
     ];
 
-        /* ---------- Components ---------- */
+    /* ---------- Components ---------- */
     function App(){
       const [lang,setLang]=useState('ru'); const t=T[lang];
       const [tab,setTab]=useState('calc');
@@ -1184,7 +1739,7 @@
 
       const [catalog,setCatalog]=useState(DEFAULT_CATALOG);
 
-           const [lines,setLines]=useState([
+      const [lines,setLines]=useState([
         {id:1,projectId:'enso',villaId:'enso-2br',qty:1,prePct:70,ownTerms:false,months:null,monthlyRatePct:null,firstPostUSD:0,discountPct:0,
          snapshot:{name:'Enso 2BR',area:100,ppsm:2500,baseUSD:250000}}
       ]);
@@ -1208,6 +1763,13 @@
 
       const [modalOpen,setModalOpen]=useState(false);
       const [catalogModalOpen,setCatalogModalOpen]=useState(false);
+
+      // Автоматическая генерация ID
+      const generateId = () => {
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substr(2, 5);
+        return `${timestamp}-${random}`;
+      };
 
       useEffect(()=>{(async()=>{
         try{
@@ -1253,7 +1815,7 @@
       // Функции для работы с проектами
       const addProject = () => {
         setNewProjectForm({
-          projectId: '',
+          projectId: generateId(), // Автоматическая генерация ID
           projectName: '',
           villas: []
         });
@@ -1261,14 +1823,8 @@
       };
 
       const saveProject = () => {
-        if (!newProjectForm.projectId || !newProjectForm.projectName) {
-          alert('Заполните ID и название проекта');
-          return;
-        }
-        
-        const projectExists = catalog.find(p => p.projectId === newProjectForm.projectId);
-        if (projectExists) {
-          alert('Проект с таким ID уже существует');
+        if (!newProjectForm.projectName) {
+          alert('Введите название проекта');
           return;
         }
 
@@ -1286,7 +1842,7 @@
       // Функции для работы с виллами
       const addVilla = (projectId) => {
         setNewVillaForm({
-          villaId: '',
+          villaId: generateId(), // Автоматическая генерация ID
           name: '',
           area: 100,
           ppsm: 2500,
@@ -1297,19 +1853,13 @@
       };
 
       const saveVilla = () => {
-        if (!newVillaForm.villaId || !newVillaForm.name) {
-          alert('Заполните ID и название виллы');
+        if (!newVillaForm.name) {
+          alert('Введите название виллы');
           return;
         }
 
         const project = catalog.find(p => p.projectId === editingProject);
         if (!project) return;
-
-        const villaExists = project.villas.find(v => v.villaId === newVillaForm.villaId);
-        if (villaExists) {
-          alert('Вилла с таким ID уже существует в этом проекте');
-          return;
-        }
 
         const newVilla = {
           villaId: newVillaForm.villaId,
@@ -1330,12 +1880,12 @@
         setNewVillaForm({ villaId: '', name: '', area: 100, ppsm: 2500, baseUSD: 250000 });
       };
 
-      const linesData=useMemo(()=>lines.map(line=>{
+            const linesData=useMemo(()=>lines.map(line=>{
         const base0=line.snapshot?.baseUSD ?? ((line.snapshot?.area||0)*(line.snapshot?.ppsm||0));
         const disc=clamp(+line.discountPct||0,0,20);
         const base=base0*(1-disc/100);
 
-        const prePct=line.prePct ?? 0;
+        const prePct=line.prePct ?? 50; // Минимум 50% вместо 0
         const k=stagesSumPct===0?0:prePct/stagesSumPct;
         const preSchedule=stages.map(s=>({
           month:Math.max(0,Math.min(handoverMonth,Math.round(+s.month||0))),
@@ -1633,10 +2183,10 @@
               <div className="row" style={{marginTop:8,alignItems:'center',justifyContent:'space-between'}}>
                 <button className="btn primary" onClick={()=>setStages(prev=>{const last=prev[prev.length-1];const id=(last?.id||0)+1;const nextMonth=Math.min(handoverMonth,(last?.month??0)+1);return [...prev,{id,label:(lang==='ru'?'Этап':'Stage'),pct:5,month:nextMonth}]})}>{t.addStage}</button>
                 {(() => {
-                  const vals=lines.map(l=>l.prePct||0);
+                  const vals=lines.map(l=>l.prePct||50); // Минимум 50% вместо 0
                   const allSame=vals.length?vals.every(v=>v===vals[0]):true;
-                  const targetText=allSame?`${vals[0]||0}%`:`${Math.min(...vals||[0])}%–${Math.max(...vals||[0])}%`;
-                  const mismatch=allSame ? (Math.round(stagesSumPct*100)/100!==(vals[0]||0)) : true;
+                  const targetText=allSame?`${vals[0]||50}%`:`${Math.min(...vals||[50])}%–${Math.max(...vals||[50])}%`;
+                  const mismatch=allSame ? (Math.round(stagesSumPct*100)/100!==(vals[0]||50)) : true;
                   return <div className={`hint ${mismatch?'warn':''}`}>{t.sumStages}: {Math.round(stagesSumPct*100)/100}% · {t.targetPrepay}: {targetText} {mismatch? (allSame? ` ${t.mismatch}` : ` (${t.mixedTargets})`) : ''}</div>;
                 })()}
               </div>
@@ -1857,14 +2407,14 @@
                           <td className="col-pre">
                             <input 
                               type="range" 
-                              min="0" 
+                              min="50" 
                               max="100" 
                               step="1" 
-                              value={ld.line.prePct||0} 
+                              value={ld.line.prePct||50} 
                               onChange={e=>updLine(ld.line.id,{prePct:parseInt(e.target.value,10)})}
                               style={{width:'100%',minWidth:'80px'}}
                             />
-                            <div className="pill">{ld.line.prePct||0}%</div>
+                            <div className="pill">{ld.line.prePct||50}%</div>
                           </td>
                           {!isClient && (
                             <>
@@ -1964,7 +2514,7 @@
             </div>
           </div>
 
-          {/* Модальное окно добавления проекта */}
+                    {/* Модальное окно добавления проекта */}
           {showAddProjectModal && (
             <div className="modal-overlay" onClick={() => setShowAddProjectModal(false)}>
               <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -1983,7 +2533,9 @@
                           placeholder="project-id"
                           value={newProjectForm.projectId}
                           onChange={e => setNewProjectForm(prev => ({ ...prev, projectId: e.target.value }))}
+                          disabled
                         />
+                        <div className="hint info">ID генерируется автоматически</div>
                       </div>
                       <div className="form-group">
                         <label>{t.projectName}</label>
@@ -2025,7 +2577,9 @@
                           placeholder="villa-id"
                           value={newVillaForm.villaId}
                           onChange={e => setNewVillaForm(prev => ({ ...prev, villaId: e.target.value }))}
+                          disabled
                         />
+                        <div className="hint info">ID генерируется автоматически</div>
                       </div>
                       <div className="form-group">
                         <label>{t.villaName}</label>
@@ -2047,7 +2601,7 @@
                           step="0.1" 
                           placeholder="100"
                           value={newVillaForm.area}
-                                                    onChange={e => setNewVillaForm(prev => ({ ...prev, area: parseFloat(e.target.value) || 0 }))}
+                          onChange={e => setNewVillaForm(prev => ({ ...prev, area: parseFloat(e.target.value) || 0 }))}
                         />
                       </div>
                       <div className="form-group">
@@ -2173,7 +2727,7 @@
                                     projectId:p.projectId,
                                     villaId:v.villaId,
                                     qty:1,
-                                    prePct:stagesSumPct,
+                                    prePct:70, // Минимум 50% вместо 0
                                     ownTerms:false,
                                     months:null,
                                     monthlyRatePct:null,
@@ -2236,6 +2790,5 @@
   </script>
 </body>
 </html>
-                                                                                              
 
-                                      
+    
