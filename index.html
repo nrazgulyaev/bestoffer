@@ -1024,7 +1024,7 @@
                 padding: 12px;
                 border: none;
                 background: transparent;
-            color: var(--muted);
+                color: var(--muted);
                 border-radius: var(--radius-sm);
                 transition: all var(--transition-fast);
                 display: flex;
@@ -1140,6 +1140,7 @@
             transform: translateY(0);
             box-shadow: var(--shadow-sm);
         }
+
 
                 /* Дополнительные стили для каталога */
         .catalog-card {
@@ -1706,6 +1707,12 @@
             ]}
         ];
 
+
+
+
+
+
+
                 /* ---------- Компоненты ---------- */
         function App(){
             const [lang,setLang]=useState('ru');
@@ -1715,11 +1722,12 @@
             const [currency,setCurrency]=useState('USD');
             const [idrPerUsd,setIdrPerUsd]=useState(16500);
             const [eurPerUsd,setEurPerUsd]=useState(0.92);
+            
+            // ИСПРАВЛЕННАЯ функция toCurrency - теперь возвращает строку
             const toCurrency=usd=>{
-   const toCurrency=usd=>{
-    const amount = currency==='USD'?usd:(currency==='IDR'?usd*idrPerUsd:usd*eurPerUsd);
-    return fmtMoney(amount, currency);
-};
+                const amount = currency==='USD'?usd:(currency==='IDR'?usd*idrPerUsd:usd*eurPerUsd);
+                return fmtMoney(amount, currency);
+            };
             
             // Текущий месяц для расчетов
             const currentMonth = getCurrentMonth();
@@ -2266,7 +2274,8 @@
                         if(!ok){
                             const url=encodeState(snapshot(),{view:'client'});
                             if(url) history.replaceState(null,'',url);
-                            alert(lang==='ru'?'Неверный PIN — открыт клиентский режим':'Wrong PIN — opened client view');
+
+                                                    alert(lang==='ru'?'Неверный PIN — открыт клиентский режим':'Wrong PIN — opened client view');
                         }
                     }else setIsClient(true);
                 }catch(e){
@@ -2282,8 +2291,8 @@
                 document.getElementById('app-title').textContent=t.title; 
                 document.title=t.title; 
             },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,catalog,lines,tab]);
-
-                    // Компонент KPI блока с отображением валюты
+            
+            // Компонент KPI блока с отображением валюты
             function KPIBlock({isClient, t, totals, currency, toCurrency}){
                 const getCurrencySymbol = (curr) => {
                     switch(curr) {
@@ -2849,4 +2858,3 @@
     </script>
 </body>
 </html>
-
