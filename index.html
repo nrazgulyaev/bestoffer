@@ -158,6 +158,12 @@
             }
         }
         
+        /* Полноширинный блок для каталога */
+        .full-width-block {
+            grid-column: 1 / -1;
+            margin-top: 24px;
+        }
+        
         /* Современные карточки */
         .card {
             background: var(--card);
@@ -169,6 +175,7 @@
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
+            margin-bottom: var(--spacing-lg);
         }
         
         .card:hover {
