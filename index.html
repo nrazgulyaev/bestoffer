@@ -1715,7 +1715,11 @@
             const [currency,setCurrency]=useState('USD');
             const [idrPerUsd,setIdrPerUsd]=useState(16500);
             const [eurPerUsd,setEurPerUsd]=useState(0.92);
-            const toCurrency=usd=>currency==='USD'?usd:(currency==='IDR'?usd*idrPerUsd:usd*eurPerUsd);
+            const toCurrency=usd=>{
+   const toCurrency=usd=>{
+    const amount = currency==='USD'?usd:(currency==='IDR'?usd*idrPerUsd:usd*eurPerUsd);
+    return fmtMoney(amount, currency);
+};
             
             // Текущий месяц для расчетов
             const currentMonth = getCurrentMonth();
