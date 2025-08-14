@@ -22,7 +22,7 @@
             text-align: center;
             color: #f8fafc;
         }
-        .test-component {
+        .card {
             background: rgba(255,255,255,0.1);
             padding: 20px;
             border-radius: 10px;
@@ -37,6 +37,16 @@
             cursor: pointer;
             margin: 5px;
         }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -45,27 +55,109 @@
     <div id="root"></div>
     
     <script type="text/babel">
-        // Простой тестовый компонент
-        function TestApp() {
-            const [count, setCount] = React.useState(0);
+        // Минимальная рабочая версия
+        function App() {
+            const [activeTab, setActiveTab] = useState('overview');
+            const [lines, setLines] = useState([
+                {
+                    id: 1,
+                    projectName: 'Проект А',
+                    villaName: 'Вилла Премиум',
+                    area: 150,
+                    ppsm: 2500,
+                    base: 375000,
+                    disc: 5,
+                    prePct: 50,
+                    months: 12,
+                    rate: 1.5
+                }
+            ]);
             
             return (
-                <div className="test-component">
-                    <h2>Тест React приложения</h2>
-                    <p>Счетчик: {count}</p>
-                    <button className="btn" onClick={() => setCount(count + 1)}>
-                        Увеличить
-                    </button>
-                    <button className="btn" onClick={() => setCount(count - 1)}>
-                        Уменьшить
-                    </button>
-                    <p>Если вы видите этот текст и кнопки работают, значит React работает!</p>
+                <div>
+                    {/* Простые вкладки */}
+                    <div style={{display: 'flex', gap: '10px', marginBottom: '20px'}}>
+                        <button 
+                            className="btn" 
+                            style={{background: activeTab === 'overview' ? '#10b981' : '#3b82f6'}}
+                            onClick={() => setActiveTab('overview')}
+                        >
+                            Обзор
+                        </button>
+                        <button 
+                            className="btn" 
+                            style={{background: activeTab === 'calculation' ? '#10b981' : '#3b82f6'}}
+                            onClick={() => setActiveTab('calculation')}
+                        >
+                            Расчёт
+                        </button>
+                        <button 
+                            className="btn" 
+                            style={{background: activeTab === 'catalog' ? '#10b981' : '#3b82f6'}}
+                            onClick={() => setActiveTab('catalog')}
+                        >
+                            Каталог
+                        </button>
+                    </div>
+                    
+                    {/* Содержимое вкладок */}
+                    {activeTab === 'overview' && (
+                        <div className="card">
+                            <h3>Обзор проекта</h3>
+                            <p>Выбранные виллы: {lines.length}</p>
+                            <p>Общая стоимость: ${lines.reduce((sum, line) => sum + line.base, 0).toLocaleString()}</p>
+                        </div>
+                    )}
+                    
+                    {activeTab === 'calculation' && (
+                        <div className="grid">
+                            <div className="card">
+                                <h3>Параметры</h3>
+                                <p>Курс IDR/USD: 15500</p>
+                                <p>Месяц получения ключей: 12</p>
+                                <p>Глобальная ставка: 1.5%</p>
+                            </div>
+                            <div className="card">
+                                <h3>Расчёт</h3>
+                                <table style={{width: '100%', borderCollapse: 'collapse'}}>
+                                    <thead>
+                                        <tr style={{background: 'rgba(255,255,255,0.1)'}}>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Проект</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Вилла</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Площадь</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Базовая цена</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {lines.map(line => (
+                                            <tr key={line.id}>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{line.projectName}</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{line.villaName}</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{line.area} м²</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>${line.base.toLocaleString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+                    
+                    {activeTab === 'catalog' && (
+                        <div className="card">
+                            <h3>Каталог проектов и вилл</h3>
+                            <button className="btn">Добавить проект</button>
+                            <button className="btn">Добавить виллу</button>
+                            <button className="btn">Импорт JSON</button>
+                            <button className="btn">Экспорт JSON</button>
+                        </div>
+                    )}
                 </div>
             );
         }
         
         // Рендеринг
-        ReactDOM.render(<TestApp />, document.getElementById('root'));
+        ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
 </html>
