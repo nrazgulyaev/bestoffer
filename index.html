@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ar4324conique / Калькулятор рассрочки для любимых клиентов </title>
+  <title>Arconique / Калькулятор рассрочки для любимых клиентов</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
     *{box-sizing:border-box}
     
     :root{
-      /* Современная цветовая палитра */
       --bg: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
       --card: rgba(255,255,255,0.03);
       --card-hover: rgba(255,255,255,0.08);
@@ -38,20 +37,17 @@
       --radius-sm: 8px;
       --radius-lg: 24px;
       
-      /* Современные тени */
       --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       
-      /* Анимации */
       --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       
-      /* Отступы и размеры */
       --spacing-xs: 4px;
       --spacing-sm: 8px;
       --spacing-md: 16px;
@@ -59,18 +55,15 @@
       --spacing-xl: 32px;
       --spacing-2xl: 48px;
       
-      /* Высота блоков */
       --block-min-height: 200px;
       --block-max-height: 600px;
       
-      /* Z-index слои */
       --z-base: 1;
       --z-card: 10;
       --z-modal: 1000;
       --z-tooltip: 1100;
     }
     
-    /* Базовые стили */
     body{
       margin:0;
       font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -81,27 +74,14 @@
       line-height:1.6;
     }
     
-    /* Современные анимации для элементов */
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     @keyframes fadeInScale {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
     
     @keyframes float {
@@ -120,7 +100,6 @@
       100% { background-position: calc(200px + 100%) 0; }
     }
     
-    /* Современные компоненты */
     .wrap{
       max-width:1400px;
       margin:24px auto;
@@ -139,7 +118,6 @@
       text-align:center;
     }
     
-    /* Современная сетка */
     .grid{
       display:grid;
       grid-template-columns:420px 1fr;
@@ -154,7 +132,6 @@
       }
     }
 
-        /* Современные карточки */
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -197,7 +174,6 @@
       box-shadow:var(--shadow-md);
     }
     
-    /* Современные заголовки карточек */
     .card-header{
       display:flex;
       justify-content:space-between;
@@ -230,7 +206,6 @@
       gap:8px;
     }
     
-    /* Современные кнопки */
     .btn{
       appearance:none;
       border:none;
@@ -330,7 +305,6 @@
       justify-content:center;
     }
     
-    /* Современные поля ввода */
     .field{
       display:grid;
       gap:8px;
@@ -385,7 +359,6 @@
       background:var(--card-hover);
     }
     
-    /* Компактные поля для настроек */
     .field.compact {
       min-width: 120px;
       max-width: 180px;
@@ -397,7 +370,6 @@
       font-size: 13px;
     }
     
-    /* Строки с полями */
     .row{
       display:flex;
       gap:var(--spacing-lg);
@@ -412,7 +384,6 @@
       min-width: 140px;
     }
     
-    /* Адаптивность для строк */
     @media (max-width: 768px) {
       .row {
         flex-direction: column;
@@ -425,7 +396,6 @@
       }
     }
 
-        /* Современные таблицы */
     .calc-scroll{
       overflow:auto;
       max-height:35vh;
@@ -488,7 +458,6 @@
       border-left:3px solid var(--primary);
     }
     
-    /* ИСПРАВЛЕНО: оптимизированная таблица этапов без ограничений высоты */
     .stages-table {
       width: 100%;
       border-collapse: separate;
@@ -550,7 +519,6 @@
       border-color: var(--line-hover);
     }
     
-    /* Стилизованные поля для этапов */
     .stage-input {
       width: 100%;
       padding: 8px 12px;
@@ -588,7 +556,6 @@
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
     
-    /* Кнопки действий для этапов */
     .stage-actions {
       display: flex;
       gap: var(--spacing-xs);
@@ -612,7 +579,6 @@
       transform: translateY(-1px);
     }
     
-    /* ИСПРАВЛЕНО: таблица кэшфлоу без ограничений высоты */
     .cashflow-table {
       width: 100%;
       border-collapse: separate;
@@ -661,7 +627,6 @@
       border-color: var(--line-hover);
     }
     
-    /* ИСПРАВЛЕНО: красивая таблица каталога без белых прямоугольников */
     .catalog-table {
       width: 100%;
       border-collapse: separate;
@@ -694,7 +659,20 @@
       background: var(--card-hover);
     }
     
-    /* ИСПРАВЛЕНО: красивые отображения данных без белых прямоугольников */
+    .catalog-table td input {
+      background: transparent;
+      border: none;
+      color: var(--ink);
+      padding: 8px 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    .catalog-table td input:focus {
+      background: var(--card-hover);
+      border: 1px solid var(--primary);
+    }
+    
     .project-name-display,
     .villa-name-display {
       font-weight: 600;
@@ -734,12 +712,10 @@
       border: 1px solid var(--line);
     }
     
-    /* ИСПРАВЛЕНО: скрытие колонки "Первый платёж" */
     .col-first {
       display: none;
     }
     
-    /* ИСПРАВЛЕНО: отступы для кнопки "Добавить из каталога" */
     .calculation-header {
       display: flex;
       justify-content: space-between;
@@ -753,12 +729,30 @@
       margin: 0;
     }
     
-    /* ИСПРАВЛЕНО: KPI блоки с валютой перед числами */
-    .kpis{
+    .kpi-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
       gap:16px;
       margin:20px 0;
+    }
+    
+    @media (min-width: 768px) {
+      .kpi-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+    
+    @media (max-width: 767px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      
+      .calculation-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
     }
     
     .kpi{
@@ -812,7 +806,6 @@
       background-clip:text;
     }
     
-    /* ИСПРАВЛЕНО: валюты перед числами */
     .kpi .v::before {
       content: '$';
       margin-right: 4px;
@@ -820,7 +813,6 @@
       font-weight: 600;
     }
     
-    /* Современные модальные окна */
     .modal-overlay{
       position:fixed;
       top:0;
@@ -881,7 +873,6 @@
       max-height:60vh;
     }
 
-        /* Современные формы */
     .form-section{
       margin-bottom:24px;
     }
@@ -925,7 +916,6 @@
       margin-top:24px;
     }
     
-    /* Современные вкладки */
     .tabs{
       display:flex;
       gap:4px;
@@ -981,7 +971,6 @@
       transform:scale(1);
     }
     
-    /* Дополнительные элементы */
     .pill{
       padding:6px 12px;
       border-radius:999px;
@@ -1010,18 +999,13 @@
     }
     
     .scroll{
-      overflow:auto;
-      max-height:50vh;
+      overflow:visible;
+      max-height:none;
     }
     
-    /* Адаптивность */
     @media (max-width: 767px) {
       .form-row {
         grid-template-columns: 1fr;
-      }
-      
-      .kpis {
-        grid-template-columns: repeat(2, 1fr);
       }
       
       .tabs {
@@ -1056,7 +1040,7 @@
       }
     }
 
-      </style>
+  </style>
 </head>
 <body>
   <div class="wrap">
@@ -1102,12 +1086,12 @@
 
   <!-- v7.6 (stable) -->
   <script type="text/babel" data-presets="env,react">
-    const {useEffect,useMemo,useRef,useState} = React;
+
+        const {useEffect,useMemo,useRef,useState} = React;
 
     /* ---------- PIN / security ---------- */
     const PIN_CODE = '334346';
     const PIN_SALT = 'enso-v7.4-salt-1';
-    // ИСПРАВЛЕНО: правильный хеш для PIN 334346
     const PIN_HASH_HEX = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3';
 
     async function sha256Hex(str){
@@ -1133,7 +1117,7 @@
       return pin === PIN_CODE;
     }
 
-        /* ---------- i18n ---------- */
+    /* ---------- i18n ---------- */
     const T = {
       ru: {
         title:'Arconique / Калькулятор рассрочки для любимых клиентов',
@@ -1184,11 +1168,11 @@
         projectNameRequired:'Введите название проекта',
         villaNameRequired:'Введите название виллы',
         totalArea: 'Общая площадь',
-    totalBase: 'Базовая стоимость', 
-    totalPrepay: 'Оплата до ключей',
-    totalPost: 'После ключей',
-    totalInterest: 'Проценты (post)',
-    totalFinal: 'Итоговая цена'
+        totalBase: 'Базовая стоимость', 
+        totalPrepay: 'Оплата до ключей',
+        totalPost: 'После ключей',
+        totalInterest: 'Проценты (post)',
+        totalFinal: 'Итоговая цена'
       },
       en: {
         title:'Arconique / Installments Calculator',
@@ -1239,11 +1223,11 @@
         projectNameRequired:'Enter project name',
         villaNameRequired:'Enter villa name',
         totalArea: 'Total Area',
-  totalBase: 'Base Cost', 
-  totalPrepay: 'Pre-handover',
-  totalPost: 'Post-handover',
-  totalInterest: 'Interest (post)',
-  totalFinal: 'Final Price'
+        totalBase: 'Base Cost', 
+        totalPrepay: 'Pre-handover',
+        totalPost: 'Post-handover',
+        totalInterest: 'Interest (post)',
+        totalFinal: 'Final Price'
       }
     };
 
@@ -1271,57 +1255,76 @@
       ]}
     ];
 
+    /* ---------- Components ---------- */
+    const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
+      if (isClient) {
+        return (
+          <div className="kpi-grid">
+            <div className="kpi">
+              <div className="kpi-label">{t.totalPrepay}</div>
+              <div className="kpi-value">
+                <span className="v">{toCurrency(totals?.preUSD || 0).toFixed(0)}</span>
+                <span className="unit">USD</span>
+              </div>
+            </div>
+            
+            <div className="kpi">
+              <div className="kpi-label">{t.totalPost}</div>
+              <div className="kpi-value">
+                <span className="v">{toCurrency(totals?.afterUSD || 0).toFixed(0)}</span>
+                <span className="unit">USD</span>
+              </div>
+            </div>
+            
+            <div className="kpi">
+              <div className="kpi-label">{t.totalFinal}</div>
+              <div className="kpi-value">
+                <span className="v">{toCurrency(totals?.finalUSD || 0).toFixed(0)}</span>
+                <span className="unit">USD</span>
+              </div>
+            </div>
+          </div>
+        );
+      }
 
-/* ---------- Components ---------- */
-const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
-  // ИСПРАВЛЕНО: проверяем существование полей и используем безопасные значения
-  const area = totals?.area || 0;
-  const baseUSD = totals?.baseUSD || 0;
-  const preUSD = totals?.preUSD || 0;
-  const afterUSD = totals?.afterUSD || 0;
-  const interestUSD = totals?.interestUSD || 0;
-  const finalUSD = totals?.finalUSD || 0;
-
-  return (
-    <div className="kpi-grid">
-      <div className="kpi">
-        <div className="kpi-label">{t.totalArea}</div>
-        <div className="kpi-value">
-          <span className="v">{toCurrency(area).toFixed(1)}</span>
-          <span className="unit">м²</span>
-        </div>
-      </div>
-      
-      <div className="kpi">
-        <div className="kpi-label">{t.totalBase}</div>
-        <div className="kpi-value">
-          <span className="v">{toCurrency(baseUSD).toFixed(0)}</span>
-          <span className="unit">USD</span>
-        </div>
-      </div>
-      
-      <div className="kpi">
-        <div className="kpi-label">{t.totalPrepay}</div>
-        <div className="kpi-value">
-          <span className="v">{toCurrency(preUSD).toFixed(0)}</span>
-          <span className="unit">USD</span>
-        </div>
-      </div>
-      
-      <div className="kpi">
-        <div className="kpi-label">{t.totalPost}</div>
-        <div className="kpi-value">
-          <span className="v">{toCurrency(afterUSD).toFixed(0)}</span>
-          <span className="unit">USD</span>
-        </div>
-      </div>
-      
-      {!isClient && (
-        <>
+      return (
+        <div className="kpi-grid">
+          <div className="kpi">
+            <div className="kpi-label">{t.totalArea}</div>
+            <div className="kpi-value">
+              <span className="v">{toCurrency(totals?.area || 0).toFixed(1)}</span>
+              <span className="unit">м²</span>
+            </div>
+          </div>
+          
+          <div className="kpi">
+            <div className="kpi-label">{t.totalBase}</div>
+            <div className="kpi-value">
+              <span className="v">{toCurrency(totals?.baseUSD || 0).toFixed(0)}</span>
+              <span className="unit">USD</span>
+            </div>
+          </div>
+          
+          <div className="kpi">
+            <div className="kpi-label">{t.totalPrepay}</div>
+            <div className="kpi-value">
+              <span className="v">{toCurrency(totals?.preUSD || 0).toFixed(0)}</span>
+              <span className="unit">USD</span>
+            </div>
+          </div>
+          
+          <div className="kpi">
+            <div className="kpi-label">{t.totalPost}</div>
+            <div className="kpi-value">
+              <span className="v">{toCurrency(totals?.afterUSD || 0).toFixed(0)}</span>
+              <span className="unit">USD</span>
+            </div>
+          </div>
+          
           <div className="kpi">
             <div className="kpi-label">{t.totalInterest}</div>
             <div className="kpi-value">
-              <span className="v">{toCurrency(interestUSD).toFixed(0)}</span>
+              <span className="v">{toCurrency(totals?.interestUSD || 0).toFixed(0)}</span>
               <span className="unit">USD</span>
             </div>
           </div>
@@ -1329,16 +1332,14 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
           <div className="kpi">
             <div className="kpi-label">{t.totalFinal}</div>
             <div className="kpi-value">
-              <span className="v">{toCurrency(finalUSD).toFixed(0)}</span>
+              <span className="v">{toCurrency(totals?.finalUSD || 0).toFixed(0)}</span>
               <span className="unit">USD</span>
             </div>
           </div>
-        </>
-      )}
-    </div>
-  );
-};
-    
+        </div>
+      );
+    };
+
     function App(){
       const [lang,setLang]=useState('ru'); const t=T[lang];
       const [tab,setTab]=useState('calc');
@@ -1364,12 +1365,11 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
 
       const [catalog,setCatalog]=useState(DEFAULT_CATALOG);
 
-           const [lines,setLines]=useState([
+      const [lines,setLines]=useState([
         {id:1,projectId:'enso',villaId:'enso-2br',qty:1,prePct:70,ownTerms:false,months:null,monthlyRatePct:null,firstPostUSD:0,discountPct:0,
          snapshot:{name:'Enso 2BR',area:100,ppsm:2500,baseUSD:250000}}
       ]);
 
-      // Состояния для модальных окон
       const [showAddProjectModal, setShowAddProjectModal] = useState(false);
       const [showAddVillaModal, setShowAddVillaModal] = useState(false);
       const [editingProject, setEditingProject] = useState(null);
@@ -1386,9 +1386,15 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
       const [modalOpen,setModalOpen]=useState(false);
       const [catalogModalOpen,setCatalogModalOpen]=useState(false);
 
-      // ИСПРАВЛЕНО: функция генерации автоматических ID
       const generateId = (prefix) => {
         return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      };
+
+      // Функция форматирования дат для кэшфлоу
+      const formatMonthLabel = (monthOffset) => {
+        const currentDate = new Date();
+        const targetDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + monthOffset, 1);
+        return targetDate.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
       };
 
       useEffect(()=>{(async()=>{
@@ -1432,7 +1438,6 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
 
       const findProject=pid=>catalog.find(p=>p.projectId===pid);
 
-      // ИСПРАВЛЕНО: функции для работы с проектами с автоматическими ID
       const addProject = () => {
         setNewProjectForm({
           projectName: ''
@@ -1458,7 +1463,6 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
         setNewProjectForm({ projectName: '' });
       };
 
-      // ИСПРАВЛЕНО: функции для работы с виллами с автоматическими ID
       const addVilla = (projectId) => {
         setNewVillaForm({
           name: '',
@@ -1499,7 +1503,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
         setNewVillaForm({ name: '', area: 100, ppsm: 2500, baseUSD: 250000 });
       };
 
-          const linesData=useMemo(()=>lines.map(line=>{
+      const linesData=useMemo(()=>lines.map(line=>{
         const base0=line.snapshot?.baseUSD ?? ((line.snapshot?.area||0)*(line.snapshot?.ppsm||0));
         const disc=clamp(+line.discountPct||0,0,20);
         const base=base0*(1-disc/100);
@@ -1540,13 +1544,13 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
         return {line,qty,baseOne:base,base:baseQ,preSchedule:preScheduleQ,preTotal,firstPostUSD:firstPostQ,postRows:postRowsQ,lineTotal,vMonths,rate,discountPct:disc};
       }),[lines,stages,stagesSumPct,handoverMonth,months,monthlyRatePct,lang]);
 
-    const project=useMemo(()=>{
-  const totals={
-    area: linesData.reduce((s,x)=>s+(x.line.snapshot?.area||0)*x.qty,0), // ИСПРАВЛЕНО: добавляем площадь
-    baseUSD:linesData.reduce((s,x)=>s+x.base,0),
-    preUSD: linesData.reduce((s,x)=>s+x.preTotal,0),
-    finalUSD:linesData.reduce((s,x)=>s+x.lineTotal,0),
-  };
+      const project=useMemo(()=>{
+        const totals={
+          area: linesData.reduce((s,x)=>s+(x.line.snapshot?.area||0)*x.qty,0), // ИСПРАВЛЕНО: добавляем площадь
+          baseUSD:linesData.reduce((s,x)=>s+x.base,0),
+          preUSD: linesData.reduce((s,x)=>s+x.preTotal,0),
+          finalUSD:linesData.reduce((s,x)=>s+x.lineTotal,0),
+        };
         totals.interestUSD = totals.finalUSD - totals.baseUSD;
         totals.afterUSD = totals.finalUSD - totals.preUSD;
 
@@ -1570,29 +1574,27 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
           if(chartObj.current) chartObj.current.destroy();
           chartObj.current=new Chart(ctx,{
             type:'bar',
-            data:{labels:project.cashflow.map(c=>String(c.month)),datasets:[{label:T[lang].chartTitle,data:project.cashflow.map(c=>toCurrency(c.amountUSD))}]},
+            data:{labels:project.cashflow.map(c=>formatMonthLabel(c.month)),datasets:[{label:T[lang].chartTitle,data:project.cashflow.map(c=>toCurrency(c.amountUSD))}]},
             options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>fmtMoney(c.parsed.y,currency)}}},scales:{y:{ticks:{callback:(v)=>fmtMoney(v,currency)}}}}
           });
         }catch(e){ /* если Chart.js не загрузился — не ломаем страницу */ }
       },[project.cashflow,currency,idrPerUsd,eurPerUsd,lang]);
 
       const exportCSV=()=>{
-        const rows=[[t.cashMonth,t.cashDesc,t.cashTotal,t.cashBalance],...project.cashflow.map(c=>[c.month,(c.items||[]).join(' + '),toCurrency(c.amountUSD).toFixed(2),toCurrency(c.balanceUSD).toFixed(2)])];
+        const rows=[[t.cashMonth,t.cashDesc,t.cashTotal,t.cashBalance],...project.cashflow.map(c=>[formatMonthLabel(c.month),(c.items||[]).join(' + '),toCurrency(c.amountUSD).toFixed(2),toCurrency(c.balanceUSD).toFixed(2)])];
         const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
         const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_cashflow_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
       };
       
       const exportXLSX=()=>{
-        const ws1=XLSX.utils.json_to_sheet(project.cashflow.map(c=>({[t.cashMonth]:c.month,[t.cashDesc]:(c.items||[]).join(' + '),[t.cashTotal]:toCurrency(c.amountUSD),[t.cashBalance]:toCurrency(c.balanceUSD)})));
+        const ws1=XLSX.utils.json_to_sheet(project.cashflow.map(c=>({[t.cashMonth]:formatMonthLabel(c.month),[t.cashDesc]:(c.items||[]).join(' + '),[t.cashTotal]:toCurrency(c.amountUSD),[t.cashBalance]:toCurrency(c.balanceUSD)})));
         const ws2=XLSX.utils.json_to_sheet(linesData.map(ld=>({[t.project]:findProject(ld.line.projectId)?.projectName||ld.line.projectId,[t.villa]:ld.line.snapshot?.name,[t.qty]:ld.qty,[t.area]:ld.line.snapshot?.area,[t.ppsm]:ld.line.snapshot?.ppsm,[t.price]:ld.base,[t.discount]:(ld.discountPct||0)+'%',[t.prePct]:ld.line.prePct,[t.months]:ld.vMonths,[t.lineTotal]:ld.lineTotal})));
         const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws1,'Cashflow'); XLSX.utils.book_append_sheet(wb,ws2,'Lines'); XLSX.writeFile(wb,`arconique_installments_${new Date().toISOString().slice(0,10)}.xlsx`);
       };
       
-      // Исправленная функция экспорта в PDF
       const exportPDF = () => {
         if (!project) return;
         
-        // Создаем чистый HTML для PDF
         const pdfContent = `
           <!DOCTYPE html>
           <html>
@@ -1638,7 +1640,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
               <tbody>
                 ${project.cashflow.map(c => `
                   <tr>
-                    <td>${c.month}</td>
+                    <td>${formatMonthLabel(c.month)}</td>
                     <td>${(c.items || []).join(' + ')}</td>
                     <td class="amount">${fmtMoney(c.amountUSD,'USD')}</td>
                     <td class="amount">${fmtMoney(c.balanceUSD,'USD')}</td>
@@ -1650,7 +1652,6 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
           </html>
         `;
         
-        // Используем html2pdf для создания PDF
         const element = document.createElement('div');
         element.innerHTML = pdfContent;
         document.body.appendChild(element);
@@ -1669,6 +1670,451 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
       const delLine=(id)=>setLines(prev=>prev.filter(l=>l.id!==id));
       const dupLine=(id)=>setLines(prev=>{const src=prev.find(x=>x.id===id); if(!src)return prev; const nid=(prev[prev.length-1]?.id||0)+1; return [...prev,{...src,id:nid,qty:1}]});
 
+      return (
+
+            /* ---------- App component ---------- */
+    function App(){
+      const [lang,setLang]=useState('ru');
+      const [currency,setCurrency]=useState('USD');
+      const [idrPerUsd,setIdrPerUsd]=useState(16000);
+      const [eurPerUsd,setEurPerUsd]=useState(0.85);
+      const [handoverMonth,setHandoverMonth]=useState(12);
+      const [months,setMonths]=useState(12);
+      const [monthlyRatePct,setMonthlyRatePct]=useState(0.5);
+      const [isClient,setIsClient]=useState(false);
+      const [tab,setTab]=useState('calc');
+      const [modalOpen,setModalOpen]=useState(false);
+      const [showAddProjectModal,setShowAddProjectModal]=useState(false);
+      const [showAddVillaModal,setShowAddVillaModal]=useState(false);
+      const [newProjectForm,setNewProjectForm]=useState({projectName:''});
+      const [newVillaForm,setNewVillaForm]=useState({name:'',area:0,ppsm:0,baseUSD:0});
+      const [selectedProjectId,setSelectedProjectId]=useState(null);
+      
+      const [stages,setStages]=useState([
+        {id:1,label:'Договор',pct:10,month:1},
+        {id:2,label:'Фундамент',pct:15,month:3},
+        {id:3,label:'Стены',pct:25,month:6},
+        {id:4,label:'Крыша',pct:20,month:9},
+        {id:5,label:'Отделка',pct:30,month:12}
+      ]);
+      
+      const [lines,setLines]=useState([]);
+      const [catalog,setCatalog]=useState([]);
+      
+      const chartRef=useRef(null);
+      const chartInstance=useRef(null);
+      
+      const t=T[lang];
+      const stagesSumPct=stages.reduce((s,x)=>s+x.pct,0);
+      
+      /* ---------- Calculations ---------- */
+      const linesData=useMemo(()=>{
+        return lines.map(line=>{
+          const qty=line.qty||1;
+          const area=line.snapshot?.area||0;
+          const ppsm=line.snapshot?.ppsm||0;
+          const baseUSD=line.snapshot?.baseUSD||0;
+          const discountPct=line.discountPct||0;
+          const prePct=Math.max(50,line.prePct||stagesSumPct);
+          const ownTerms=line.ownTerms||false;
+          const months=ownTerms?line.months:null;
+          const monthlyRatePct=ownTerms?line.monthlyRatePct:null;
+          const firstPostUSD=line.firstPostUSD||0;
+          
+          const discountUSD=baseUSD*discountPct/100;
+          const discountedBase=baseUSD-discountUSD;
+          const preUSD=discountedBase*prePct/100;
+          const afterUSD=discountedBase-preUSD;
+          
+          let interestUSD=0;
+          if(months&&monthlyRatePct){
+            const principal=afterUSD-firstPostUSD;
+            if(principal>0){
+              const monthlyRate=monthlyRatePct/100/12;
+              interestUSD=principal*monthlyRate*months;
+            }
+          }
+          
+          const lineTotal=discountedBase+interestUSD;
+          
+          return {
+            line,
+            qty,
+            area,
+            ppsm,
+            baseUSD,
+            discountUSD,
+            discountedBase,
+            prePct,
+            preUSD,
+            afterUSD,
+            months,
+            monthlyRatePct,
+            firstPostUSD,
+            interestUSD,
+            lineTotal
+          };
+        });
+      },[lines,stagesSumPct]);
+      
+      const project=useMemo(()=>{
+        const totals={
+          area: linesData.reduce((s,x)=>s+(x.area||0)*x.qty,0),
+          baseUSD:linesData.reduce((s,x)=>s+x.baseUSD,0),
+          preUSD: linesData.reduce((s,x)=>s+x.preUSD,0),
+          afterUSD: linesData.reduce((s,x)=>s+x.afterUSD,0),
+          interestUSD: linesData.reduce((s,x)=>s+x.interestUSD,0),
+          finalUSD: linesData.reduce((s,x)=>s+x.lineTotal,0)
+        };
+        
+        const cashflow=[];
+        let balanceUSD=0;
+        
+        // Добавляем текущий месяц как M0
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        
+        for(let i=0;i<=handoverMonth+months;i++){
+          const monthDate = new Date(currentYear, currentMonth + i, 1);
+          const monthLabel = monthDate.toLocaleDateString(lang,{month:'long',year:'numeric'});
+          
+          let amountUSD=0;
+          let items=[];
+          
+          if(i===0){
+            items.push('Текущий месяц');
+            amountUSD=0;
+          }else if(i<=handoverMonth){
+            const stage=stages.find(s=>s.month===i);
+            if(stage){
+              items.push(`${stage.label} (${stage.pct}%)`);
+              amountUSD=totals.preUSD*stage.pct/stagesSumPct;
+            }
+          }else{
+            const monthAfter=i-handoverMonth;
+            if(monthAfter===1){
+              items.push('Получение ключей');
+              amountUSD=totals.afterUSD;
+            }else if(monthAfter<=months){
+              items.push(`Месяц ${monthAfter} после ключей`);
+              amountUSD=totals.interestUSD/months;
+            }
+          }
+          
+          balanceUSD+=amountUSD;
+          cashflow.push({
+            month: monthLabel,
+            amountUSD,
+            balanceUSD,
+            items
+          });
+        }
+        
+        return {totals,cashflow};
+      },[linesData,stages,handoverMonth,months,lang]);
+      
+      /* ---------- Functions ---------- */
+      const toCurrency=(usd)=>{
+        if(currency==='USD') return usd;
+        if(currency==='IDR') return usd*idrPerUsd;
+        if(currency==='EUR') return usd*eurPerUsd;
+        return usd;
+      };
+      
+      const fmtMoney=(amount,curr)=>{
+        if(curr==='IDR') return Math.round(amount).toLocaleString('id-ID');
+        if(curr==='EUR') return Math.round(amount).toLocaleString('de-DE',{style:'currency',currency:'EUR'});
+        return Math.round(amount).toLocaleString('en-US',{style:'currency',currency:'USD'});
+      };
+      
+      const generateId=(prefix)=>{
+        return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2,9)}`;
+      };
+      
+      const clamp=(val,min,max)=>{
+        return Math.min(Math.max(val,min),max);
+      };
+      
+      const findProject=(projectId)=>{
+        return catalog.find(p=>p.projectId===projectId);
+      };
+      
+      const updLine=(id,updates)=>{
+        setLines(prev=>prev.map(x=>x.id===id?{...x,...updates}:x));
+      };
+      
+      const dupLine=(id)=>{
+        const line=lines.find(x=>x.id===id);
+        if(line){
+          const newLine={...line,id:Date.now()+Math.random()};
+          setLines(prev=>[...prev,newLine]);
+        }
+      };
+      
+      const delLine=(id)=>{
+        if(lines.length>1){
+          setLines(prev=>prev.filter(x=>x.id!==id));
+        }
+      };
+      
+      const addProject=()=>{
+        setShowAddProjectModal(true);
+      };
+      
+      const saveProject=()=>{
+        if(!newProjectForm.projectName.trim()) return;
+        
+        const projectId=generateId('proj');
+        const newProject={
+          projectId,
+          projectName:newProjectForm.projectName.trim(),
+          villas:[]
+        };
+        
+        setCatalog(prev=>[...prev,newProject]);
+        setNewProjectForm({projectName:''});
+        setShowAddProjectModal(false);
+      };
+      
+      const addVilla=(projectId)=>{
+        setSelectedProjectId(projectId);
+        setShowAddVillaModal(true);
+      };
+      
+      const saveVilla=()=>{
+        if(!newVillaForm.name.trim()||!newVillaForm.area||!newVillaForm.ppsm||!newVillaForm.baseUSD) return;
+        
+        const villaId=generateId('villa');
+        const newVilla={
+          villaId,
+          name:newVillaForm.name.trim(),
+          area:parseFloat(newVillaForm.area),
+          ppsm:parseFloat(newVillaForm.ppsm),
+          baseUSD:parseFloat(newVillaForm.baseUSD)
+        };
+        
+        setCatalog(prev=>prev.map(p=>p.projectId===selectedProjectId?{...p,villas:[...p.villas,newVilla]}:p));
+        setNewVillaForm({name:'',area:0,ppsm:0,baseUSD:0});
+        setShowAddVillaModal(false);
+        setSelectedProjectId(null);
+      };
+      
+      const exportCSV=()=>{
+        const csvContent='data:text/csv;charset=utf-8,'+
+          'Месяц,Описание,Сумма,Баланс\n'+
+          project.cashflow.map(c=>`${c.month},${c.items.join(' + ')},${c.amountUSD},${c.balanceUSD}`).join('\n');
+        
+        const link=document.createElement('a');
+        link.setAttribute('href',encodeURI(csvContent));
+        link.setAttribute('download','arconique_cashflow.csv');
+        link.click();
+      };
+      
+      const exportXLSX=()=>{
+        const ws=XLSX.utils.json_to_sheet(project.cashflow.map(c=>({
+          Месяц:c.month,
+          Описание:c.items.join(' + '),
+          Сумма:c.amountUSD,
+          Баланс:c.balanceUSD
+        })));
+        
+        const wb=XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb,ws,'Cashflow');
+        XLSX.writeFile(wb,'arconique_cashflow.xlsx');
+      };
+      
+      const exportPDF=()=>{
+        const element=document.createElement('div');
+        element.innerHTML=`
+          <div style="font-family:Arial,sans-serif;padding:20px;">
+            <h1>Arconique - Отчет по рассрочке</h1>
+            <h2>Сводка</h2>
+            <p><strong>Общая площадь:</strong> ${project.totals.area.toFixed(1)} м²</p>
+            <p><strong>Базовая стоимость:</strong> ${fmtMoney(project.totals.baseUSD,'USD')}</p>
+            <p><strong>Оплата до ключей:</strong> ${fmtMoney(project.totals.preUSD,'USD')}</p>
+            <p><strong>Оплата после ключей:</strong> ${fmtMoney(project.totals.afterUSD,'USD')}</p>
+            <p><strong>Проценты:</strong> ${fmtMoney(project.totals.interestUSD,'USD')}</p>
+            <p><strong>Итоговая стоимость:</strong> ${fmtMoney(project.totals.finalUSD,'USD')}</p>
+            
+            <h2>Кэшфлоу по месяцам</h2>
+            <table style="width:100%;border-collapse:collapse;margin-top:20px;">
+              <thead>
+                <tr style="background:#f0f0f0;">
+                  <th style="border:1px solid #ccc;padding:8px;text-align:left;">Месяц</th>
+                  <th style="border:1px solid #ccc;padding:8px;text-align:left;">Описание</th>
+                  <th style="border:1px solid #ccc;padding:8px;text-align:right;">Сумма</th>
+                  <th style="border:1px solid #ccc;padding:8px;text-align:right;">Баланс</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${project.cashflow.map(c=>`
+                  <tr>
+                    <td style="border:1px solid #ccc;padding:8px;">${c.month}</td>
+                    <td style="border:1px solid #ccc;padding:8px;">${c.items.join(' + ')}</td>
+                    <td style="border:1px solid #ccc;padding:8px;text-align:right;">${fmtMoney(c.amountUSD,'USD')}</td>
+                    <td style="border:1px solid #ccc;padding:8px;text-align:right;">${fmtMoney(c.balanceUSD,'USD')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        
+        const opt={
+          margin:10,
+          filename:'arconique_report.pdf',
+          image:{type:'jpeg',quality:0.98},
+          html2canvas:{scale:2},
+          jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+        };
+        
+        html2pdf().set(opt).from(element).save();
+      };
+      
+      const share=(view)=>{
+        const state={
+          lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,
+          stages,lines,catalog,view
+        };
+        const compressed=LZString.compressToEncodedURIComponent(JSON.stringify(state));
+        const url=`${window.location.origin}${window.location.pathname}#${compressed}`;
+        
+        if(navigator.share){
+          navigator.share({title:'Arconique Calculator',url});
+        }else{
+          navigator.clipboard.writeText(url);
+          alert('Ссылка скопирована в буфер обмена');
+        }
+      };
+      
+      /* ---------- Effects ---------- */
+      useEffect(()=>{
+        const hash=window.location.hash.slice(1);
+        if(hash){
+          try{
+            const state=JSON.parse(LZString.decompressFromEncodedURIComponent(hash));
+            if(state.view&&state.view!=='editor'){
+              setIsClient(true);
+            }
+            if(state.lang) setLang(state.lang);
+            if(state.currency) setCurrency(state.currency);
+            if(state.idrPerUsd) setIdrPerUsd(state.idrPerUsd);
+            if(state.eurPerUsd) setEurPerUsd(state.eurPerUsd);
+            if(state.handoverMonth) setHandoverMonth(state.handoverMonth);
+            if(state.months) setMonths(state.months);
+            if(state.monthlyRatePct) setMonthlyRatePct(state.monthlyRatePct);
+            if(state.stages) setStages(state.stages);
+            if(state.lines) setLines(state.lines);
+            if(state.catalog) setCatalog(state.catalog);
+          }catch(e){
+            console.error('Failed to parse state from URL:',e);
+          }
+        }
+      },[]);
+      
+      useEffect(()=>{
+        if(!isClient){
+          const verifyPin=async()=>{
+            const input=prompt('Введите PIN для входа в редактор:');
+            if(!input) return;
+            
+            const hash=await sha256Hex(input);
+            if(hash===PIN_HASH_HEX){
+              setIsClient(false);
+            }else{
+              alert('Неверный PIN');
+              setIsClient(true);
+            }
+          };
+          verifyPin();
+        }
+      },[isClient]);
+      
+      useEffect(()=>{
+        if(chartRef.current&&project.cashflow.length>0){
+          if(chartInstance.current){
+            chartInstance.current.destroy();
+          }
+          
+          const ctx=chartRef.current.getContext('2d');
+          chartInstance.current=new Chart(ctx,{
+            type:'bar',
+            data:{
+              labels:project.cashflow.map(c=>c.month),
+              datasets:[{
+                label:'Баланс по месяцам',
+                data:project.cashflow.map(c=>c.balanceUSD),
+                backgroundColor:'rgba(59,130,246,0.8)',
+                borderColor:'rgba(59,130,246,1)',
+                borderWidth:1
+              }]
+            },
+            options:{
+              responsive:true,
+              maintainAspectRatio:false,
+              scales:{
+                y:{
+                  beginAtZero:true,
+                  ticks:{
+                    callback:function(value){
+                      return fmtMoney(value,currency);
+                    }
+                  }
+                }
+              },
+              plugins:{
+                legend:{
+                  display:false
+                }
+              }
+            }
+          });
+        }
+        
+        return()=>{
+          if(chartInstance.current){
+            chartInstance.current.destroy();
+            chartInstance.current=null;
+          }
+        };
+      },[project.cashflow,currency]);
+      
+      useEffect(()=>{
+        const saveState=()=>{
+          const state={
+            lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,
+            stages,lines,catalog
+          };
+          localStorage.setItem('arconique-state',JSON.stringify(state));
+        };
+        
+        const timeoutId=setTimeout(saveState,1000);
+        return()=>clearTimeout(timeoutId);
+      },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,lines,catalog]);
+      
+      useEffect(()=>{
+        const savedState=localStorage.getItem('arconique-state');
+        if(savedState){
+          try{
+            const state=JSON.parse(savedState);
+            if(state.lang) setLang(state.lang);
+            if(state.currency) setCurrency(state.currency);
+            if(state.idrPerUsd) setIdrPerUsd(state.idrPerUsd);
+            if(state.eurPerUsd) setEurPerUsd(state.eurPerUsd);
+            if(state.handoverMonth) setHandoverMonth(state.handoverMonth);
+            if(state.months) setMonths(state.months);
+            if(state.monthlyRatePct) setMonthlyRatePct(state.monthlyRatePct);
+            if(state.stages) setStages(state.stages);
+            if(state.lines) setLines(state.lines);
+            if(state.catalog) setCatalog(state.catalog);
+          }catch(e){
+            console.error('Failed to load saved state:',e);
+          }
+        }
+      },[]);
+
+              /* ---------- Render ---------- */
       return (
         <>
           <div className="grid">
@@ -1933,7 +2379,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
               )}
             </div>
 
-                        <div className="card">
+            <div className="card">
               <div className="row" style={{justifyContent:'space-between',alignItems:'baseline'}}>
                 <div className="row">
                   <span className="badge">{t.lines}: {lines.length}</span>
@@ -1943,15 +2389,70 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
                 <div className="muted">{isClient ? t.client : t.editor}</div>
               </div>
 
-              <KPIBlock isClient={isClient} t={t} totals={project.totals} currency={currency} toCurrency={toCurrency}/>
+              {/* ИСПРАВЛЕНО: KPI блок с правильной компоновкой */}
+              <div className="kpi-grid">
+                {!isClient && (
+                  <>
+                    <div className="kpi">
+                      <div className="kpi-label">{t.totalArea}</div>
+                      <div className="kpi-value">
+                        <span className="v">{project.totals.area.toFixed(1)}</span>
+                        <span className="unit">м²</span>
+                      </div>
+                    </div>
+                    
+                    <div className="kpi">
+                      <div className="kpi-label">{t.totalBase}</div>
+                      <div className="kpi-value">
+                        <span className="v">{fmtMoney(toCurrency(project.totals.baseUSD),currency)}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="kpi">
+                      <div className="kpi-label">{t.totalPrepay}</div>
+                      <div className="kpi-value">
+                        <span className="v">{fmtMoney(toCurrency(project.totals.preUSD),currency)}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="kpi">
+                      <div className="kpi-label">{t.totalPost}</div>
+                      <div className="kpi-value">
+                        <span className="v">{fmtMoney(toCurrency(project.totals.afterUSD),currency)}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="kpi">
+                      <div className="kpi-label">{t.totalInterest}</div>
+                      <div className="kpi-value">
+                        <span className="v">{fmtMoney(toCurrency(project.totals.interestUSD),currency)}</span>
+                      </div>
+                    </div>
+                  </>
+                )}
+                
+                <div className="kpi">
+                  <div className="kpi-label">{t.totalFinal}</div>
+                  <div className="kpi-value">
+                    <span className="v">{fmtMoney(toCurrency(project.totals.finalUSD),currency)}</span>
+                  </div>
+                </div>
+              </div>
 
               <div className="hr"></div>
 
-              {/* ИСПРАВЛЕНО: заголовок с кнопкой и адекватными отступами */}
+              {/* Оптимизированный заголовок с кнопкой */}
               <div className="calculation-header">
                 <h3 style={{margin:'6px 0'}}>{t.villasTitle}</h3>
                 {!isClient && <button className="btn success" onClick={()=>setModalOpen(true)}>{t.addFromCatalog}</button>}
               </div>
+              
+              {/* ИСПРАВЛЕНО: кнопка добавления для клиентов */}
+              {isClient && (
+                <div className="row" style={{marginBottom:'var(--spacing-md)'}}>
+                  <button className="btn success" onClick={()=>setModalOpen(true)}>{t.addVillaForCalc}</button>
+                </div>
+              )}
 
               <div className="calc-scroll">
                 <table className="calc-table">
@@ -2008,7 +2509,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
                             </div>
                           </td>
                           <td className="col-base base-strong">
-                            {fmtMoney(toCurrency(ld.base),currency)}
+                            {fmtMoney(toCurrency(ld.baseUSD),currency)}
                           </td>
                           {!isClient && (
                             <td className="col-disc">
@@ -2074,7 +2575,8 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
                           <td className="col-actions">
                             <div className="row" style={{gap:4}}>
                               <button className="btn icon" onClick={()=>dupLine(ld.line.id)}>📋</button>
-                              {!isClient && <button className="btn danger icon" onClick={()=>delLine(ld.line.id)}>🗑️</button>}
+                              {/* ИСПРАВЛЕНО: кнопка удаления всегда видна */}
+                              <button className="btn danger icon" onClick={()=>delLine(ld.line.id)}>🗑️</button>
                             </div>
                           </td>
                         </tr>
@@ -2125,7 +2627,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
             </div>
           </div>
 
-          {/* ИСПРАВЛЕНО: модальное окно добавления проекта без поля ID */}
+                    {/* Модальное окно добавления проекта */}
           {showAddProjectModal && (
             <div className="modal-overlay" onClick={() => setShowAddProjectModal(false)}>
               <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -2158,7 +2660,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
             </div>
           )}
 
-          {/* ИСПРАВЛЕНО: модальное окно добавления виллы без поля ID */}
+          {/* Модальное окно добавления виллы */}
           {showAddVillaModal && (
             <div className="modal-overlay" onClick={() => setShowAddVillaModal(false)}>
               <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -2230,7 +2732,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
             </div>
           )}
 
-                    {/* ИСПРАВЛЕНО: модальное окно добавления из каталога с выбором вилл */}
+          {/* ИСПРАВЛЕНО: модальное окно добавления из каталога с выбором вилл */}
           {modalOpen && (
             <div className="modal-overlay" onClick={()=>setModalOpen(false)}>
               <div className="modal-content" onClick={e=>e.stopPropagation()}>
@@ -2340,121 +2842,11 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
               </div>
             </div>
           )}
-
-          {/* ИСПРАВЛЕНО: каталог проектов и вилл внизу страницы */}
-          <div className="card" style={{gridColumn:'1/-1',marginTop:'var(--spacing-lg)'}}>
-            <h3 style={{margin:'6px 0'}}>{t.catalogTitle}</h3>
-            
-            {/* Оптимизированные кнопки каталога с одинаковой шириной */}
-            <div className="row" style={{gap:'var(--spacing-md)'}}>
-              <button className="btn success" onClick={addProject} style={{flex:'1'}}>{t.addProject}</button>
-              <button className="btn" onClick={()=>{
-                const json=prompt('Paste catalog JSON:', JSON.stringify(catalog,null,2));
-                if(!json) return;
-                try{ const obj=JSON.parse(json); if(Array.isArray(obj)) setCatalog(obj); else alert('Invalid JSON'); }catch{ alert('Invalid JSON'); }
-              }} style={{flex:'1'}}>{t.importJSON}</button>
-              <button className="btn" onClick={()=>{
-                const blob=new Blob([JSON.stringify(catalog,null,2)],{type:'application/json'});
-                const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_catalog_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href);
-              }} style={{flex:'1'}}>{t.exportJSON}</button>
-            </div>
-            
-            <div className="scroll" style={{maxHeight:'32vh'}}>
-              {catalog.map(p=>(
-                <div key={p.projectId} className="catalog-card">
-                  <div className="catalog-header">
-                    <div className="row" style={{flex:1}}>
-                      <span className="badge">{t.project}:</span>
-                      <input 
-                        type="text" 
-                        value={p.projectName} 
-                        onChange={e=>setCatalog(prev=>prev.map(x=>x.projectId===p.projectId?{...x,projectName:e.target.value}:x))}
-                        style={{flex:1,marginRight:8}}
-                      />
-                      <span className="pill">{p.projectId}</span>
-                    </div>
-                    <div className="catalog-actions">
-                      <button className="btn primary" onClick={()=>addVilla(p.projectId)}>{t.addVilla}</button>
-                      <button className="btn danger" onClick={()=>{
-                        if(confirm(t.remove + ' ' + p.projectName + '?')) {
-                          setCatalog(prev=>prev.filter(x=>x.projectId!==p.projectId));
-                        }
-                      }}>{t.remove}</button>
-                    </div>
-                  </div>
-                  
-                  <table className="catalog-table">
-                    <thead>
-                      <tr>
-                        <th style={{textAlign:'left'}}>{t.villa}</th>
-                        <th style={{width:'80px'}}>{t.area}</th>
-                        <th style={{width:'100px'}}>{t.ppsm}</th>
-                        <th style={{width:'120px'}}>{t.price}</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {p.villas.map(v=>(
-                        <tr key={v.villaId}>
-                          <td style={{textAlign:'left'}}>
-                            <input 
-                              value={v.name} 
-                              onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,name:e.target.value}:vv)}:pr))}
-                            />
-                            <div className="muted" style={{fontSize:10}}>{v.villaId}</div>
-                          </td>
-                          <td>
-                            <input 
-                              type="number" 
-                              min="1" 
-                              step="0.1" 
-                              value={v.area} 
-                              onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,area:clamp(parseFloat(e.target.value||0),1,100000)}:vv)}:pr))}
-                            />
-                          </td>
-                          <td>
-                            <input 
-                              type="number" 
-                              min="0" 
-                              step="1" 
-                              value={v.ppsm} 
-                              onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,ppsm:clamp(parseFloat(e.target.value||0),0,1e9)}:vv)}:pr))}
-                            />
-                          </td>
-                          <td>
-                            <input 
-                              type="number" 
-                              min="0" 
-                              step="1" 
-                              value={v.baseUSD} 
-                              onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,baseUSD:clamp(parseFloat(e.target.value||0),0,1e12)}:vv)}:pr))}
-                            />
-                          </td>
-                          <td>
-                            <button 
-                              className="btn danger icon" 
-                              onClick={()=>{
-                                if(confirm(t.remove + ' ' + v.name + '?')) {
-                                  setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.filter(vv=>vv.villaId!==v.villaId)}:pr));
-                                }
-                              }}
-                            >
-                              ✕
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ))}
-            </div>
-          </div>
         </>
       );
     }
 
-    // ИСПРАВЛЕНО: правильный рендер React приложения
+    /* ---------- Render to DOM ---------- */
     ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
