@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Arconique / Калькулятор рассрочки для любимых клиентов </title>
+  <title>Ar4324conique / Калькулятор рассрочки для любимых клиентов </title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
@@ -1273,14 +1273,21 @@
 
 
 /* ---------- Components ---------- */
-// ИСПРАВЛЕНО: добавляем компонент KPIBlock перед компонентом App
 const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
+  // ИСПРАВЛЕНО: проверяем существование полей и используем безопасные значения
+  const area = totals?.area || 0;
+  const baseUSD = totals?.baseUSD || 0;
+  const preUSD = totals?.preUSD || 0;
+  const afterUSD = totals?.afterUSD || 0;
+  const interestUSD = totals?.interestUSD || 0;
+  const finalUSD = totals?.finalUSD || 0;
+
   return (
     <div className="kpi-grid">
       <div className="kpi">
         <div className="kpi-label">{t.totalArea}</div>
         <div className="kpi-value">
-          <span className="v">{toCurrency(totals.area).toFixed(1)}</span>
+          <span className="v">{toCurrency(area).toFixed(1)}</span>
           <span className="unit">м²</span>
         </div>
       </div>
@@ -1288,7 +1295,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
       <div className="kpi">
         <div className="kpi-label">{t.totalBase}</div>
         <div className="kpi-value">
-          <span className="v">{toCurrency(totals.baseUSD).toFixed(0)}</span>
+          <span className="v">{toCurrency(baseUSD).toFixed(0)}</span>
           <span className="unit">USD</span>
         </div>
       </div>
@@ -1296,7 +1303,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
       <div className="kpi">
         <div className="kpi-label">{t.totalPrepay}</div>
         <div className="kpi-value">
-          <span className="v">{toCurrency(totals.preUSD).toFixed(0)}</span>
+          <span className="v">{toCurrency(preUSD).toFixed(0)}</span>
           <span className="unit">USD</span>
         </div>
       </div>
@@ -1304,7 +1311,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
       <div className="kpi">
         <div className="kpi-label">{t.totalPost}</div>
         <div className="kpi-value">
-          <span className="v">{toCurrency(totals.postUSD).toFixed(0)}</span>
+          <span className="v">{toCurrency(afterUSD).toFixed(0)}</span>
           <span className="unit">USD</span>
         </div>
       </div>
@@ -1314,7 +1321,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
           <div className="kpi">
             <div className="kpi-label">{t.totalInterest}</div>
             <div className="kpi-value">
-              <span className="v">{toCurrency(totals.interestUSD).toFixed(0)}</span>
+              <span className="v">{toCurrency(interestUSD).toFixed(0)}</span>
               <span className="unit">USD</span>
             </div>
           </div>
@@ -1322,7 +1329,7 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
           <div className="kpi">
             <div className="kpi-label">{t.totalFinal}</div>
             <div className="kpi-value">
-              <span className="v">{toCurrency(totals.finalUSD).toFixed(0)}</span>
+              <span className="v">{toCurrency(finalUSD).toFixed(0)}</span>
               <span className="unit">USD</span>
             </div>
           </div>
@@ -1331,8 +1338,6 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
     </div>
   );
 };
-
-
     
     function App(){
       const [lang,setLang]=useState('ru'); const t=T[lang];
@@ -1535,12 +1540,13 @@ const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
         return {line,qty,baseOne:base,base:baseQ,preSchedule:preScheduleQ,preTotal,firstPostUSD:firstPostQ,postRows:postRowsQ,lineTotal,vMonths,rate,discountPct:disc};
       }),[lines,stages,stagesSumPct,handoverMonth,months,monthlyRatePct,lang]);
 
-      const project=useMemo(()=>{
-        const totals={
-          baseUSD:linesData.reduce((s,x)=>s+x.base,0),
-          preUSD: linesData.reduce((s,x)=>s+x.preTotal,0),
-          finalUSD:linesData.reduce((s,x)=>s+x.lineTotal,0),
-        };
+    const project=useMemo(()=>{
+  const totals={
+    area: linesData.reduce((s,x)=>s+(x.line.snapshot?.area||0)*x.qty,0), // ИСПРАВЛЕНО: добавляем площадь
+    baseUSD:linesData.reduce((s,x)=>s+x.base,0),
+    preUSD: linesData.reduce((s,x)=>s+x.preTotal,0),
+    finalUSD:linesData.reduce((s,x)=>s+x.lineTotal,0),
+  };
         totals.interestUSD = totals.finalUSD - totals.baseUSD;
         totals.afterUSD = totals.finalUSD - totals.preUSD;
 
