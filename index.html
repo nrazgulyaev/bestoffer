@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aфффrconique / Калькулятор рассрочки для любимых клиентов</title>
+  <title>A123rconique / Калькулятор рассрочки для любимых клиентов</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
@@ -728,8 +728,8 @@
     .calculation-header h3 {
       margin: 0;
     }
-    
-    .kpi-grid{
+
+        .kpi-grid{
       display:grid;
       grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
       gap:16px;
@@ -812,8 +812,30 @@
       color: var(--primary);
       font-weight: 600;
     }
+    
+    .kpi-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .kpi-value {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 4px;
+    }
+    
+    .kpi-value .unit {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
 
-        .modal-overlay{
+    .modal-overlay{
       position:fixed;
       top:0;
       left:0;
@@ -1083,7 +1105,7 @@
     })();
   </script>
 
-  <!-- v7.6 (stable) -->
+    <!-- v7.6 (stable) -->
   <script type="text/babel" data-presets="env,react">
     const {useEffect,useMemo,useRef,useState} = React;
 
@@ -1107,15 +1129,22 @@
       }
     }
     
+    // ИСПРАВЛЕНО: упрощаем проверку PIN
     async function verifyPinFlow(){
       const pin = prompt('Enter PIN');
       if(pin==null) return false;
+      
+      // Сначала проверяем простой PIN
+      if(pin === PIN_CODE) return true;
+      
+      // Затем проверяем хеш
       const hex = await sha256Hex(`${pin}|${PIN_SALT}`);
       if(hex && hex === PIN_HASH_HEX) return true;
-      return pin === PIN_CODE;
+      
+      return false;
     }
 
-        /* ---------- i18n ---------- */
+    /* ---------- i18n ---------- */
     const T = {
       ru: {
         title:'Arconique / Калькулятор рассрочки для любимых клиентов',
@@ -1425,7 +1454,8 @@
           };
         });
       },[lines,stagesSumPct]);
-      
+
+          // ИСПРАВЛЕНО: кэшфлоу только с платежами
       const project=useMemo(()=>{
         const totals={
           area: linesData.reduce((s,x)=>s+(x.area||0)*x.qty,0),
@@ -1439,51 +1469,59 @@
         const cashflow=[];
         let balanceUSD=0;
         
-        // Добавляем текущий месяц как M0
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
-        
-        for(let i=0;i<=handoverMonth+months;i++){
-          const monthDate = new Date(currentYear, currentMonth + i, 1);
-          const monthLabel = monthDate.toLocaleDateString(lang,{month:'long',year:'numeric'});
-          
-          let amountUSD=0;
-          let items=[];
-          
-          if(i===0){
-            items.push('Текущий месяц');
-            amountUSD=0;
-          }else if(i<=handoverMonth){
-            const stage=stages.find(s=>s.month===i);
-            if(stage){
-              items.push(`${stage.label} (${stage.pct}%)`);
-              amountUSD=totals.preUSD*stage.pct/stagesSumPct;
-            }
-          }else{
-            const monthAfter=i-handoverMonth;
-            if(monthAfter===1){
-              items.push('Получение ключей');
-              amountUSD=totals.afterUSD;
-            }else if(monthAfter<=months){
-              items.push(`Месяц ${monthAfter} после ключей`);
-              amountUSD=totals.interestUSD/months;
-            }
-          }
-          
-          balanceUSD+=amountUSD;
+        // Добавляем текущий месяц как M0 только если есть данные
+        if(linesData.length > 0) {
           cashflow.push({
-            month: monthLabel,
-            amountUSD,
-            balanceUSD,
-            items
+            month: 'Текущий месяц',
+            amountUSD: 0,
+            balanceUSD: 0,
+            items: ['Текущий месяц']
           });
         }
         
-        return {totals,cashflow};
-      },[linesData,stages,handoverMonth,months,lang]);
+        // Добавляем только месяцы с этапами
+        stages.forEach(stage => {
+          if(stage.month <= handoverMonth) {
+            const amountUSD = totals.preUSD * stage.pct / stagesSumPct;
+            balanceUSD += amountUSD;
+            cashflow.push({
+              month: `Месяц ${stage.month}`,
+              amountUSD,
+              balanceUSD,
+              items: [`${stage.label} (${stage.pct}%)`]
+            });
+          }
+        });
+        
+        // Добавляем получение ключей
+        if(totals.afterUSD > 0) {
+          balanceUSD += totals.afterUSD;
+          cashflow.push({
+            month: `Месяц ${handoverMonth + 1}`,
+            amountUSD: totals.afterUSD,
+            balanceUSD,
+            items: ['Получение ключей']
+          });
+        }
+        
+        // Добавляем месяцы после ключей только если есть проценты
+        if(totals.interestUSD > 0 && months > 0) {
+          const monthlyInterest = totals.interestUSD / months;
+          for(let i = 1; i <= months; i++) {
+            balanceUSD += monthlyInterest;
+            cashflow.push({
+              month: `Месяц ${handoverMonth + 1 + i}`,
+              amountUSD: monthlyInterest,
+              balanceUSD,
+              items: [`Месяц ${i} после ключей`]
+            });
+          }
+        }
+        
+        return {totals, cashflow};
+      },[linesData,stages,handoverMonth,months]);
 
-          /* ---------- Functions ---------- */
+      /* ---------- Functions ---------- */
       const toCurrency=(usd)=>{
         if(currency==='USD') return usd;
         if(currency==='IDR') return usd*idrPerUsd;
@@ -1656,8 +1694,8 @@
           alert('Ссылка скопирована в буфер обмена');
         }
       };
-      
-      /* ---------- Effects ---------- */
+
+          /* ---------- Effects ---------- */
       useEffect(()=>{
         const hash=window.location.hash.slice(1);
         if(hash){
@@ -1783,7 +1821,7 @@
         }
       },[]);
 
-          /* ---------- Render ---------- */
+      /* ---------- Render ---------- */
       return (
         <>
           <div className="grid">
