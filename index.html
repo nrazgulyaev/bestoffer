@@ -1130,19 +1130,13 @@
     }
     
     // ИСПРАВЛЕНО: упрощаем проверку PIN
-    async function verifyPinFlow(){
-      const pin = prompt('Enter PIN');
-      if(pin==null) return false;
-      
-      // Сначала проверяем простой PIN
-      if(pin === PIN_CODE) return true;
-      
-      // Затем проверяем хеш
-      const hex = await sha256Hex(`${pin}|${PIN_SALT}`);
-      if(hex && hex === PIN_HASH_HEX) return true;
-      
-      return false;
-    }
+  async function verifyPinFlow(){
+  const pin = prompt('Enter PIN');
+  if(pin==null) return false;
+  
+  // Только простая проверка PIN - убираем хеширование
+  return pin === PIN_CODE;
+}
 
     /* ---------- i18n ---------- */
     const T = {
