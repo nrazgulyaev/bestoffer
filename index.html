@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>A1rconique / Калькулятор рассрочки для любимых клиентов</title>
+  <title>Arconique / Калькулятор рассрочки для любимых клиентов</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
@@ -118,15 +118,23 @@
       text-align:center;
     }
     
-    .grid{
+    /* ИСПРАВЛЕНО: сетка для основного контента */
+    .main-grid{
       display:grid;
       grid-template-columns:420px 1fr;
       gap:24px;
       animation: fadeInScale 0.6s ease-out 0.2s both;
+      margin-bottom: 24px;
+    }
+    
+    /* ИСПРАВЛЕНО: каталог полной ширины снизу */
+    .catalog-section{
+      width: 100%;
+      margin-top: 24px;
     }
     
     @media (max-width: 1023px) {
-      .grid { 
+      .main-grid { 
         grid-template-columns: 1fr; 
         gap: 16px;
       }
@@ -396,9 +404,10 @@
       }
     }
 
-        .calc-scroll{
-      overflow:auto;
-      max-height:35vh;
+        /* ИСПРАВЛЕНО: убираем ограничения высоты */
+    .calc-scroll{
+      overflow: visible;
+      max-height: none;
       border:1px solid var(--line);
       border-radius:var(--radius-sm);
       background:var(--card);
@@ -579,13 +588,14 @@
       transform: translateY(-1px);
     }
     
+    /* ИСПРАВЛЕНО: убираем ограничения высоты */
     .cashflow-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
       border: 1px solid var(--line);
       border-radius: var(--radius-sm);
-      overflow: hidden;
+      overflow: visible;
     }
     
     .cashflow-table th {
@@ -1020,6 +1030,7 @@
       margin:var(--spacing-lg) 0;
     }
     
+    /* ИСПРАВЛЕНО: убираем ограничения высоты */
     .scroll{
       overflow:visible;
       max-height:none;
@@ -1130,13 +1141,13 @@
     }
     
     // ИСПРАВЛЕНО: упрощаем проверку PIN
-  async function verifyPinFlow(){
-  const pin = prompt('Enter PIN');
-  if(pin==null) return false;
-  
-  // Только простая проверка PIN - убираем хеширование
-  return pin === PIN_CODE;
-}
+    async function verifyPinFlow(){
+      const pin = prompt('Enter PIN');
+      if(pin==null) return false;
+      
+      // Только простая проверка PIN - убираем хеширование
+      return pin === PIN_CODE;
+    }
 
     /* ---------- i18n ---------- */
     const T = {
@@ -1391,7 +1402,8 @@
       ]);
       
       const [lines,setLines]=useState([]);
-      const [catalog,setCatalog]=useState([]);
+      // ИСПРАВЛЕНО: загружаем примеры по умолчанию
+      const [catalog,setCatalog]=useState(DEFAULT_CATALOG);
       
       const chartRef=useRef(null);
       const chartInstance=useRef(null);
@@ -1449,7 +1461,7 @@
         });
       },[lines,stagesSumPct]);
 
-          // ИСПРАВЛЕНО: кэшфлоу только с платежами
+      // ИСПРАВЛЕНО: правильная логика кэшфлоу
       const project=useMemo(()=>{
         const totals={
           area: linesData.reduce((s,x)=>s+(x.area||0)*x.qty,0),
@@ -1498,7 +1510,7 @@
           });
         }
         
-        // Добавляем месяцы после ключей только если есть проценты
+        // ИСПРАВЛЕНО: добавляем месяцы после ключей только если есть проценты
         if(totals.interestUSD > 0 && months > 0) {
           const monthlyInterest = totals.interestUSD / months;
           for(let i = 1; i <= months; i++) {
@@ -1689,7 +1701,7 @@
         }
       };
 
-          /* ---------- Effects ---------- */
+      /* ---------- Effects ---------- */
       useEffect(()=>{
         const hash=window.location.hash.slice(1);
         if(hash){
@@ -1714,26 +1726,27 @@
         }
       },[]);
       
-     useEffect(()=>{
-  if(!isClient){
-    const verifyPin=async()=>{
-      const input=prompt('Введите PIN для входа в редактор:');
-      if(!input) {
-        setIsClient(true); // Если отменили - клиентский режим
-        return;
-      }
-      
-      // Простая проверка PIN
-      if(input === PIN_CODE){
-        setIsClient(false); // Редактор
-      }else{
-        alert('Неверный PIN');
-        setIsClient(true); // Клиентский режим
-      }
-    };
-    verifyPin();
-  }
-},[isClient]);
+      // ИСПРАВЛЕНО: правильная проверка PIN
+      useEffect(()=>{
+        if(!isClient){
+          const verifyPin=async()=>{
+            const input=prompt('Введите PIN для входа в редактор:');
+            if(!input) {
+              setIsClient(true); // Если отменили - клиентский режим
+              return;
+            }
+            
+            // Простая проверка PIN
+            if(input === PIN_CODE){
+              setIsClient(false); // Редактор
+            }else{
+              alert('Неверный PIN');
+              setIsClient(true); // Клиентский режим
+            }
+          };
+          verifyPin();
+        }
+      },[isClient]);
       
       useEffect(()=>{
         if(chartRef.current&&project.cashflow.length>0){
@@ -1821,7 +1834,8 @@
       /* ---------- Render ---------- */
       return (
         <>
-          <div className="grid">
+          {/* ИСПРАВЛЕНО: основная сетка для настроек и расчетов */}
+          <div className="main-grid">
             <div className="card">
               {!isClient && (
                 <div className="tabs">
@@ -1970,117 +1984,6 @@
                 </div>
               )}
               {isClient && <div className="row"><button className="btn" onClick={()=>share('client')}>Поделиться</button></div>}
-
-              {(!isClient && tab==='catalog') && (
-                <>
-                  <h3 style={{margin:'6px 0'}}>{t.catalogTitle}</h3>
-                  
-                  {/* Оптимизированные кнопки каталога */}
-                  <div className="row" style={{gap:'var(--spacing-md)'}}>
-                    <button className="btn success" onClick={addProject}>{t.addProject}</button>
-                    <button className="btn" onClick={()=>{
-                      const json=prompt('Paste catalog JSON:', JSON.stringify(catalog,null,2));
-                      if(!json) return;
-                      try{ const obj=JSON.parse(json); if(Array.isArray(obj)) setCatalog(obj); else alert('Invalid JSON'); }catch{ alert('Invalid JSON'); }
-                    }}>{t.importJSON}</button>
-                    <button className="btn" onClick={()=>{
-                      const blob=new Blob([JSON.stringify(catalog,null,2)],{type:'application/json'});
-                      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_catalog_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href);
-                    }}>{t.exportJSON}</button>
-                  </div>
-                  
-                  <div className="scroll" style={{maxHeight:'32vh'}}>
-                    {catalog.map(p=>(
-                      <div key={p.projectId} className="catalog-card">
-                        <div className="catalog-header">
-                          <div className="row" style={{flex:1}}>
-                            <span className="badge">{t.project}:</span>
-                            <input 
-                              type="text" 
-                              value={p.projectName} 
-                              onChange={e=>setCatalog(prev=>prev.map(x=>x.projectId===p.projectId?{...x,projectName:e.target.value}:x))}
-                              style={{flex:1,marginRight:8}}
-                            />
-                            <span className="pill">{p.projectId}</span>
-                          </div>
-                          <div className="catalog-actions">
-                            <button className="btn primary" onClick={()=>addVilla(p.projectId)}>{t.addVilla}</button>
-                            <button className="btn danger" onClick={()=>{
-                              if(confirm(t.remove + ' ' + p.projectName + '?')) {
-                                setCatalog(prev=>prev.filter(x=>x.projectId!==p.projectId));
-                              }
-                            }}>{t.remove}</button>
-                          </div>
-                        </div>
-                        
-                        <table className="catalog-table">
-                          <thead>
-                            <tr>
-                              <th style={{textAlign:'left'}}>{t.villa}</th>
-                              <th style={{width:'80px'}}>{t.area}</th>
-                              <th style={{width:'100px'}}>{t.ppsm}</th>
-                              <th style={{width:'120px'}}>{t.price}</th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {p.villas.map(v=>(
-                              <tr key={v.villaId}>
-                                <td style={{textAlign:'left'}}>
-                                  <input 
-                                    value={v.name} 
-                                    onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,name:e.target.value}:vv)}:pr))}
-                                  />
-                                  <div className="muted" style={{fontSize:10}}>{v.villaId}</div>
-                                </td>
-                                <td>
-                                  <input 
-                                    type="number" 
-                                    min="1" 
-                                    step="0.1" 
-                                    value={v.area} 
-                                    onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,area:clamp(parseFloat(e.target.value||0),1,100000)}:vv)}:pr))}
-                                  />
-                                </td>
-                                <td>
-                                  <input 
-                                    type="number" 
-                                    min="0" 
-                                    step="1" 
-                                    value={v.ppsm} 
-                                    onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,ppsm:clamp(parseFloat(e.target.value||0),0,1e9)}:vv)}:pr))}
-                                  />
-                                </td>
-                                <td>
-                                  <input 
-                                    type="number" 
-                                    min="0" 
-                                    step="1" 
-                                    value={v.baseUSD} 
-                                    onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,baseUSD:clamp(parseFloat(e.target.value||0),0,1e12)}:vv)}:pr))}
-                                  />
-                                </td>
-                                <td>
-                                  <button 
-                                    className="btn danger icon" 
-                                    onClick={()=>{
-                                      if(confirm(t.remove + ' ' + v.name + '?')) {
-                                        setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.filter(vv=>vv.villaId!==v.villaId)}:pr));
-                                      }
-                                    }}
-                                  >
-                                    ✕
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
             </div>
 
             <div className="card">
@@ -2284,216 +2187,239 @@
             </div>
           </div>
 
-          {/* Модальное окно добавления проекта */}
-          {showAddProjectModal && (
-            <div className="modal-overlay" onClick={() => setShowAddProjectModal(false)}>
-              <div className="modal-content" onClick={e => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h3>{t.addProject}</h3>
-                  <button className="btn icon" onClick={() => setShowAddProjectModal(false)}>✕</button>
+          {/* ИСПРАВЛЕНО: каталог полной ширины снизу */}
+          {!isClient && (
+            <div className="catalog-section">
+              <div className="card">
+                <h3 style={{margin:'6px 0'}}>{t.catalogTitle}</h3>
+                
+                {/* Оптимизированные кнопки каталога */}
+                <div className="row" style={{gap:'var(--spacing-md)'}}>
+                  <button className="btn success" onClick={addProject}>{t.addProject}</button>
+                  <button className="btn" onClick={()=>{
+                    const json=prompt('Paste catalog JSON:', JSON.stringify(catalog,null,2));
+                    if(!json) return;
+                    try{ const obj=JSON.parse(json); if(Array.isArray(obj)) setCatalog(obj); else alert('Invalid JSON'); }catch{ alert('Invalid JSON'); }
+                  }}>{t.importJSON}</button>
+                  <button className="btn" onClick={()=>{
+                    const blob=new Blob([JSON.stringify(catalog,null,2)],{type:'application/json'});
+                    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_catalog_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href);
+                  }}>{t.exportJSON}</button>
                 </div>
                 
-                <div className="modal-body">
-                  <div className="form-section">
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>{t.projectName}</label>
-                        <input 
-                          type="text" 
-                          placeholder={t.projectName}
-                          value={newProjectForm.projectName}
-                          onChange={e => setNewProjectForm(prev => ({ ...prev, projectName: e.target.value }))}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="form-actions">
-                    <button className="btn" onClick={() => setShowAddProjectModal(false)}>{t.cancel}</button>
-                    <button className="btn success" onClick={saveProject}>{t.save}</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Модальное окно добавления виллы */}
-          {showAddVillaModal && (
-            <div className="modal-overlay" onClick={() => setShowAddVillaModal(false)}>
-              <div className="modal-content" onClick={e => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h3>{t.addVilla}</h3>
-                  <button className="btn icon" onClick={() => setShowAddVillaModal(false)}>✕</button>
-                </div>
-                
-                <div className="modal-body">
-                  <div className="form-section">
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>{t.villaName}</label>
-                        <input 
-                          type="text" 
-                          placeholder={t.villaName}
-                          value={newVillaForm.name}
-                          onChange={e => setNewVillaForm(prev => ({ ...prev, name: e.target.value }))}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>{t.villaArea}</label>
-                        <input 
-                          type="number" 
-                          min="1" 
-                          step="0.1" 
-                          placeholder="100"
-                          value={newVillaForm.area}
-                          onChange={e => setNewVillaForm(prev => ({ ...prev, area: parseFloat(e.target.value) || 0 }))}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>{t.villaPpsm}</label>
-                        <input 
-                          type="number" 
-                          min="0" 
-                          step="1" 
-                          placeholder="2500"
-                          value={newVillaForm.ppsm}
-                          onChange={e => setNewVillaForm(prev => ({ ...prev, ppsm: parseFloat(e.target.value) || 0 }))}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>{t.villaBasePrice}</label>
-                        <input 
-                          type="number" 
-                          min="0" 
-                          step="1000" 
-                          placeholder="250000"
-                          value={newVillaForm.baseUSD}
-                          onChange={e => setNewVillaForm(prev => ({ ...prev, baseUSD: parseFloat(e.target.value) || 0 }))}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="form-actions">
-                    <button className="btn" onClick={() => setShowAddVillaModal(false)}>{t.cancel}</button>
-                    <button className="btn success" onClick={saveVilla}>{t.save}</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ИСПРАВЛЕНО: модальное окно добавления из каталога с выбором вилл */}
-          {modalOpen && (
-            <div className="modal-overlay" onClick={()=>setModalOpen(false)}>
-              <div className="modal-content" onClick={e=>e.stopPropagation()}>
-                <div className="modal-header">
-                  <h3>{t.selectFromCatalog}</h3>
-                  <button className="btn icon" onClick={()=>setModalOpen(false)}>✕</button>
-                </div>
-                
-                <div className="modal-body">
-                  <div className="search-filters">
-                    <input 
-                      type="text" 
-                      placeholder={t.search} 
-                      className="search-input"
-                      onChange={e=>{
-                        const query=e.target.value.toLowerCase();
-                        const filtered=catalog.map(p=>({
-                          ...p,
-                          villas:p.villas.filter(v=>
-                            p.projectName.toLowerCase().includes(query) ||
-                            v.name.toLowerCase().includes(query) ||
-                            v.villaId.toLowerCase().includes(query)
-                          )
-                        })).filter(p=>p.villas.length>0);
-                        // Здесь можно добавить состояние для фильтрации
-                      }}
-                    />
-                    
-                    <div className="filter-row">
-                      <div className="filter-group">
-                        <label>{t.areaFrom}</label>
-                        <input type="number" min="0" step="1" placeholder="0" />
-                      </div>
-                      <div className="filter-group">
-                        <label>{t.areaTo}</label>
-                        <input type="number" min="0" step="1" placeholder="1000" />
-                      </div>
-                    </div>
-                    
-                    <div className="filter-row">
-                      <div className="filter-group">
-                        <label>{t.priceFrom}</label>
-                        <input type="number" min="0" step="1000" placeholder="0" />
-                      </div>
-                      <div className="filter-group">
-                        <label>{t.priceTo}</label>
-                        <input type="number" min="0" step="1000" placeholder="1000000" />
-                      </div>
-                    </div>
-                    
-                    <div className="filter-row">
-                      <div className="filter-group">
-                        <label>{t.sort}</label>
-                        <select>
-                          <option value="name">{t.byName}</option>
-                          <option value="area">{t.byArea}</option>
-                          <option value="price">{t.byPrice}</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="catalog-selection">
-                    {catalog.map(p=>(
-                      <div key={p.projectId} className="catalog-selection-project">
-                        <h4>{p.projectName}</h4>
-                        <div className="villas-selection">
-                          {p.villas.map(v=>(
-                            <div key={v.villaId} className="villa-selection-item">
-                              <div className="villa-info">
-                                <div className="villa-name">{v.name}</div>
-                                <div className="villa-details">
-                                  <span>{v.area} {t.area}</span>
-                                  <span>{v.ppsm} {t.ppsm}</span>
-                                  <span>{fmtMoney(v.baseUSD,'USD')}</span>
-                                </div>
-                              </div>
-                              <button 
-                                className="btn success" 
-                                onClick={()=>{
-                                  const newLine={
-                                    id:Date.now()+Math.random(),
-                                    projectId:p.projectId,
-                                    villaId:v.villaId,
-                                    qty:1,
-                                    prePct:stagesSumPct,
-                                    ownTerms:false,
-                                    months:null,
-                                    monthlyRatePct:null,
-                                    firstPostUSD:0,
-                                    discountPct:0,
-                                    snapshot:{name:v.name,area:v.area,ppsm:v.ppsm,baseUSD:v.baseUSD}
-                                  };
-                                  setLines(prev=>[...prev,newLine]);
-                                  setModalOpen(false);
-                                }}
-                              >
-                                {t.addSelected}
-                              </button>
-                            </div>
-                          ))}
+                <div className="scroll" style={{maxHeight:'32vh'}}>
+                  {catalog.map(p=>(
+                    <div key={p.projectId} className="catalog-card">
+                      <div className="catalog-header">
+                        <div className="row" style={{flex:1}}>
+                          <span className="badge">{t.project}:</span>
+                          <input 
+                            type="text" 
+                            value={p.projectName} 
+                            onChange={e=>setCatalog(prev=>prev.map(x=>x.projectId===p.projectId?{...x,projectName:e.target.value}:x))}
+                            style={{flex:1,marginRight:8}}
+                          />
+                          <span className="pill">{p.projectId}</span>
+                        </div>
+                        <div className="catalog-actions">
+                          <button className="btn primary" onClick={()=>addVilla(p.projectId)}>{t.addVilla}</button>
+                          <button className="btn danger" onClick={()=>{
+                            if(confirm(t.remove + ' ' + p.projectName + '?')) {
+                              setCatalog(prev=>prev.filter(x=>x.projectId!==p.projectId));
+                            }
+                          }}>{t.remove}</button>
                         </div>
                       </div>
-                    ))}
+                      
+                      <table className="catalog-table">
+                        <thead>
+                          <tr>
+                            <th style={{textAlign:'left'}}>{t.villa}</th>
+                            <th style={{width:'80px'}}>{t.area}</th>
+                            <th style={{width:'100px'}}>{t.ppsm}</th>
+                            <th style={{width:'120px'}}>{t.price}</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {p.villas.map(v=>(
+                            <tr key={v.villaId}>
+                              <td style={{textAlign:'left'}}>
+                                <input 
+                                  value={v.name} 
+                                  onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,name:e.target.value}:vv)}:pr))}
+                                />
+                                <div className="muted" style={{fontSize:10}}>{v.villaId}</div>
+                              </td>
+                              <td>
+                                <input 
+                                  type="number" 
+                                  min="1" 
+                                  step="0.1" 
+                                  value={v.area} 
+                                  onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,area:clamp(parseFloat(e.target.value||0),1,100000)}:vv)}:pr))}
+                                />
+                              </td>
+                              <td>
+                                <input 
+                                  type="number" 
+                                  min="0" 
+                                  step="1" 
+                                  value={v.ppsm} 
+                                                                   onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,ppsm:clamp(parseFloat(e.target.value||0),0,100000)}:vv)}:pr))}
+                                />
+                              </td>
+                              <td>
+                                <input 
+                                  type="number" 
+                                  min="0" 
+                                  step="100" 
+                                  value={v.baseUSD} 
+                                  onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,baseUSD:clamp(parseFloat(e.target.value||0),0,10000000)}:vv)}:pr))}
+                                />
+                              </td>
+                              <td>
+                                <button className="btn danger icon" onClick={()=>{
+                                  if(confirm(t.remove + ' ' + v.name + '?')) {
+                                    setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.filter(vv=>vv.villaId!==v.villaId)}:pr));
+                                  }
+                                }}>🗑️</button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Модальные окна */}
+          {modalOpen && (
+            <div className="modal-overlay" onClick={()=>setModalOpen(false)}>
+              <div className="modal" onClick={e=>e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>{t.addFromCatalog}</h3>
+                  <button className="btn icon" onClick={()=>setModalOpen(false)}>✕</button>
+                </div>
+                <div className="modal-body">
+                  <div className="catalog-grid">
+                    {catalog.map(p=>p.villas.map(v=>(
+                      <div key={v.villaId} className="catalog-item" onClick={()=>{
+                        const newLine={
+                          id:Date.now()+Math.random(),
+                          projectId:p.projectId,
+                          villaId:v.villaId,
+                          snapshot:v,
+                          qty:1,
+                          discountPct:0,
+                          prePct:stagesSumPct,
+                          ownTerms:false,
+                          months:months,
+                          monthlyRatePct:monthlyRatePct,
+                          firstPostUSD:0
+                        };
+                        setLines(prev=>[...prev,newLine]);
+                        setModalOpen(false);
+                      }}>
+                        <div className="catalog-item-header">
+                          <div className="catalog-item-project">{p.projectName}</div>
+                          <div className="catalog-item-villa">{v.name}</div>
+                        </div>
+                        <div className="catalog-item-details">
+                          <div className="catalog-item-area">{v.area} м²</div>
+                          <div className="catalog-item-ppsm">{v.ppsm} USD/м²</div>
+                          <div className="catalog-item-price">{fmtMoney(v.baseUSD,'USD')}</div>
+                        </div>
+                      </div>
+                    )))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showAddProjectModal && (
+            <div className="modal-overlay" onClick={()=>setShowAddProjectModal(false)}>
+              <div className="modal" onClick={e=>e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>{t.addProject}</h3>
+                  <button className="btn icon" onClick={()=>setShowAddProjectModal(false)}>✕</button>
+                </div>
+                <div className="modal-body">
+                  <div className="form-section">
+                    <label>{t.projectName}</label>
+                    <input 
+                      type="text" 
+                      value={newProjectForm.projectName} 
+                      onChange={e=>setNewProjectForm(prev=>({...prev,projectName:e.target.value}))}
+                      placeholder={t.projectNamePlaceholder}
+                    />
+                  </div>
+                  <div className="modal-actions">
+                    <button className="btn" onClick={()=>setShowAddProjectModal(false)}>{t.cancel}</button>
+                    <button className="btn primary" onClick={saveProject}>{t.save}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showAddVillaModal && (
+            <div className="modal-overlay" onClick={()=>setShowAddVillaModal(false)}>
+              <div className="modal" onClick={e=>e.stopPropagation()}>
+                <div className="modal-header">
+                  <h3>{t.addVilla}</h3>
+                  <button className="btn icon" onClick={()=>setShowAddVillaModal(false)}>✕</button>
+                </div>
+                <div className="modal-body">
+                  <div className="form-section">
+                    <label>{t.villaName}</label>
+                    <input 
+                      type="text" 
+                      value={newVillaForm.name} 
+                      onChange={e=>setNewVillaForm(prev=>({...prev,name:e.target.value}))}
+                      placeholder={t.villaNamePlaceholder}
+                    />
+                  </div>
+                  <div className="form-section">
+                    <label>{t.area}</label>
+                    <input 
+                      type="number" 
+                      min="1" 
+                      step="0.1" 
+                      value={newVillaForm.area} 
+                      onChange={e=>setNewVillaForm(prev=>({...prev,area:parseFloat(e.target.value||0)}))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div className="form-section">
+                    <label>{t.ppsm}</label>
+                    <input 
+                      type="number" 
+                      min="0" 
+                      step="1" 
+                      value={newVillaForm.ppsm} 
+                      onChange={e=>setNewVillaForm(prev=>({...prev,ppsm:parseFloat(e.target.value||0)}))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div className="form-section">
+                    <label>{t.price}</label>
+                    <input 
+                      type="number" 
+                      min="0" 
+                      step="100" 
+                      value={newVillaForm.baseUSD} 
+                      onChange={e=>setNewVillaForm(prev=>({...prev,baseUSD:parseFloat(e.target.value||0)}))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div className="modal-actions">
+                    <button className="btn" onClick={()=>setShowAddVillaModal(false)}>{t.cancel}</button>
+                    <button className="btn primary" onClick={saveVilla}>{t.save}</button>
                   </div>
                 </div>
               </div>
@@ -2503,8 +2429,8 @@
       );
     }
 
-    /* ---------- Render to DOM ---------- */
-    ReactDOM.render(<App />, document.getElementById('root'));
+    /* ---------- Render ---------- */
+    ReactDOM.render(<App/>,document.getElementById('root'));
   </script>
 </body>
 </html>
