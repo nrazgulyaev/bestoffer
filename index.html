@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Arconique / Калькулятор рассрочки для любимых клиентов — v8.3</title>
+    <title>Arconique / Калькулятор рассрочки для любимых клиентов — v8.2</title>
     
     <!-- CDN библиотеки -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -55,6 +55,9 @@
     <div id="root"></div>
     
     <script type="text/babel">
+        // ИСПРАВЛЕНО: добавляю useState
+        const { useState } = React;
+        
         // Минимальная рабочая версия
         function App() {
             const [activeTab, setActiveTab] = useState('overview');
