@@ -488,7 +488,7 @@
       border-left:3px solid var(--primary);
     }
     
-    /* Оптимизированная таблица этапов */
+    /* ИСПРАВЛЕНО: оптимизированная таблица этапов без ограничений высоты */
     .stages-table {
       width: 100%;
       border-collapse: separate;
@@ -612,7 +612,7 @@
       transform: translateY(-1px);
     }
     
-    /* Таблица кэшфлоу */
+    /* ИСПРАВЛЕНО: таблица кэшфлоу без ограничений высоты */
     .cashflow-table {
       width: 100%;
       border-collapse: separate;
@@ -659,6 +659,165 @@
     
     .cashflow-table tbody tr:hover td {
       border-color: var(--line-hover);
+    }
+    
+    /* ИСПРАВЛЕНО: красивая таблица каталога без белых прямоугольников */
+    .catalog-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .catalog-table th {
+      background: var(--card-hover);
+      padding: var(--spacing-md);
+      font-weight: 600;
+      text-align: center;
+      border-bottom: 2px solid var(--line);
+    }
+    
+    .catalog-table td {
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--line);
+      text-align: center;
+    }
+    
+    .catalog-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .catalog-table tr:hover {
+      background: var(--card-hover);
+    }
+    
+    /* ИСПРАВЛЕНО: красивые отображения данных без белых прямоугольников */
+    .project-name-display,
+    .villa-name-display {
+      font-weight: 600;
+      color: var(--primary);
+      padding: 8px 12px;
+      background: var(--card-hover);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+    }
+    
+    .area-display,
+    .ppsm-display {
+      font-family: monospace;
+      background: var(--card-hover);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-weight: 500;
+    }
+    
+    .base-strong {
+      font-weight: 700;
+      color: var(--success);
+      padding: 8px 12px;
+      background: var(--card-hover);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+    }
+    
+    .line-total {
+      font-weight: 700;
+      color: var(--primary);
+      padding: 8px 12px;
+      background: var(--card-hover);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+    }
+    
+    /* ИСПРАВЛЕНО: скрытие колонки "Первый платёж" */
+    .col-first {
+      display: none;
+    }
+    
+    /* ИСПРАВЛЕНО: отступы для кнопки "Добавить из каталога" */
+    .calculation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .calculation-header h3 {
+      margin: 0;
+    }
+    
+    /* ИСПРАВЛЕНО: KPI блоки с валютой перед числами */
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
+      gap:16px;
+      margin:20px 0;
+    }
+    
+    .kpi{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius-sm);
+      padding:16px;
+      text-align:center;
+      transition:all var(--transition-normal);
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .kpi::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      height:2px;
+      background:linear-gradient(90deg, var(--primary), var(--accent));
+      transform:scaleX(0);
+      transition:transform var(--transition-normal);
+    }
+    
+    .kpi:hover{
+      background:var(--card-hover);
+      border-color:var(--line-hover);
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-md);
+    }
+    
+    .kpi:hover::before{
+      transform:scaleX(1);
+    }
+    
+    .kpi .muted{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+      display:block;
+    }
+    
+    .kpi .v{
+      font-size:1.5rem;
+      font-weight:700;
+      color:var(--ink);
+      background:linear-gradient(135deg, var(--ink) 0%, var(--accent) 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    
+    /* ИСПРАВЛЕНО: валюты перед числами */
+    .kpi .v::before {
+      content: '$';
+      margin-right: 4px;
+      color: var(--primary);
+      font-weight: 600;
     }
     
     /* Современные модальные окна */
@@ -764,65 +923,6 @@
       padding-top:20px;
       border-top:1px solid var(--line);
       margin-top:24px;
-    }
-    
-    /* Современные KPI блоки */
-    .kpis{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
-      gap:16px;
-      margin:20px 0;
-    }
-    
-    .kpi{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius-sm);
-      padding:16px;
-      text-align:center;
-      transition:all var(--transition-normal);
-      position:relative;
-      overflow:hidden;
-    }
-    
-    .kpi::before{
-      content:'';
-      position:absolute;
-      top:0;
-      left:0;
-      right:0;
-      height:2px;
-      background:linear-gradient(90deg, var(--primary), var(--accent));
-      transform:scaleX(0);
-      transition:transform var(--transition-normal);
-    }
-    
-    .kpi:hover{
-      background:var(--card-hover);
-      border-color:var(--line-hover);
-      transform:translateY(-2px);
-      box-shadow:var(--shadow-md);
-    }
-    
-    .kpi:hover::before{
-      transform:scaleX(1);
-    }
-    
-    .kpi .muted{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:8px;
-      display:block;
-    }
-    
-    .kpi .v{
-      font-size:1.5rem;
-      font-weight:700;
-      color:var(--ink);
-      background:linear-gradient(135deg, var(--ink) 0%, var(--accent) 100%);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
     }
     
     /* Современные вкладки */
@@ -1033,7 +1133,7 @@
       return pin === PIN_CODE;
     }
 
-          /* ---------- i18n ---------- */
+        /* ---------- i18n ---------- */
     const T = {
       ru: {
         title:'Arconique / Калькулятор рассрочки для любимых клиентов',
@@ -1044,23 +1144,23 @@
         globalTerm:'Глобальный срок post‑handover (6–24 мес)',
         globalRate:'Глобальная ставка, %/мес',
         clientTerm:'Срок post‑handover (мес)',
-        stagesTitle:'Этапы ДО ключей',
+        stagesTitle:'Базовая рассрочка',
         stage:'Этап', percent:'%', month:'Месяц',
         addStage:'Добавить этап', delete:'Удалить',
         villasTitle:'Расчёт (позиции)',
         project:'Проект', villa:'Вилла', qty:'Кол-во',
-        area:'м²', ppsm:'$ / м²', price:'База (USD)',
+        area:'м²', ppsm:'$ / м²', price:'Базовая стоимость (USD)',
         discount:'Скидка, %', prePct:'До ключей, %',
-        months:'Срок, мес', rate:'Ставка, %/мес',
-        firstPost:'Первый платёж', lineTotal:'Итог по строке',
+        months:'Срок рассрочки, мес', rate:'Ставка, %/мес',
+        firstPost:'Первый платёж', lineTotal:'Итоговая стоимость',
         addFromCatalog:'Добавить из каталога',
         cashflowTitle:'Сводный кэшфлоу по месяцам',
         cashMonth:'Месяц', cashDesc:'Описание',
         cashTotal:'Сумма к оплате', cashBalance:'Остаток долга',
-        totals:'Итоги', base:'База', prepay:'Оплата до ключей',
+        totals:'Итоги', base:'Базовая стоимость', prepay:'Оплата до ключей',
         after:'Остаток после ключей', interestTotal:'Проценты (post)',
         final:'Итоговая цена',
-        lines:'Позиций', keys:'Ключи: мес.',
+        lines:'Выбрано вилл', keys:'Ключи через',
         chartTitle:'Платежи по месяцам',
         sumStages:'Сумма этапов', targetPrepay:'Целевой % до ключей',
         mismatch:'— отличается от целевого', mixedTargets:'разные цели у строк',
@@ -1075,7 +1175,7 @@
         priceFrom:'Цена от', priceTo:'Цена до',
         sort:'Сортировать', byPrice:'по цене', byArea:'по площади', byName:'по названию',
         addSelected:'Добавить выбранные', cancel:'Отмена',
-        qtyShort:'Кол-во', baseUSD:'База (USD)',
+        qtyShort:'Кол-во', baseUSD:'Базовая стоимость (USD)',
         projectId:'ID проекта', projectName:'Название проекта',
         villaId:'ID виллы', villaName:'Название виллы',
         villaArea:'Площадь (м²)', villaPpsm:'Цена за м² ($)',
@@ -1093,23 +1193,23 @@
         globalTerm:'Global post‑handover term (6–24 mo)',
         globalRate:'Global rate, %/month',
         clientTerm:'Post‑handover term (months)',
-        stagesTitle:'Pre‑handover stages',
+        stagesTitle:'Base installments',
         stage:'Stage', percent:'%', month:'Month',
         addStage:'Add stage', delete:'Delete',
         villasTitle:'Calculation (lines)',
         project:'Project', villa:'Villa', qty:'Qty',
-        area:'sqm', ppsm:'$ / sqm', price:'Base (USD)',
+        area:'sqm', ppsm:'$ / sqm', price:'Base cost (USD)',
         discount:'Discount, %', prePct:'Pre‑handover, %',
-        months:'Term, mo', rate:'Rate, %/mo',
-        firstPost:'First payment', lineTotal:'Line total',
+        months:'Installment term, mo', rate:'Rate, %/mo',
+        firstPost:'First payment', lineTotal:'Total cost',
         addFromCatalog:'Add from catalog',
         cashflowTitle:'Monthly consolidated cashflow',
         cashMonth:'Month', cashDesc:'Description',
         cashTotal:'Amount due', cashBalance:'Remaining balance',
-        totals:'Totals', base:'Base', prepay:'Paid before keys',
+        totals:'Totals', base:'Base cost', prepay:'Paid before keys',
         after:'Balance after keys', interestTotal:'Interest (post)',
         final:'Final price',
-        lines:'Lines', keys:'Keys: mo.',
+        lines:'Selected villas', keys:'Keys in',
         chartTitle:'Payments by month',
         sumStages:'Stages sum', targetPrepay:'Target pre‑handover %',
         mismatch:'— differs from target', mixedTargets:'different line targets',
@@ -1124,7 +1224,7 @@
         priceFrom:'Price from', priceTo:'Price to',
         sort:'Sort', byPrice:'by price', byArea:'by area', byName:'by name',
         addSelected:'Add selected', cancel:'Cancel',
-        qtyShort:'Qty', baseUSD:'Base (USD)',
+        qtyShort:'Qty', baseUSD:'Base cost (USD)',
         projectId:'Project ID', projectName:'Project Name',
         villaId:'Villa ID', villaName:'Villa Name',
         villaArea:'Area (sqm)', villaPpsm:'Price per sqm ($)',
@@ -1195,12 +1295,9 @@
       const [showAddVillaModal, setShowAddVillaModal] = useState(false);
       const [editingProject, setEditingProject] = useState(null);
       const [newProjectForm, setNewProjectForm] = useState({
-        projectId: '',
-        projectName: '',
-        villas: []
+        projectName: ''
       });
       const [newVillaForm, setNewVillaForm] = useState({
-        villaId: '',
         name: '',
         area: 100,
         ppsm: 2500,
@@ -1209,6 +1306,11 @@
 
       const [modalOpen,setModalOpen]=useState(false);
       const [catalogModalOpen,setCatalogModalOpen]=useState(false);
+
+      // ИСПРАВЛЕНО: функция генерации автоматических ID
+      const generateId = (prefix) => {
+        return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      };
 
       useEffect(()=>{(async()=>{
         try{
@@ -1251,43 +1353,35 @@
 
       const findProject=pid=>catalog.find(p=>p.projectId===pid);
 
-      // Функции для работы с проектами
+      // ИСПРАВЛЕНО: функции для работы с проектами с автоматическими ID
       const addProject = () => {
         setNewProjectForm({
-          projectId: '',
-          projectName: '',
-          villas: []
+          projectName: ''
         });
         setShowAddProjectModal(true);
       };
 
       const saveProject = () => {
-        if (!newProjectForm.projectId || !newProjectForm.projectName) {
-          alert('Заполните ID и название проекта');
+        if (!newProjectForm.projectName) {
+          alert('Введите название проекта');
           return;
         }
         
-        const projectExists = catalog.find(p => p.projectId === newProjectForm.projectId);
-        if (projectExists) {
-          alert('Проект с таким ID уже существует');
-          return;
-        }
-
+        const projectId = generateId('proj');
         const newProject = {
-          projectId: newProjectForm.projectId,
+          projectId: projectId,
           projectName: newProjectForm.projectName,
-          villas: newProjectForm.villas
+          villas: []
         };
 
         setCatalog(prev => [...prev, newProject]);
         setShowAddProjectModal(false);
-        setNewProjectForm({ projectId: '', projectName: '', villas: [] });
+        setNewProjectForm({ projectName: '' });
       };
 
-      // Функции для работы с виллами
+      // ИСПРАВЛЕНО: функции для работы с виллами с автоматическими ID
       const addVilla = (projectId) => {
         setNewVillaForm({
-          villaId: '',
           name: '',
           area: 100,
           ppsm: 2500,
@@ -1298,22 +1392,17 @@
       };
 
       const saveVilla = () => {
-        if (!newVillaForm.villaId || !newVillaForm.name) {
-          alert('Заполните ID и название виллы');
+        if (!newVillaForm.name) {
+          alert('Введите название виллы');
           return;
         }
 
         const project = catalog.find(p => p.projectId === editingProject);
         if (!project) return;
 
-        const villaExists = project.villas.find(v => v.villaId === newVillaForm.villaId);
-        if (villaExists) {
-          alert('Вилла с таким ID уже существует в этом проекте');
-          return;
-        }
-
+        const villaId = generateId('villa');
         const newVilla = {
-          villaId: newVillaForm.villaId,
+          villaId: villaId,
           name: newVillaForm.name,
           area: newVillaForm.area,
           ppsm: newVillaForm.ppsm,
@@ -1328,10 +1417,10 @@
 
         setShowAddVillaModal(false);
         setEditingProject(null);
-        setNewVillaForm({ villaId: '', name: '', area: 100, ppsm: 2500, baseUSD: 250000 });
+        setNewVillaForm({ name: '', area: 100, ppsm: 2500, baseUSD: 250000 });
       };
 
-            const linesData=useMemo(()=>lines.map(line=>{
+          const linesData=useMemo(()=>lines.map(line=>{
         const base0=line.snapshot?.baseUSD ?? ((line.snapshot?.area||0)*(line.snapshot?.ppsm||0));
         const disc=clamp(+line.discountPct||0,0,20);
         const base=base0*(1-disc/100);
@@ -1575,8 +1664,8 @@
 
               <h3 style={{margin:'6px 0'}}>{t.stagesTitle}</h3>
               
-              {/* Исправленная таблица этапов */}
-              <div className="scroll" style={{maxHeight:'26vh',border:'1px dashed #223',borderRadius:'8px',padding:'6px',marginBottom:'var(--spacing-lg)'}}>
+              {/* ИСПРАВЛЕНО: таблица этапов без ограничений высоты */}
+              <div className="scroll" style={{border:'1px dashed #223',borderRadius:'8px',padding:'6px',marginBottom:'var(--spacing-lg)'}}>
                 <table className="stages-table">
                   <thead>
                     <tr>
@@ -1603,7 +1692,7 @@
                             className="stage-number-input"
                             min="0" 
                             max="100"
-                            step="0.01" 
+                            step="1" 
                             value={s.pct} 
                             onChange={e=>setStages(prev=>prev.map(x=>x.id===s.id?{...x,pct:clamp(parseFloat(e.target.value||0),0,100)}:x))}
                           />
@@ -1698,9 +1787,9 @@
                           <thead>
                             <tr>
                               <th style={{textAlign:'left'}}>{t.villa}</th>
-                              <th>{t.area}</th>
-                              <th>{t.ppsm}</th>
-                              <th>{t.price}</th>
+                              <th style={{width:'80px'}}>{t.area}</th>
+                              <th style={{width:'100px'}}>{t.ppsm}</th>
+                              <th style={{width:'120px'}}>{t.price}</th>
                               <th></th>
                             </tr>
                           </thead>
@@ -1764,7 +1853,7 @@
               )}
             </div>
 
-                          <div className="card">
+                        <div className="card">
               <div className="row" style={{justifyContent:'space-between',alignItems:'baseline'}}>
                 <div className="row">
                   <span className="badge">{t.lines}: {lines.length}</span>
@@ -1778,7 +1867,7 @@
 
               <div className="hr"></div>
 
-              {/* Оптимизированный заголовок с кнопкой */}
+              {/* ИСПРАВЛЕНО: заголовок с кнопкой и адекватными отступами */}
               <div className="calculation-header">
                 <h3 style={{margin:'6px 0'}}>{t.villasTitle}</h3>
                 {!isClient && <button className="btn success" onClick={()=>setModalOpen(true)}>{t.addFromCatalog}</button>}
@@ -1798,7 +1887,6 @@
                       <th className="col-pre">{t.prePct}</th>
                       {!isClient && <th className="col-months">{t.months}</th>}
                       {!isClient && <th className="col-rate">{t.rate}</th>}
-                      <th className="col-first">{t.firstPost}</th>
                       <th className="col-lineTotal">{t.lineTotal}</th>
                       <th className="col-actions"></th>
                     </tr>
@@ -1900,16 +1988,6 @@
                               </td>
                             </>
                           )}
-                          <td className="col-first">
-                            <input 
-                              type="number" 
-                              min="0" 
-                              step="1" 
-                              value={ld.line.firstPostUSD||0} 
-                              onChange={e=>updLine(ld.line.id,{firstPostUSD:clamp(parseFloat(e.target.value||0),0,ld.base)})}
-                              style={{width:'100%',minWidth:'80px'}}
-                            />
-                          </td>
                           <td className="col-lineTotal line-total">
                             {fmtMoney(toCurrency(ld.lineTotal),currency)}
                           </td>
@@ -1937,7 +2015,7 @@
                 </div>
               </div>
 
-              {/* Исправленная таблица кэшфлоу */}
+              {/* ИСПРАВЛЕНО: таблица кэшфлоу без ограничений высоты */}
               <div className="scroll">
                 <table className="cashflow-table">
                   <thead>
@@ -1967,7 +2045,7 @@
             </div>
           </div>
 
-          {/* Модальное окно добавления проекта */}
+          {/* ИСПРАВЛЕНО: модальное окно добавления проекта без поля ID */}
           {showAddProjectModal && (
             <div className="modal-overlay" onClick={() => setShowAddProjectModal(false)}>
               <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -1979,15 +2057,6 @@
                 <div className="modal-body">
                   <div className="form-section">
                     <div className="form-row">
-                      <div className="form-group">
-                        <label>{t.projectId}</label>
-                        <input 
-                          type="text" 
-                          placeholder="project-id"
-                          value={newProjectForm.projectId}
-                          onChange={e => setNewProjectForm(prev => ({ ...prev, projectId: e.target.value }))}
-                        />
-                      </div>
                       <div className="form-group">
                         <label>{t.projectName}</label>
                         <input 
@@ -2009,7 +2078,7 @@
             </div>
           )}
 
-          {/* Модальное окно добавления виллы */}
+          {/* ИСПРАВЛЕНО: модальное окно добавления виллы без поля ID */}
           {showAddVillaModal && (
             <div className="modal-overlay" onClick={() => setShowAddVillaModal(false)}>
               <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -2021,15 +2090,6 @@
                 <div className="modal-body">
                   <div className="form-section">
                     <div className="form-row">
-                      <div className="form-group">
-                        <label>{t.villaId}</label>
-                        <input 
-                          type="text" 
-                          placeholder="villa-id"
-                          value={newVillaForm.villaId}
-                          onChange={e => setNewVillaForm(prev => ({ ...prev, villaId: e.target.value }))}
-                        />
-                      </div>
                       <div className="form-group">
                         <label>{t.villaName}</label>
                         <input 
@@ -2090,7 +2150,7 @@
             </div>
           )}
 
-                      {/* ИСПРАВЛЕНО: модальное окно добавления из каталога */}
+                    {/* ИСПРАВЛЕНО: модальное окно добавления из каталога с выбором вилл */}
           {modalOpen && (
             <div className="modal-overlay" onClick={()=>setModalOpen(false)}>
               <div className="modal-content" onClick={e=>e.stopPropagation()}>
@@ -2200,42 +2260,122 @@
               </div>
             </div>
           )}
+
+          {/* ИСПРАВЛЕНО: каталог проектов и вилл внизу страницы */}
+          <div className="card" style={{gridColumn:'1/-1',marginTop:'var(--spacing-lg)'}}>
+            <h3 style={{margin:'6px 0'}}>{t.catalogTitle}</h3>
+            
+            {/* Оптимизированные кнопки каталога с одинаковой шириной */}
+            <div className="row" style={{gap:'var(--spacing-md)'}}>
+              <button className="btn success" onClick={addProject} style={{flex:'1'}}>{t.addProject}</button>
+              <button className="btn" onClick={()=>{
+                const json=prompt('Paste catalog JSON:', JSON.stringify(catalog,null,2));
+                if(!json) return;
+                try{ const obj=JSON.parse(json); if(Array.isArray(obj)) setCatalog(obj); else alert('Invalid JSON'); }catch{ alert('Invalid JSON'); }
+              }} style={{flex:'1'}}>{t.importJSON}</button>
+              <button className="btn" onClick={()=>{
+                const blob=new Blob([JSON.stringify(catalog,null,2)],{type:'application/json'});
+                const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_catalog_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href);
+              }} style={{flex:'1'}}>{t.exportJSON}</button>
+            </div>
+            
+            <div className="scroll" style={{maxHeight:'32vh'}}>
+              {catalog.map(p=>(
+                <div key={p.projectId} className="catalog-card">
+                  <div className="catalog-header">
+                    <div className="row" style={{flex:1}}>
+                      <span className="badge">{t.project}:</span>
+                      <input 
+                        type="text" 
+                        value={p.projectName} 
+                        onChange={e=>setCatalog(prev=>prev.map(x=>x.projectId===p.projectId?{...x,projectName:e.target.value}:x))}
+                        style={{flex:1,marginRight:8}}
+                      />
+                      <span className="pill">{p.projectId}</span>
+                    </div>
+                    <div className="catalog-actions">
+                      <button className="btn primary" onClick={()=>addVilla(p.projectId)}>{t.addVilla}</button>
+                      <button className="btn danger" onClick={()=>{
+                        if(confirm(t.remove + ' ' + p.projectName + '?')) {
+                          setCatalog(prev=>prev.filter(x=>x.projectId!==p.projectId));
+                        }
+                      }}>{t.remove}</button>
+                    </div>
+                  </div>
+                  
+                  <table className="catalog-table">
+                    <thead>
+                      <tr>
+                        <th style={{textAlign:'left'}}>{t.villa}</th>
+                        <th style={{width:'80px'}}>{t.area}</th>
+                        <th style={{width:'100px'}}>{t.ppsm}</th>
+                        <th style={{width:'120px'}}>{t.price}</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {p.villas.map(v=>(
+                        <tr key={v.villaId}>
+                          <td style={{textAlign:'left'}}>
+                            <input 
+                              value={v.name} 
+                              onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,name:e.target.value}:vv)}:pr))}
+                            />
+                            <div className="muted" style={{fontSize:10}}>{v.villaId}</div>
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              min="1" 
+                              step="0.1" 
+                              value={v.area} 
+                              onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,area:clamp(parseFloat(e.target.value||0),1,100000)}:vv)}:pr))}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              min="0" 
+                              step="1" 
+                              value={v.ppsm} 
+                              onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,ppsm:clamp(parseFloat(e.target.value||0),0,1e9)}:vv)}:pr))}
+                            />
+                          </td>
+                          <td>
+                            <input 
+                              type="number" 
+                              min="0" 
+                              step="1" 
+                              value={v.baseUSD} 
+                              onChange={e=>setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.map(vv=>vv.villaId===v.villaId?{...vv,baseUSD:clamp(parseFloat(e.target.value||0),0,1e12)}:vv)}:pr))}
+                            />
+                          </td>
+                          <td>
+                            <button 
+                              className="btn danger icon" 
+                              onClick={()=>{
+                                if(confirm(t.remove + ' ' + v.name + '?')) {
+                                  setCatalog(prev=>prev.map(pr=>pr.projectId===p.projectId?{...pr,villas:pr.villas.filter(vv=>vv.villaId!==v.villaId)}:pr));
+                                }
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </div>
+          </div>
         </>
       );
     }
 
-    /* ---------- KPI Block Component ---------- */
-    function KPIBlock({isClient, t, totals, currency, toCurrency}){
-      return (
-        <div className="kpis">
-          <div className="kpi">
-            <div className="muted">{t.base}</div>
-            <div className="v">{fmtMoney(toCurrency(totals.baseUSD),currency)}</div>
-          </div>
-          <div className="kpi">
-            <div className="muted">{t.prepay}</div>
-            <div className="v">{fmtMoney(toCurrency(totals.preUSD),currency)}</div>
-          </div>
-          <div className="kpi">
-            <div className="muted">{t.after}</div>
-            <div className="v">{fmtMoney(toCurrency(totals.afterUSD),currency)}</div>
-          </div>
-          {!isClient && (
-            <div className="kpi">
-              <div className="muted">{t.interestTotal}</div>
-              <div className="v">{fmtMoney(toCurrency(totals.interestUSD),currency)}</div>
-            </div>
-          )}
-          <div className="kpi">
-            <div className="muted">{t.final}</div>
-            <div className="v">{fmtMoney(toCurrency(totals.finalUSD),currency)}</div>
-          </div>
-        </div>
-      );
-    }
-
-    /* ---------- Render ---------- */
-    ReactDOM.render(<App/>,document.getElementById('root'));
+    // ИСПРАВЛЕНО: правильный рендер React приложения
+    ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
