@@ -66,6 +66,59 @@
         .row .field {
             flex: 1;
         }
+        
+        /* ДОБАВЛЕНО: стили для модальных окон */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
+        }
+        
+        .form-section h4 {
+            margin: 0 0 10px;
+            color: #cbd5e1;
+            font-size: 0.9em;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -82,7 +135,7 @@
     <div id="root"></div>
     
     <script type="text/babel">
-        // ДОБАВЛЯЕМ ФУНКЦИОНАЛЬНОСТЬ ПО ЧАСТЯМ
+        // ДОБАВЛЯЕМ МОДАЛЬНЫЕ ОКНА
         const { useState, useEffect, useMemo } = React;
         
         function App() {
@@ -104,14 +157,18 @@
                 }
             ]);
             
-            // ДОБАВЛЕНО: параметры
+            // ДОБАВЛЕНО: состояние для модальных окон
+            const [showAddProjectModal, setShowAddProjectModal] = useState(false);
+            const [showAddVillaModal, setShowAddVillaModal] = useState(false);
+            
+            // Параметры
             const [exchangeRateIDR, setExchangeRateIDR] = useState(15500);
             const [keysMonth, setKeysMonth] = useState(12);
             const [globalRate, setGlobalRate] = useState(1.5);
             const [preHandover, setPreHandover] = useState(50);
             const [displayCurrency, setDisplayCurrency] = useState('USD');
             
-            // ДОБАВЛЕНО: этапы рассрочки
+            // Этапы рассрочки
             const [stages, setStages] = useState([
                 { id: 1, stage: 'Аванс', percent: 30, month: 0 },
                 { id: 2, stage: 'Фундамент', percent: 20, month: 3 },
@@ -120,10 +177,54 @@
                 { id: 5, stage: 'Отделка', percent: 10, month: 12 }
             ]);
             
-            // ДОБАВЛЕНО: вычисления
+            // ДОБАВЛЕНО: каталог проектов и вилл
+            const [projects, setProjects] = useState([
+                {
+                    id: 'proj1',
+                    name: 'Проект А',
+                    description: 'Современный жилой комплекс'
+                }
+            ]);
+            
+            const [villas, setVillas] = useState([
+                {
+                    id: 'villa1',
+                    projectId: 'proj1',
+                    name: 'Вилла Премиум',
+                    area: 150,
+                    ppsm: 2500,
+                    base: 375000
+                }
+            ]);
+            
+            // Вычисления
             const totalBase = lines.reduce((sum, line) => sum + line.base, 0);
             const totalDisc = lines.reduce((sum, line) => sum + line.base * line.disc / 100, 0);
             const totalPre = lines.reduce((sum, line) => sum + line.base * line.prePct / 100, 0);
+            
+            // ДОБАВЛЕНО: функции для работы с каталогом
+            const addProject = () => {
+                const newProject = {
+                    id: Date.now().toString(),
+                    name: 'Новый проект',
+                    description: 'Описание проекта'
+                };
+                setProjects(prev => [...prev, newProject]);
+                setShowAddProjectModal(false);
+            };
+            
+            const addVilla = () => {
+                const newVilla = {
+                    id: Date.now().toString(),
+                    projectId: projects[0]?.id || '',
+                    name: 'Новая вилла',
+                    area: 150,
+                    ppsm: 2500,
+                    base: 375000
+                };
+                setVillas(prev => [...prev, newVilla]);
+                setShowAddVillaModal(false);
+            };
             
             return (
                 <div>
@@ -295,10 +396,210 @@
                         <div className="card">
                             <h3>Каталог проектов и вилл</h3>
                             <div className="row">
-                                <button className="btn">Добавить проект</button>
-                                <button className="btn">Добавить виллу</button>
+                                <button className="btn" onClick={() => setShowAddProjectModal(true)}>Добавить проект</button>
+                                <button className="btn" onClick={() => setShowAddVillaModal(true)}>Добавить виллу</button>
                                 <button className="btn">Импорт JSON</button>
                                 <button className="btn">Экспорт JSON</button>
+                            </div>
+                            
+                            {/* ДОБАВЛЕНО: таблица проектов */}
+                            <div style={{marginTop: '20px'}}>
+                                <h4>Проекты</h4>
+                                <table style={{width: '100%', borderCollapse: 'collapse'}}>
+                                    <thead>
+                                        <tr style={{background: 'rgba(255,255,255,0.1)'}}>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>ID</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Название</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Описание</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {projects.map(project => (
+                                            <tr key={project.id}>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{project.id}</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{project.name}</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{project.description}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            {/* ДОБАВЛЕНО: таблица вилл */}
+                            <div style={{marginTop: '20px'}}>
+                                <h4>Виллы</h4>
+                                <table style={{width: '100%', borderCollapse: 'collapse'}}>
+                                    <thead>
+                                        <tr style={{background: 'rgba(255,255,255,0.1)'}}>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>ID</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Проект</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Название</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Площадь</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Цена за м²</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Базовая цена</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {villas.map(villa => {
+                                            const project = projects.find(p => p.id === villa.projectId);
+                                            return (
+                                                <tr key={villa.id}>
+                                                    <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{villa.id}</td>
+                                                    <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{project ? project.name : 'Неизвестный проект'}</td>
+                                                    <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{villa.name}</td>
+                                                    <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{villa.area}</td>
+                                                    <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>${villa.ppsm.toLocaleString()}</td>
+                                                    <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>${villa.base.toLocaleString()}</td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+                    
+                    {/* ДОБАВЛЕНО: Модальное окно добавления проекта */}
+                    {showAddProjectModal && (
+                        <div className="modal-overlay" onClick={() => setShowAddProjectModal(false)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h3>Добавить проект</h3>
+                                    <button 
+                                        className="btn" 
+                                        onClick={() => setShowAddProjectModal(false)}
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                                <div className="form-section">
+                                    <h4>Информация о проекте</h4>
+                                    <div className="field">
+                                        <label>Название проекта</label>
+                                        <input 
+                                            type="text" 
+                                            placeholder="Введите название проекта"
+                                            id="newProjectName"
+                                        />
+                                    </div>
+                                    <div className="field">
+                                        <label>Описание</label>
+                                        <input 
+                                            type="text" 
+                                            placeholder="Введите описание проекта"
+                                            id="newProjectDescription"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-actions">
+                                    <button 
+                                        className="btn" 
+                                        onClick={() => setShowAddProjectModal(false)}
+                                    >
+                                        Отмена
+                                    </button>
+                                    <button 
+                                        className="btn" 
+                                        onClick={() => {
+                                            const name = document.getElementById('newProjectName').value;
+                                            const description = document.getElementById('newProjectDescription').value;
+                                            if (name.trim()) {
+                                                addProject();
+                                            }
+                                        }}
+                                    >
+                                        Добавить проект
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    
+                    {/* ДОБАВЛЕНО: Модальное окно добавления виллы */}
+                    {showAddVillaModal && (
+                        <div className="modal-overlay" onClick={() => setShowAddVillaModal(false)}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <h3>Добавить виллу</h3>
+                                    <button 
+                                        className="btn" 
+                                        onClick={() => setShowAddVillaModal(false)}
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                                <div className="form-section">
+                                    <h4>Информация о вилле</h4>
+                                    <div className="field">
+                                        <label>Проект</label>
+                                        <select id="newVillaProjectId">
+                                            {projects.map(project => (
+                                                <option key={project.id} value={project.id}>
+                                                    {project.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="field">
+                                        <label>Название виллы</label>
+                                        <input 
+                                            type="text" 
+                                            placeholder="Введите название виллы"
+                                            id="newVillaName"
+                                        />
+                                    </div>
+                                    <div className="row">
+                                        <div className="field">
+                                            <label>Площадь (м²)</label>
+                                            <input 
+                                                type="number" 
+                                                placeholder="0"
+                                                id="newVillaArea"
+                                                min="0"
+                                                step="0.01"
+                                            />
+                                        </div>
+                                        <div className="field">
+                                            <label>Цена за м²</label>
+                                            <input 
+                                                type="number" 
+                                                placeholder="0"
+                                                id="newVillaPpsm"
+                                                min="0"
+                                                step="0.01"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="field">
+                                        <label>Базовая цена</label>
+                                        <input 
+                                            type="number" 
+                                            placeholder="0"
+                                            id="newVillaBase"
+                                            min="0"
+                                            step="0.01"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-actions">
+                                    <button 
+                                        className="btn" 
+                                        onClick={() => setShowAddVillaModal(false)}
+                                    >
+                                        Отмена
+                                    </button>
+                                    <button 
+                                        className="btn" 
+                                        onClick={() => {
+                                            const name = document.getElementById('newVillaName').value;
+                                            if (name.trim()) {
+                                                addVilla();
+                                            }
+                                        }}
+                                    >
+                                        Добавить виллу
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
