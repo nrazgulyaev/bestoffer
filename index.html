@@ -42,9 +42,36 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
+        .field {
+            margin: 10px 0;
+        }
+        .field label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cbd5e1;
+        }
+        .field input, .field select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 5px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+        .row .field {
+            flex: 1;
+        }
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
+            }
+            .row {
+                flex-direction: column;
             }
         }
     </style>
@@ -55,20 +82,48 @@
     <div id="root"></div>
     
     <script type="text/babel">
-        // ПРОСТАЯ РАБОЧАЯ ВЕРСИЯ
-        const { useState } = React;
+        // ДОБАВЛЯЕМ ФУНКЦИОНАЛЬНОСТЬ ПО ЧАСТЯМ
+        const { useState, useEffect, useMemo } = React;
         
         function App() {
             const [activeTab, setActiveTab] = useState('overview');
-            const [lines] = useState([
+            const [lines, setLines] = useState([
                 {
                     id: 1,
+                    projectId: 'proj1',
+                    villaId: 'villa1',
                     projectName: 'Проект А',
                     villaName: 'Вилла Премиум',
                     area: 150,
-                    base: 375000
+                    ppsm: 2500,
+                    base: 375000,
+                    disc: 5,
+                    prePct: 50,
+                    months: 12,
+                    rate: 1.5
                 }
             ]);
+            
+            // ДОБАВЛЕНО: параметры
+            const [exchangeRateIDR, setExchangeRateIDR] = useState(15500);
+            const [keysMonth, setKeysMonth] = useState(12);
+            const [globalRate, setGlobalRate] = useState(1.5);
+            const [preHandover, setPreHandover] = useState(50);
+            const [displayCurrency, setDisplayCurrency] = useState('USD');
+            
+            // ДОБАВЛЕНО: этапы рассрочки
+            const [stages, setStages] = useState([
+                { id: 1, stage: 'Аванс', percent: 30, month: 0 },
+                { id: 2, stage: 'Фундамент', percent: 20, month: 3 },
+                { id: 3, stage: 'Стены', percent: 25, month: 6 },
+                { id: 4, stage: 'Крыша', percent: 15, month: 9 },
+                { id: 5, stage: 'Отделка', percent: 10, month: 12 }
+            ]);
+            
+            // ДОБАВЛЕНО: вычисления
+            const totalBase = lines.reduce((sum, line) => sum + line.base, 0);
+            const totalDisc = lines.reduce((sum, line) => sum + line.base * line.disc / 100, 0);
+            const totalPre = lines.reduce((sum, line) => sum + line.base * line.prePct / 100, 0);
             
             return (
                 <div>
@@ -90,6 +145,13 @@
                         </button>
                         <button 
                             className="btn" 
+                            style={{background: activeTab === 'stages' ? '#10b981' : '#3b82f6'}}
+                            onClick={() => setActiveTab('stages')}
+                        >
+                            Этапы
+                        </button>
+                        <button 
+                            className="btn" 
                             style={{background: activeTab === 'catalog' ? '#10b981' : '#3b82f6'}}
                             onClick={() => setActiveTab('catalog')}
                         >
@@ -101,8 +163,18 @@
                     {activeTab === 'overview' && (
                         <div className="card">
                             <h3>Обзор проекта</h3>
-                            <p>Выбранные виллы: {lines.length}</p>
-                            <p>Общая стоимость: ${lines.reduce((sum, line) => sum + line.base, 0).toLocaleString()}</p>
+                            <div className="grid">
+                                <div>
+                                    <p><strong>Выбранные виллы:</strong> {lines.length}</p>
+                                    <p><strong>Общая стоимость:</strong> ${totalBase.toLocaleString()}</p>
+                                    <p><strong>Скидка:</strong> ${totalDisc.toLocaleString()}</p>
+                                </div>
+                                <div>
+                                    <p><strong>Предоплата:</strong> ${totalPre.toLocaleString()}</p>
+                                    <p><strong>Ключи через:</strong> {keysMonth} месяцев</p>
+                                    <p><strong>Валюта:</strong> {displayCurrency}</p>
+                                </div>
+                            </div>
                         </div>
                     )}
                     
@@ -110,25 +182,124 @@
                         <div className="grid">
                             <div className="card">
                                 <h3>Параметры</h3>
-                                <p>Курс IDR/USD: 15500</p>
-                                <p>Месяц получения ключей: 12</p>
-                                <p>Глобальная ставка: 1.5%</p>
+                                <div className="field">
+                                    <label>Курс IDR/USD</label>
+                                    <input 
+                                        type="number" 
+                                        value={exchangeRateIDR} 
+                                        onChange={(e) => setExchangeRateIDR(Number(e.target.value))}
+                                        step="0.01"
+                                    />
+                                </div>
+                                <div className="field">
+                                    <label>Месяц получения ключей</label>
+                                    <input 
+                                        type="number" 
+                                        value={keysMonth} 
+                                        onChange={(e) => setKeysMonth(Number(e.target.value))}
+                                        min="1"
+                                        max="60"
+                                    />
+                                </div>
+                                <div className="field">
+                                    <label>Глобальная ставка, %/мес</label>
+                                    <input 
+                                        type="number" 
+                                        value={globalRate} 
+                                        onChange={(e) => setGlobalRate(Number(e.target.value))}
+                                        step="0.1"
+                                        min="0"
+                                        max="10"
+                                    />
+                                </div>
+                                <div className="field">
+                                    <label>Pre-handover, %</label>
+                                    <input 
+                                        type="range" 
+                                        value={preHandover} 
+                                        onChange={(e) => setPreHandover(Number(e.target.value))}
+                                        min="50"
+                                        max="100"
+                                        step="1"
+                                    />
+                                    <span style={{color: '#cbd5e1'}}>{preHandover}%</span>
+                                </div>
+                                <div className="field">
+                                    <label>Валюта отображения</label>
+                                    <select 
+                                        value={displayCurrency} 
+                                        onChange={(e) => setDisplayCurrency(e.target.value)}
+                                    >
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="IDR">IDR</option>
+                                    </select>
+                                </div>
                             </div>
                             <div className="card">
-                                <h3>Расчёт</h3>
-                                <p>Проект: {lines[0].projectName}</p>
-                                <p>Вилла: {lines[0].villaName}</p>
-                                <p>Площадь: {lines[0].area} м²</p>
-                                <p>Базовая цена: ${lines[0].base.toLocaleString()}</p>
+                                <h3>Расчёт позиций</h3>
+                                <table style={{width: '100%', borderCollapse: 'collapse'}}>
+                                    <thead>
+                                        <tr style={{background: 'rgba(255,255,255,0.1)'}}>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Проект</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Вилла</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Площадь</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Базовая цена</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Скидка</th>
+                                            <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>До ключей</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {lines.map(line => (
+                                            <tr key={line.id}>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{line.projectName}</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{line.villaName}</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{line.area} м²</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>${line.base.toLocaleString()}</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{line.disc}%</td>
+                                                <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{line.prePct}%</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
+                    )}
+                    
+                    {activeTab === 'stages' && (
+                        <div className="card">
+                            <h3>Базовая рассрочка</h3>
+                            <table style={{width: '100%', borderCollapse: 'collapse', marginBottom: '20px'}}>
+                                <thead>
+                                    <tr style={{background: 'rgba(255,255,255,0.1)'}}>
+                                        <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Этап</th>
+                                        <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Процент</th>
+                                        <th style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>Месяц</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {stages.map(stage => (
+                                        <tr key={stage.id}>
+                                            <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{stage.stage}</td>
+                                            <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{stage.percent}%</td>
+                                            <td style={{padding: '8px', border: '1px solid rgba(255,255,255,0.2)'}}>{stage.month}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <button className="btn">Добавить этап</button>
                         </div>
                     )}
                     
                     {activeTab === 'catalog' && (
                         <div className="card">
                             <h3>Каталог проектов и вилл</h3>
-                            <button className="btn">Добавить проект</button>
-                            <button className="btn">Добавить виллу</button>
+                            <div className="row">
+                                <button className="btn">Добавить проект</button>
+                                <button className="btn">Добавить виллу</button>
+                                <button className="btn">Импорт JSON</button>
+                                <button className="btn">Экспорт JSON</button>
+                            </div>
                         </div>
                     )}
                 </div>
