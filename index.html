@@ -6,8 +6,8 @@
     <title>Arconique / Калькулятор рассрочки для любимых клиентов — v8.2</title>
     
     <!-- CDN библиотеки -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -972,11 +972,11 @@
         .animate-fade-in:nth-child(5) { animation-delay: 0.4s; }
     </style>
     
-    <!-- Диагностика загрузки -->
+    <!-- Диагностика загрузки - ИСПРАВЛЕННАЯ -->
     <script>
         (function() {
             let attempts = 0;
-            const maxAttempts = 10;
+            const maxAttempts = 15;
             
             function checkDependencies() {
                 attempts++;
@@ -984,18 +984,27 @@
                 
                 if (window.React && window.ReactDOM && window.Babel) {
                     console.log('✅ Все зависимости загружены успешно');
+                    console.log('React version:', window.React.version);
+                    console.log('ReactDOM version:', window.ReactDOM.version);
+                    console.log('Babel version:', window.Babel.version);
                     return true;
                 }
                 
                 if (attempts >= maxAttempts) {
                     console.error('❌ Не удалось загрузить зависимости после', maxAttempts, 'попыток');
                     document.body.innerHTML = `
-                        <div style="padding: 20px; text-align: center; color: #ef4444;">
+                        <div style="padding: 20px; text-align: center; color: #ef4444; background: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                             <h2>Ошибка загрузки</h2>
                             <p>Не удалось загрузить React или Babel. Попробуйте обновить страницу.</p>
-                            <button onclick="location.reload()" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            <button onclick="location.reload()" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px;">
                                 Обновить страницу
                             </button>
+                            <div style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px; text-align: left; max-width: 600px;">
+                                <h3>Статус загрузки:</h3>
+                                <p>React: ${window.React ? '✅ Загружен' : '❌ Не загружен'}</p>
+                                <p>ReactDOM: ${window.ReactDOM ? '✅ Загружен' : '❌ Не загружен'}</p>
+                                <p>Babel: ${window.Babel ? '✅ Загружен' : '❌ Не загружен'}</p>
+                            </div>
                         </div>
                     `;
                     return false;
@@ -1005,32 +1014,42 @@
                 return false;
             }
             
-            if (!checkDependencies()) {
-                // Попытка загрузки альтернативных CDN
-                if (!window.React) {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js';
-                    script.crossOrigin = 'anonymous';
-                    document.head.appendChild(script);
-                }
-                
-                if (!window.ReactDOM) {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js';
-                    script.crossOrigin = 'anonymous';
-                    document.head.appendChild(script);
-                }
-                
-                if (!window.Babel) {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js';
-                    document.head.appendChild(script);
-                }
+            // Попытка загрузки альтернативных CDN если основные не загрузились
+            if (!window.React) {
+                console.log('Попытка загрузки React...');
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js';
+                script.crossOrigin = 'anonymous';
+                script.onerror = () => console.error('Не удалось загрузить React с cdnjs');
+                document.head.appendChild(script);
             }
+            
+            if (!window.ReactDOM) {
+                console.log('Попытка загрузки ReactDOM...');
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js';
+                script.crossOrigin = 'anonymous';
+                script.onerror = () => console.error('Не удалось загрузить ReactDOM с cdnjs');
+                document.head.appendChild(script);
+            }
+            
+            if (!window.Babel) {
+                console.log('Попытка загрузки Babel...');
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js';
+                script.onerror = () => console.error('Не удалось загрузить Babel с cdnjs');
+                document.head.appendChild(script);
+            }
+            
+            // Начинаем проверку
+            setTimeout(checkDependencies, 500);
         })();
     </script>
 </head>
 <body>
+    <!-- ИСПРАВЛЕНО: добавлен заголовок h1 в HTML -->
+    <h1>Arconique / Калькулятор рассрочки для любимых клиентов</h1>
+    
     <div id="root"></div>
     <div id="auto-save-indicator"></div>
     
@@ -1722,12 +1741,10 @@
                 checkPin();
             }, [isClient]);
 
-                    // Рендер компонента
+
+                 // Рендер компонента
             return (
                 <div className="wrap">
-                    {/* Заголовок - ИСПРАВЛЕНО: добавлен h1 */}
-                    <h1>{T.title}</h1>
-                    
                     {/* Индикатор автосохранения */}
                     <div id="auto-save-indicator" className="auto-save-indicator" style={{ display: autoSaveStatus !== 'saved' ? 'block' : 'none' }}>
                         {autoSaveStatus === 'saving' && 'Сохранение...'}
@@ -2744,6 +2761,7 @@
                 </div>
             );
         }
+
 
                 // Рендеринг приложения
         ReactDOM.render(<App />, document.getElementById('root'));
