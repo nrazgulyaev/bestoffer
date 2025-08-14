@@ -1183,6 +1183,12 @@
         edit:'Редактировать', remove:'Удалить',
         projectNameRequired:'Введите название проекта',
         villaNameRequired:'Введите название виллы'
+        totalArea: 'Общая площадь',
+    totalBase: 'Базовая стоимость', 
+    totalPrepay: 'Оплата до ключей',
+    totalPost: 'После ключей',
+    totalInterest: 'Проценты (post)',
+    totalFinal: 'Итоговая цена',
       },
       en: {
         title:'Arconique / Installments Calculator',
@@ -1259,7 +1265,69 @@
       ]}
     ];
 
-        /* ---------- Components ---------- */
+
+/* ---------- Components ---------- */
+// ИСПРАВЛЕНО: добавляем компонент KPIBlock перед компонентом App
+const KPIBlock = ({ isClient, t, totals, currency, toCurrency }) => {
+  return (
+    <div className="kpi-grid">
+      <div className="kpi">
+        <div className="kpi-label">{t.totalArea}</div>
+        <div className="kpi-value">
+          <span className="v">{toCurrency(totals.area).toFixed(1)}</span>
+          <span className="unit">м²</span>
+        </div>
+      </div>
+      
+      <div className="kpi">
+        <div className="kpi-label">{t.totalBase}</div>
+        <div className="kpi-value">
+          <span className="v">{toCurrency(totals.baseUSD).toFixed(0)}</span>
+          <span className="unit">USD</span>
+        </div>
+      </div>
+      
+      <div className="kpi">
+        <div className="kpi-label">{t.totalPrepay}</div>
+        <div className="kpi-value">
+          <span className="v">{toCurrency(totals.preUSD).toFixed(0)}</span>
+          <span className="unit">USD</span>
+        </div>
+      </div>
+      
+      <div className="kpi">
+        <div className="kpi-label">{t.totalPost}</div>
+        <div className="kpi-value">
+          <span className="v">{toCurrency(totals.postUSD).toFixed(0)}</span>
+          <span className="unit">USD</span>
+        </div>
+      </div>
+      
+      {!isClient && (
+        <>
+          <div className="kpi">
+            <div className="kpi-label">{t.totalInterest}</div>
+            <div className="kpi-value">
+              <span className="v">{toCurrency(totals.interestUSD).toFixed(0)}</span>
+              <span className="unit">USD</span>
+            </div>
+          </div>
+          
+          <div className="kpi">
+            <div className="kpi-label">{t.totalFinal}</div>
+            <div className="kpi-value">
+              <span className="v">{toCurrency(totals.finalUSD).toFixed(0)}</span>
+              <span className="unit">USD</span>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+
+    
     function App(){
       const [lang,setLang]=useState('ru'); const t=T[lang];
       const [tab,setTab]=useState('calc');
