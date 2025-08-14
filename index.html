@@ -1714,23 +1714,26 @@
         }
       },[]);
       
-      useEffect(()=>{
-        if(!isClient){
-          const verifyPin=async()=>{
-            const input=prompt('Введите PIN для входа в редактор:');
-            if(!input) return;
-            
-            const hash=await sha256Hex(input);
-            if(hash===PIN_HASH_HEX){
-              setIsClient(false);
-            }else{
-              alert('Неверный PIN');
-              setIsClient(true);
-            }
-          };
-          verifyPin();
-        }
-      },[isClient]);
+     useEffect(()=>{
+  if(!isClient){
+    const verifyPin=async()=>{
+      const input=prompt('Введите PIN для входа в редактор:');
+      if(!input) {
+        setIsClient(true); // Если отменили - клиентский режим
+        return;
+      }
+      
+      // Простая проверка PIN
+      if(input === PIN_CODE){
+        setIsClient(false); // Редактор
+      }else{
+        alert('Неверный PIN');
+        setIsClient(true); // Клиентский режим
+      }
+    };
+    verifyPin();
+  }
+},[isClient]);
       
       useEffect(()=>{
         if(chartRef.current&&project.cashflow.length>0){
