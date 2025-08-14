@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ar3conique / Калькулятор рассрочки для любимых клиентов </title>
+  <title>Arconique / Калькулятор рассрочки для любимых клиентов </title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
@@ -154,7 +154,7 @@
       }
     }
 
-        /* Современные карточки */
+    /* Современные карточки */
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -424,7 +424,6 @@
         min-width: auto;
       }
     }
-
         /* Современные таблицы */
     .calc-scroll{
       overflow:auto;
@@ -653,12 +652,26 @@
       border-bottom: none;
     }
     
+    .cashflow-table tbody tr {
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+    
     .cashflow-table tbody tr:hover {
       background: var(--card-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
     }
     
     .cashflow-table tbody tr:hover td {
       border-color: var(--line-hover);
+      color: var(--ink);
+    }
+    
+    .cashflow-table tbody tr:hover td:first-child {
+      border-left: 3px solid var(--primary);
+      background: linear-gradient(90deg, var(--primary), transparent);
     }
     
     /* Современные модальные окна */
@@ -722,7 +735,7 @@
       max-height:60vh;
     }
 
-        /* Современные формы */
+    /* Современные формы */
     .form-section{
       margin-bottom:24px;
     }
@@ -956,6 +969,186 @@
       }
     }
 
+    /* Новые стили для исправлений */
+    .calculation-header {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .stages-scroll {
+      min-height: 120px;
+      border: 1px dashed #223;
+      border-radius: 8px;
+      padding: 6px;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .cashflow-scroll {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      overflow: visible;
+    }
+    
+    .catalog-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .catalog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .catalog-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    
+    .catalog-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    
+    .catalog-table th,
+    .catalog-table td {
+      padding: var(--spacing-sm);
+      text-align: center;
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .catalog-table th {
+      background: var(--card-hover);
+      font-weight: 600;
+    }
+    
+    .catalog-table input {
+      width: 100%;
+      padding: 6px 8px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-size: 12px;
+    }
+    
+    .catalog-selection-project {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .catalog-selection-project h4 {
+      margin: 0 0 var(--spacing-md);
+      color: var(--ink);
+    }
+    
+    .villas-selection {
+      display: grid;
+      gap: var(--spacing-sm);
+    }
+    
+    .villa-selection-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-sm);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+    }
+    
+    .villa-info {
+      flex: 1;
+    }
+    
+    .villa-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .villa-details {
+      display: flex;
+      gap: var(--spacing-md);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    
+    .search-filters {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: var(--spacing-sm);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .filter-row {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .filter-group {
+      flex: 1;
+    }
+    
+    .filter-group label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    
+    .filter-group input,
+    .filter-group select {
+      width: 100%;
+      padding: 6px 8px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-size: 12px;
+    }
+    
+    /* Очень компактная кнопка для добавления из каталога */
+    .add-selected-btn {
+      padding: 6px 12px;
+      font-size: 11px;
+      min-width: auto;
+      height: 28px;
+      line-height: 1;
+    }
+    
+    /* Отступы между кнопками экспорта */
+    .export-buttons {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    
+    /* Информационный блок для начального месяца */
+    .info-display {
+      padding: 10px 12px;
+      background: var(--card-hover);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      font-size: 13px;
+      text-align: center;
+      font-weight: 500;
+    }
+
       </style>
 </head>
 <body>
@@ -1043,23 +1236,24 @@
         globalTerm:'Глобальный срок post‑handover (6–24 мес)',
         globalRate:'Глобальная ставка, %/мес',
         clientTerm:'Срок post‑handover (мес)',
-        stagesTitle:'Этапы ДО ключей',
+        startMonth:'Начальный месяц',
+        stagesTitle:'Базовая рассрочка',
         stage:'Этап', percent:'%', month:'Месяц',
         addStage:'Добавить этап', delete:'Удалить',
         villasTitle:'Расчёт (позиции)',
         project:'Проект', villa:'Вилла', qty:'Кол-во',
-        area:'м²', ppsm:'$ / м²', price:'База (USD)',
+        area:'м²', ppsm:'$ / м²', price:'Базовая стоимость (USD)',
         discount:'Скидка, %', prePct:'До ключей, %',
-        months:'Срок, мес', rate:'Ставка, %/мес',
-        firstPost:'Первый платёж', lineTotal:'Итог по строке',
+        months:'Срок рассрочки, мес', rate:'Ставка, %/мес',
+        firstPost:'Первый платёж', lineTotal:'Итоговая стоимость',
         addFromCatalog:'Добавить из каталога',
         cashflowTitle:'Сводный кэшфлоу по месяцам',
         cashMonth:'Месяц', cashDesc:'Описание',
         cashTotal:'Сумма к оплате', cashBalance:'Остаток долга',
-        totals:'Итоги', base:'База', prepay:'Оплата до ключей',
+        totals:'Итоги', base:'Базовая стоимость', prepay:'Оплата до ключей',
         after:'Остаток после ключей', interestTotal:'Проценты (post)',
         final:'Итоговая цена',
-        lines:'Позиций', keys:'Ключи: мес.',
+        lines:'Выбрано вилл', keys:'Ключи через',
         chartTitle:'Платежи по месяцам',
         sumStages:'Сумма этапов', targetPrepay:'Целевой % до ключей',
         mismatch:'— отличается от целевого', mixedTargets:'разные цели у строк',
@@ -1074,7 +1268,7 @@
         priceFrom:'Цена от', priceTo:'Цена до',
         sort:'Сортировать', byPrice:'по цене', byArea:'по площади', byName:'по названию',
         addSelected:'Добавить выбранные', cancel:'Отмена',
-        qtyShort:'Кол-во', baseUSD:'База (USD)',
+        qtyShort:'Кол-во', baseUSD:'Базовая стоимость (USD)',
         projectId:'ID проекта', projectName:'Название проекта',
         villaId:'ID виллы', villaName:'Название виллы',
         villaArea:'Площадь (м²)', villaPpsm:'Цена за м² ($)',
@@ -1092,23 +1286,24 @@
         globalTerm:'Global post‑handover term (6–24 mo)',
         globalRate:'Global rate, %/month',
         clientTerm:'Post‑handover term (months)',
-        stagesTitle:'Pre‑handover stages',
+        startMonth:'Start month',
+        stagesTitle:'Basic installments',
         stage:'Stage', percent:'%', month:'Month',
         addStage:'Add stage', delete:'Delete',
         villasTitle:'Calculation (lines)',
         project:'Project', villa:'Villa', qty:'Qty',
-        area:'sqm', ppsm:'$ / sqm', price:'Base (USD)',
+        area:'sqm', ppsm:'$ / sqm', price:'Base Price (USD)',
         discount:'Discount, %', prePct:'Pre‑handover, %',
-        months:'Term, mo', rate:'Rate, %/mo',
-        firstPost:'First payment', lineTotal:'Line total',
+        months:'Installment term, mo', rate:'Rate, %/mo',
+        firstPost:'First payment', lineTotal:'Final price',
         addFromCatalog:'Add from catalog',
         cashflowTitle:'Monthly consolidated cashflow',
         cashMonth:'Month', cashDesc:'Description',
         cashTotal:'Amount due', cashBalance:'Remaining balance',
-        totals:'Totals', base:'Base', prepay:'Paid before keys',
+        totals:'Totals', base:'Base price', prepay:'Paid before keys',
         after:'Balance after keys', interestTotal:'Interest (post)',
         final:'Final price',
-        lines:'Lines', keys:'Keys: mo.',
+        lines:'Selected villas', keys:'Keys in',
         chartTitle:'Payments by month',
         sumStages:'Stages sum', targetPrepay:'Target pre‑handover %',
         mismatch:'— differs from target', mixedTargets:'different line targets',
@@ -1123,7 +1318,7 @@
         priceFrom:'Price from', priceTo:'Price to',
         sort:'Sort', byPrice:'by price', byArea:'by area', byName:'by name',
         addSelected:'Add selected', cancel:'Cancel',
-        qtyShort:'Qty', baseUSD:'Base (USD)',
+        qtyShort:'Qty', baseUSD:'Base Price (USD)',
         projectId:'Project ID', projectName:'Project Name',
         villaId:'Villa ID', villaName:'Villa Name',
         villaArea:'Area (sqm)', villaPpsm:'Price per sqm ($)',
@@ -1158,10 +1353,9 @@
       ]}
     ];
 
-        /* ---------- Components ---------- */
+    /* ---------- Components ---------- */
     function App(){
       const [lang,setLang]=useState('ru'); const t=T[lang];
-      const [tab,setTab]=useState('calc');
       const [isClient,setIsClient]=useState(true);
 
       const [currency,setCurrency]=useState('USD');
@@ -1172,6 +1366,9 @@
       const [handoverMonth,setHandoverMonth]=useState(12);
       const [months,setMonths]=useState(12);
       const [monthlyRatePct,setMonthlyRatePct]=useState(8.33);
+      
+      // НОВОЕ: Начальный месяц для реальных дат (автоматически текущий)
+      const [startMonth,setStartMonth]=useState(new Date());
 
       const [stages,setStages]=useState([
         {id:1,label:'Договор',pct:30,month:0},
@@ -1184,7 +1381,7 @@
 
       const [catalog,setCatalog]=useState(DEFAULT_CATALOG);
 
-           const [lines,setLines]=useState([
+      const [lines,setLines]=useState([
         {id:1,projectId:'enso',villaId:'enso-2br',qty:1,prePct:70,ownTerms:false,months:null,monthlyRatePct:null,firstPostUSD:0,discountPct:0,
          snapshot:{name:'Enso 2BR',area:100,ppsm:2500,baseUSD:250000}}
       ]);
@@ -1209,6 +1406,16 @@
       const [modalOpen,setModalOpen]=useState(false);
       const [catalogModalOpen,setCatalogModalOpen]=useState(false);
 
+      // НОВАЯ ФУНКЦИЯ: Форматирование месяца для кэшфлоу
+      const formatMonth = (monthOffset) => {
+        const date = new Date(startMonth);
+        date.setMonth(date.getMonth() + monthOffset);
+        return date.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', { 
+          month: 'long', 
+          year: 'numeric' 
+        });
+      };
+
       useEffect(()=>{(async()=>{
         try{
           const fromUrl=decodeState();
@@ -1224,7 +1431,7 @@
             if(Array.isArray(saved.stages)) setStages(saved.stages);
             if(Array.isArray(saved.catalog)) setCatalog(saved.catalog);
             if(Array.isArray(saved.lines)) setLines(saved.lines);
-            if(saved.tab) setTab(saved.tab);
+            if(saved.startMonth) setStartMonth(new Date(saved.startMonth));
           }
           const view=(fromUrl?.view)|| (new URLSearchParams(location.hash.slice(1)).get('view'));
           if(view==='editor'){
@@ -1241,16 +1448,16 @@
         document.title=t.title;
       })()},[]);
 
-      const snapshot=()=>({lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,catalog,lines,tab});
+      const snapshot=()=>({lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,catalog,lines,startMonth});
       useEffect(()=>{
         localStorage.setItem('arconique_v76',JSON.stringify(snapshot()));
         document.getElementById('app-title').textContent=t.title;
         document.title=t.title;
-      },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,catalog,lines,tab]);
+      },[lang,currency,idrPerUsd,eurPerUsd,handoverMonth,months,monthlyRatePct,stages,catalog,lines,startMonth]);
 
       const findProject=pid=>catalog.find(p=>p.projectId===pid);
 
-      // Функции для работы с проектами
+          // Функции для работы с проектами
       const addProject = () => {
         setNewProjectForm({
           projectId: '',
@@ -1335,7 +1542,8 @@
         const disc=clamp(+line.discountPct||0,0,20);
         const base=base0*(1-disc/100);
 
-        const prePct=line.prePct ?? 0;
+        // ИСПРАВЛЕНИЕ: Ограничение "До ключей" от 50% до 100%
+        const prePct=clamp(line.prePct ?? 0, 50, 100);
         const k=stagesSumPct===0?0:prePct/stagesSumPct;
         const preSchedule=stages.map(s=>({
           month:Math.max(0,Math.min(handoverMonth,Math.round(+s.month||0))),
@@ -1368,7 +1576,7 @@
         const baseQ=base*qty;
         const lineTotal=lineTotalOne*qty;
 
-        return {line,qty,baseOne:base,base:baseQ,preSchedule:preScheduleQ,preTotal,firstPostUSD:firstPostQ,postRows:postRowsQ,lineTotal,vMonths,rate,discountPct:disc};
+        return {line,qty,baseOne:base,base:baseQ,preSchedule:preScheduleQ,preTotal,firstPostUSD:firstPostQ,postRows:postRowsQ,lineTotal,vMonths,rate,discountPct:disc,prePct:prePct};
       }),[lines,stages,stagesSumPct,handoverMonth,months,monthlyRatePct,lang]);
 
       const project=useMemo(()=>{
@@ -1400,21 +1608,21 @@
           if(chartObj.current) chartObj.current.destroy();
           chartObj.current=new Chart(ctx,{
             type:'bar',
-            data:{labels:project.cashflow.map(c=>String(c.month)),datasets:[{label:T[lang].chartTitle,data:project.cashflow.map(c=>toCurrency(c.amountUSD))}]},
+            data:{labels:project.cashflow.map(c=>formatMonth(c.month)),datasets:[{label:T[lang].chartTitle,data:project.cashflow.map(c=>toCurrency(c.amountUSD))}]},
             options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>fmtMoney(c.parsed.y,currency)}}},scales:{y:{ticks:{callback:(v)=>fmtMoney(v,currency)}}}}
           });
         }catch(e){ /* если Chart.js не загрузился — не ломаем страницу */ }
-      },[project.cashflow,currency,idrPerUsd,eurPerUsd,lang]);
+      },[project.cashflow,currency,idrPerUsd,eurPerUsd,lang,startMonth]);
 
       const exportCSV=()=>{
-        const rows=[[t.cashMonth,t.cashDesc,t.cashTotal,t.cashBalance],...project.cashflow.map(c=>[c.month,(c.items||[]).join(' + '),toCurrency(c.amountUSD).toFixed(2),toCurrency(c.balanceUSD).toFixed(2)])];
+        const rows=[[t.cashMonth,t.cashDesc,t.cashTotal,t.cashBalance],...project.cashflow.map(c=>[formatMonth(c.month),(c.items||[]).join(' + '),toCurrency(c.amountUSD).toFixed(2),toCurrency(c.balanceUSD).toFixed(2)])];
         const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
         const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`arconique_cashflow_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
       };
       
       const exportXLSX=()=>{
-        const ws1=XLSX.utils.json_to_sheet(project.cashflow.map(c=>({[t.cashMonth]:c.month,[t.cashDesc]:(c.items||[]).join(' + '),[t.cashTotal]:toCurrency(c.amountUSD),[t.cashBalance]:toCurrency(c.balanceUSD)})));
-        const ws2=XLSX.utils.json_to_sheet(linesData.map(ld=>({[t.project]:findProject(ld.line.projectId)?.projectName||ld.line.projectId,[t.villa]:ld.line.snapshot?.name,[t.qty]:ld.qty,[t.area]:ld.line.snapshot?.area,[t.ppsm]:ld.line.snapshot?.ppsm,[t.price]:ld.base,[t.discount]:(ld.discountPct||0)+'%',[t.prePct]:ld.line.prePct,[t.months]:ld.vMonths,[t.lineTotal]:ld.lineTotal})));
+        const ws1=XLSX.utils.json_to_sheet(project.cashflow.map(c=>({[t.cashMonth]:formatMonth(c.month),[t.cashDesc]:(c.items||[]).join(' + '),[t.cashTotal]:toCurrency(c.amountUSD),[t.cashBalance]:toCurrency(c.balanceUSD)})));
+        const ws2=XLSX.utils.json_to_sheet(linesData.map(ld=>({[t.project]:findProject(ld.line.projectId)?.projectName||ld.line.projectId,[t.villa]:ld.line.snapshot?.name,[t.qty]:ld.qty,[t.area]:ld.line.snapshot?.area,[t.ppsm]:ld.line.snapshot?.ppsm,[t.price]:ld.base,[t.discount]:(ld.discountPct||0)+'%',[t.prePct]:ld.prePct,[t.months]:ld.vMonths,[t.lineTotal]:ld.lineTotal})));
         const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws1,'Cashflow'); XLSX.utils.book_append_sheet(wb,ws2,'Lines'); XLSX.writeFile(wb,`arconique_installments_${new Date().toISOString().slice(0,10)}.xlsx`);
       };
       
@@ -1468,7 +1676,7 @@
               <tbody>
                 ${project.cashflow.map(c => `
                   <tr>
-                    <td>${c.month}</td>
+                    <td>${formatMonth(c.month)}</td>
                     <td>${(c.items || []).join(' + ')}</td>
                     <td class="amount">${fmtMoney(c.amountUSD,'USD')}</td>
                     <td class="amount">${fmtMoney(c.balanceUSD,'USD')}</td>
@@ -1503,17 +1711,8 @@
         <>
           <div className="grid">
             <div className="card">
-              {!isClient && (
-                <div className="tabs">
-                  <button className={`tab ${tab==='calc'?'active':''}`} onClick={()=>setTab('calc')}>
-                    <span>{t.tabCalc}</span>
-                  </button>
-                  <button className={`tab ${tab==='catalog'?'active':''}`} onClick={()=>setTab('catalog')}>
-                    <span>{t.tabCatalog}</span>
-                  </button>
-                </div>
-              )}
-
+              {/* УБРАЛИ ВКЛАДКИ - каталог перемещен в правую часть */}
+              
               {/* Оптимизированные поля настроек */}
               <div className="row">
                 <div className="field compact">
@@ -1544,7 +1743,20 @@
                 </div>
               )}
 
-              {/* Оптимизированные поля времени */}
+              {/* НОВОЕ: Информационный блок начального месяца (не редактируемый) */}
+              <div className="row">
+                <div className="field compact">
+                  <label>{t.startMonth}</label>
+                  <div className="info-display">
+                    {startMonth.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', { 
+                      month: 'long', 
+                      year: 'numeric' 
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* ИСПРАВЛЕНИЕ: Поменяли местами поля "Глобальная ставка" и "Глобальный срок" */}
               <div className="row">
                 <div className="field compact">
                   <label>{t.handoverMonth}</label>
@@ -1553,13 +1765,13 @@
                 {!isClient ? (
                   <>
                     <div className="field compact">
+                      <label>{t.globalRate}</label>
+                      <input type="number" min="0" step="0.01" value={monthlyRatePct} onChange={e=>setMonthlyRatePct(clamp(parseFloat(e.target.value||0),0,1000))}/>
+                    </div>
+                    <div className="field compact">
                       <label>{t.globalTerm}</label>
                       <input type="range" min="6" max="24" step="1" value={months} onChange={e=>setMonths(parseInt(e.target.value,10))}/>
                       <div className="pill">{t.months}: {months}</div>
-                    </div>
-                    <div className="field compact">
-                      <label>{t.globalRate}</label>
-                      <input type="number" min="0" step="0.01" value={monthlyRatePct} onChange={e=>setMonthlyRatePct(clamp(parseFloat(e.target.value||0),0,1000))}/>
                     </div>
                   </>
                 ) : (
@@ -1574,8 +1786,8 @@
 
               <h3 style={{margin:'6px 0'}}>{t.stagesTitle}</h3>
               
-              {/* Исправленная таблица этапов */}
-              <div className="scroll" style={{maxHeight:'26vh',border:'1px dashed #223',borderRadius:'8px',padding:'6px',marginBottom:'var(--spacing-lg)'}}>
+              {/* ИСПРАВЛЕНИЕ: Динамическая высота блока этапов */}
+              <div className="stages-scroll">
                 <table className="stages-table">
                   <thead>
                     <tr>
@@ -1650,9 +1862,217 @@
                 </div>
               )}
               {isClient && <div className="row"><button className="btn" onClick={()=>share('client')}>Поделиться</button></div>}
+            </div>
 
-              {(!isClient && tab==='catalog') && (
+                        <div className="card">
+              <div className="row" style={{justifyContent:'space-between',alignItems:'baseline'}}>
+                <div className="row">
+                  <span className="badge">{t.lines}: {lines.length}</span>
+                  <span className="badge">{t.keys} {handoverMonth} мес.</span>
+                  {!isClient && <span className="badge">{t.months}: {months}</span>}
+                </div>
+                <div className="muted">{isClient ? t.client : t.editor}</div>
+              </div>
+
+              <KPIBlock isClient={isClient} t={t} totals={project.totals} currency={currency} toCurrency={toCurrency}/>
+
+              <div className="hr"></div>
+
+              {/* ИСПРАВЛЕНИЕ: Отступ между блоками и кнопка видна в клиентском режиме */}
+              <div className="calculation-header">
+                <h3 style={{margin:'6px 0'}}>{t.villasTitle}</h3>
+                <button className="btn success" onClick={()=>setModalOpen(true)}>{t.addFromCatalog}</button>
+              </div>
+
+              <div className="calc-scroll">
+                <table className="calc-table">
+                  <thead>
+                    <tr>
+                      <th className="col-project">{t.project}</th>
+                      <th className="col-villa">{t.villa}</th>
+                      <th className="col-qty">{t.qty}</th>
+                      <th className="col-area">{t.area}</th>
+                      <th className="col-ppsm">{t.ppsm}</th>
+                      <th className="col-base">{t.price}</th>
+                      {!isClient && <th className="col-disc">{t.discount}</th>}
+                      <th className="col-pre">{t.prePct}</th>
+                      {!isClient && <th className="col-months">{t.months}</th>}
+                      {!isClient && <th className="col-rate">{t.rate}</th>}
+                      <th className="col-first">{t.firstPost}</th>
+                      <th className="col-lineTotal">{t.lineTotal}</th>
+                      <th className="col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {linesData.map(ld=>{
+                      const projName=findProject(ld.line.projectId)?.projectName || ld.line.projectId;
+                      const villaName=ld.line.snapshot?.name || ld.line.villaId;
+                      return (
+                        <tr key={ld.line.id}>
+                          <td className="col-project" style={{textAlign:'left'}}>
+                            <div className="project-name-display">
+                              {projName}
+                            </div>
+                          </td>
+                          <td className="col-villa" style={{textAlign:'left'}}>
+                            <div className="villa-name-display">
+                              {villaName}
+                            </div>
+                          </td>
+                          <td className="col-qty">
+                            <input 
+                              type="number" 
+                              min="1" 
+                              step="1" 
+                              value={ld.line.qty} 
+                              onChange={e=>updLine(ld.line.id,{qty:clamp(parseInt(e.target.value||0,10),1,9999)})}
+                              style={{width:'100%',minWidth:'50px'}}
+                            />
+                          </td>
+                          <td className="col-area">
+                            <div className="area-display">
+                              {ld.line.snapshot?.area||0}
+                            </div>
+                          </td>
+                          <td className="col-ppsm">
+                            <div className="ppsm-display">
+                              {ld.line.snapshot?.ppsm||0}
+                            </div>
+                          </td>
+                          <td className="col-base base-strong">
+                            {fmtMoney(toCurrency(ld.base),currency)}
+                          </td>
+                          {!isClient && (
+                            <td className="col-disc">
+                              <input 
+                                type="number" 
+                                min="0" 
+                                max="20" 
+                                step="0.1" 
+                                value={ld.line.discountPct||0} 
+                                onChange={e=>updLine(ld.line.id,{discountPct:clamp(parseFloat(e.target.value||0),0,20)})}
+                                style={{width:'100%',minWidth:'50px'}}
+                              />
+                            </td>
+                          )}
+                          <td className="col-pre">
+                            {/* ИСПРАВЛЕНИЕ: Ограничение "До ключей" от 50% до 100% */}
+                            <input 
+                              type="range" 
+                              min="50" 
+                              max="100" 
+                              step="1" 
+                              value={Math.max(50, Math.min(100, ld.prePct || 0))} 
+                              onChange={e => {
+                                const value = parseInt(e.target.value, 10);
+                                const clampedValue = Math.max(50, Math.min(100, value));
+                                updLine(ld.line.id, { prePct: clampedValue });
+                              }}
+                              style={{width:'100%',minWidth:'80px'}}
+                            />
+                            <div className="pill">{Math.max(50, Math.min(100, ld.prePct || 0))}%</div>
+                          </td>
+                          {!isClient && (
+                            <>
+                              <td className="col-months">
+                                <input 
+                                  type="checkbox" 
+                                  checked={ld.line.ownTerms||false} 
+                                  onChange={e=>updLine(ld.line.id,{ownTerms:e.target.checked})}
+                                />
+                                <input 
+                                  type="number" 
+                                  min="6" 
+                                  step="1" 
+                                  value={ld.line.months||months} 
+                                  onChange={e=>updLine(ld.line.id,{months:clamp(parseInt(e.target.value||0,10),6,120)})}
+                                  disabled={!ld.line.ownTerms}
+                                  style={{width:'100%',minWidth:'50px'}}
+                                />
+                              </td>
+                              <td className="col-rate">
+                                <input 
+                                  type="number" 
+                                  min="0" 
+                                  step="0.01" 
+                                  value={ld.line.monthlyRatePct||monthlyRatePct} 
+                                  onChange={e=>updLine(ld.line.id,{monthlyRatePct:clamp(parseFloat(e.target.value||0),0,1000)})}
+                                  disabled={!ld.line.ownTerms}
+                                  style={{width:'100%',minWidth:'60px'}}
+                                />
+                              </td>
+                            </>
+                          )}
+                          <td className="col-first">
+                            <input 
+                              type="number" 
+                              min="0" 
+                              step="1" 
+                              value={ld.line.firstPostUSD||0} 
+                              onChange={e=>updLine(ld.line.id,{firstPostUSD:clamp(parseFloat(e.target.value||0),0,ld.base)})}
+                              style={{width:'100%',minWidth:'80px'}}
+                            />
+                          </td>
+                          <td className="col-lineTotal line-total">
+                            {fmtMoney(toCurrency(ld.lineTotal),currency)}
+                          </td>
+                          <td className="col-actions">
+                            <div className="row" style={{gap:4}}>
+                              <button className="btn icon" onClick={()=>dupLine(ld.line.id)}>📋</button>
+                              {!isClient && <button className="btn danger icon" onClick={()=>delLine(ld.line.id)}>🗑️</button>}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="hr"></div>
+
+              <h3 style={{margin:'6px 0'}}>{t.cashflowTitle}</h3>
+              {/* ИСПРАВЛЕНИЕ: Отступы между кнопками экспорта */}
+              <div className="row" style={{justifyContent:'space-between',alignItems:'center'}}>
+                <div className="export-buttons">
+                  <button className="btn" onClick={exportCSV}>{t.exportCSV}</button>
+                  <button className="btn" onClick={exportXLSX}>{t.exportXLSX}</button>
+                  <button className="btn" onClick={exportPDF}>{t.exportPDF}</button>
+                </div>
+              </div>
+
+              {/* ИСПРАВЛЕНИЕ: Реальные даты в кэшфлоу и убрали ограничение высоты */}
+              <div className="cashflow-scroll">
+                <table className="cashflow-table">
+                  <thead>
+                    <tr>
+                      <th>{t.cashMonth}</th>
+                      <th style={{textAlign:'left'}}>{t.cashDesc}</th>
+                      <th>{t.cashTotal}</th>
+                      <th>{t.cashBalance}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {project.cashflow.map(c=>(
+                      <tr key={c.month}>
+                        <td>{formatMonth(c.month)}</td>
+                        <td style={{textAlign:'left'}}>{(c.items||[]).join(' + ')}</td>
+                        <td>{fmtMoney(toCurrency(c.amountUSD),currency)}</td>
+                        <td>{fmtMoney(toCurrency(c.balanceUSD),currency)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="hr"></div>
+
+              <canvas ref={chartRef} style={{height:'200px',width:'100%'}}></canvas>
+
+              {/* ИСПРАВЛЕНИЕ: Каталог перемещен в правую часть под графиком */}
+              {!isClient && (
                 <>
+                  <div className="hr"></div>
                   <h3 style={{margin:'6px 0'}}>{t.catalogTitle}</h3>
                   
                   {/* Оптимизированные кнопки каталога */}
@@ -1762,206 +2182,6 @@
                 </>
               )}
             </div>
-
-            <div className="card">
-              <div className="row" style={{justifyContent:'space-between',alignItems:'baseline'}}>
-                <div className="row">
-                  <span className="badge">{t.lines}: {lines.length}</span>
-                  <span className="badge">{t.keys} {handoverMonth}</span>
-                  {!isClient && <span className="badge">{t.months}: {months}</span>}
-                </div>
-                <div className="muted">{isClient ? t.client : t.editor}</div>
-              </div>
-
-              <KPIBlock isClient={isClient} t={t} totals={project.totals} currency={currency} toCurrency={toCurrency}/>
-
-              <div className="hr"></div>
-
-              {/* Оптимизированный заголовок с кнопкой */}
-              <div className="calculation-header">
-                <h3 style={{margin:'6px 0'}}>{t.villasTitle}</h3>
-                {!isClient && <button className="btn success" onClick={()=>setModalOpen(true)}>{t.addFromCatalog}</button>}
-              </div>
-
-              <div className="calc-scroll">
-                <table className="calc-table">
-                  <thead>
-                    <tr>
-                      <th className="col-project">{t.project}</th>
-                      <th className="col-villa">{t.villa}</th>
-                      <th className="col-qty">{t.qty}</th>
-                      <th className="col-area">{t.area}</th>
-                      <th className="col-ppsm">{t.ppsm}</th>
-                      <th className="col-base">{t.price}</th>
-                      {!isClient && <th className="col-disc">{t.discount}</th>}
-                      <th className="col-pre">{t.prePct}</th>
-                      {!isClient && <th className="col-months">{t.months}</th>}
-                      {!isClient && <th className="col-rate">{t.rate}</th>}
-                      <th className="col-first">{t.firstPost}</th>
-                      <th className="col-lineTotal">{t.lineTotal}</th>
-                      <th className="col-actions"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {linesData.map(ld=>{
-                      const projName=findProject(ld.line.projectId)?.projectName || ld.line.projectId;
-                      const villaName=ld.line.snapshot?.name || ld.line.villaId;
-                      return (
-                        <tr key={ld.line.id}>
-                          <td className="col-project" style={{textAlign:'left'}}>
-                            <div className="project-name-display">
-                              {projName}
-                            </div>
-                          </td>
-                          <td className="col-villa" style={{textAlign:'left'}}>
-                            <div className="villa-name-display">
-                              {villaName}
-                            </div>
-                          </td>
-                          <td className="col-qty">
-                            <input 
-                              type="number" 
-                              min="1" 
-                              step="1" 
-                              value={ld.line.qty} 
-                              onChange={e=>updLine(ld.line.id,{qty:clamp(parseInt(e.target.value||0,10),1,9999)})}
-                              style={{width:'100%',minWidth:'50px'}}
-                            />
-                          </td>
-                          <td className="col-area">
-                            <div className="area-display">
-                              {ld.line.snapshot?.area||0}
-                            </div>
-                          </td>
-                          <td className="col-ppsm">
-                            <div className="ppsm-display">
-                              {ld.line.snapshot?.ppsm||0}
-                            </div>
-                          </td>
-                          <td className="col-base base-strong">
-                            {fmtMoney(toCurrency(ld.base),currency)}
-                          </td>
-                          {!isClient && (
-                            <td className="col-disc">
-                              <input 
-                                type="number" 
-                                min="0" 
-                                max="20" 
-                                step="0.1" 
-                                value={ld.line.discountPct||0} 
-                                onChange={e=>updLine(ld.line.id,{discountPct:clamp(parseFloat(e.target.value||0),0,20)})}
-                                style={{width:'100%',minWidth:'50px'}}
-                              />
-                            </td>
-                          )}
-                          <td className="col-pre">
-                            <input 
-                              type="range" 
-                              min="0" 
-                              max="100" 
-                              step="1" 
-                              value={ld.line.prePct||0} 
-                              onChange={e=>updLine(ld.line.id,{prePct:parseInt(e.target.value,10)})}
-                              style={{width:'100%',minWidth:'80px'}}
-                            />
-                            <div className="pill">{ld.line.prePct||0}%</div>
-                          </td>
-                          {!isClient && (
-                            <>
-                              <td className="col-months">
-                                <input 
-                                  type="checkbox" 
-                                  checked={ld.line.ownTerms||false} 
-                                  onChange={e=>updLine(ld.line.id,{ownTerms:e.target.checked})}
-                                />
-                                <input 
-                                  type="number" 
-                                  min="6" 
-                                  step="1" 
-                                  value={ld.line.months||months} 
-                                  onChange={e=>updLine(ld.line.id,{months:clamp(parseInt(e.target.value||0,10),6,120)})}
-                                  disabled={!ld.line.ownTerms}
-                                  style={{width:'100%',minWidth:'50px'}}
-                                />
-                              </td>
-                              <td className="col-rate">
-                                <input 
-                                  type="number" 
-                                  min="0" 
-                                  step="0.01" 
-                                  value={ld.line.monthlyRatePct||monthlyRatePct} 
-                                  onChange={e=>updLine(ld.line.id,{monthlyRatePct:clamp(parseFloat(e.target.value||0),0,1000)})}
-                                  disabled={!ld.line.ownTerms}
-                                  style={{width:'100%',minWidth:'60px'}}
-                                />
-                              </td>
-                            </>
-                          )}
-                          <td className="col-first">
-                            <input 
-                              type="number" 
-                              min="0" 
-                              step="1" 
-                              value={ld.line.firstPostUSD||0} 
-                              onChange={e=>updLine(ld.line.id,{firstPostUSD:clamp(parseFloat(e.target.value||0),0,ld.base)})}
-                              style={{width:'100%',minWidth:'80px'}}
-                            />
-                          </td>
-                          <td className="col-lineTotal line-total">
-                            {fmtMoney(toCurrency(ld.lineTotal),currency)}
-                          </td>
-                          <td className="col-actions">
-                            <div className="row" style={{gap:4}}>
-                              <button className="btn icon" onClick={()=>dupLine(ld.line.id)}>📋</button>
-                              {!isClient && <button className="btn danger icon" onClick={()=>delLine(ld.line.id)}>🗑️</button>}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="hr"></div>
-
-              <h3 style={{margin:'6px 0'}}>{t.cashflowTitle}</h3>
-              <div className="row" style={{justifyContent:'space-between',alignItems:'center'}}>
-                <div className="export-buttons">
-                  <button className="btn" onClick={exportCSV}>{t.exportCSV}</button>
-                  <button className="btn" onClick={exportXLSX}>{t.exportXLSX}</button>
-                  <button className="btn" onClick={exportPDF}>{t.exportPDF}</button>
-                </div>
-              </div>
-
-              {/* Исправленная таблица кэшфлоу */}
-              <div className="scroll">
-                <table className="cashflow-table">
-                  <thead>
-                    <tr>
-                      <th>{t.cashMonth}</th>
-                      <th style={{textAlign:'left'}}>{t.cashDesc}</th>
-                      <th>{t.cashTotal}</th>
-                      <th>{t.cashBalance}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {project.cashflow.map(c=>(
-                      <tr key={c.month}>
-                        <td>{c.month}</td>
-                        <td style={{textAlign:'left'}}>{(c.items||[]).join(' + ')}</td>
-                        <td>{fmtMoney(toCurrency(c.amountUSD),currency)}</td>
-                        <td>{fmtMoney(toCurrency(c.balanceUSD),currency)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="hr"></div>
-
-              <canvas ref={chartRef} style={{height:'200px',width:'100%'}}></canvas>
-            </div>
           </div>
 
           {/* Модальное окно добавления проекта */}
@@ -2047,7 +2267,7 @@
                           step="0.1" 
                           placeholder="100"
                           value={newVillaForm.area}
-                                                    onChange={e => setNewVillaForm(prev => ({ ...prev, area: parseFloat(e.target.value) || 0 }))}
+                          onChange={e => setNewVillaForm(prev => ({ ...prev, area: parseFloat(e.target.value) || 0 }))}
                         />
                       </div>
                       <div className="form-group">
@@ -2165,8 +2385,9 @@
                                   <span>{fmtMoney(v.baseUSD,'USD')}</span>
                                 </div>
                               </div>
+                              {/* ИСПРАВЛЕНИЕ: Очень компактная кнопка "Добавить выбранные" */}
                               <button 
-                                className="btn success" 
+                                className="btn success add-selected-btn" 
                                 onClick={()=>{
                                   const newLine={
                                     id:Date.now()+Math.random(),
@@ -2236,4 +2457,3 @@
   </script>
 </body>
 </html>
-                                                                                              
